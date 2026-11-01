@@ -1,0 +1,29 @@
+{
+ "first_appointees": 4104,
+ "fill": {
+  "person_table": 2839,
+  "still_missing": 541,
+  "roster_fill": 724
+ },
+ "validation": {
+  "ok": 2074,
+  "bad": 205,
+  "nomatch": 560,
+  "ambiguous": 0,
+  "accuracy": 0.910048266783677
+ },
+ "resample_n": 247,
+ "spearman_resampled": [
+  0.9030303030303028,
+  0.0003436121977632824
+ ],
+ "spearman_lower": [
+  0.8545454545454544,
+  0.0016368033159867156
+ ],
+ "spearman_munkwa": [
+  0.9515151515151514,
+  2.279854920641689e-05
+ ],
+ "roster_size": 15151
+}

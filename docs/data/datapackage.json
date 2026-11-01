@@ -564,6 +564,52 @@
    ]
   },
   {
+   "name": "d_clan_fill",
+   "path": "d_clan_fill.json",
+   "format": "json",
+   "encoding": "utf-8",
+   "rows": null,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "NIKH, 'Veritable Records — supplementary person data' (15053645): 115,859 persons, 336,255 office-holding rows.",
+     "path": "https://www.data.go.kr/data/15053645/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Academy of Korean Studies, 'Successful candidates of the civil service examination' (15052752): 15,151 passers with name, clan seat and year.",
+     "path": "https://www.data.go.kr/data/15052752/fileData.do",
+     "license": "No restriction (data.go.kr)"
+    }
+   ]
+  },
+  {
+   "name": "a_yearly_by_edition",
+   "path": "a_yearly_by_edition.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 542,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_lecture",
    "path": "d_lecture.csv",
    "format": "csv",
@@ -584,6 +630,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_memorial",
    "path": "d_memorial.csv",
    "format": "csv",
@@ -604,6 +651,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_justice",
    "path": "d_justice.csv",
    "format": "csv",
@@ -664,6 +712,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_death_reign",
    "path": "e_death_reign.csv",
    "format": "csv",
@@ -704,6 +753,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_relief",
    "path": "e_relief.csv",
    "format": "csv",
@@ -744,6 +794,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_eonmun",
    "path": "e_eonmun.csv",
    "format": "csv",
@@ -764,6 +815,7 @@
    ]
   },
   {
+   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_slave",
    "path": "e_slave.csv",
    "format": "csv",

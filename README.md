@@ -19,7 +19,13 @@ Site: https://bowonkwon.github.io/Sillok-Metrics/ (한국어 · English) · Hub:
 |---|---|
 | `docs/` | the built site (GitHub Pages source): `ko/`, `en/`, `data/` |
 | `data/` | derived CSVs (one per table), `datapackage.json`, `coding/` (codebooks and every hand-coded judgement) |
-| `src/` | `registry.py` (every metric's definition, in one place), `build_articles.py`, `extract_keywords.py`, `astro.py`, `espenak.py`, `check_calendar.py`, `metrics_a.py`–`metrics_e.py`, `reliability.py`, `merge_coding.py`, `build_site.py` |
+| `src/` | `registry.py` (every metric's definition, in one place) and `takeaways.py` (page takeaways), `build_articles.py`, `check_articles.py`, `extract_keywords.py`, `export_coding_input.py`, `astro.py`, `espenak.py`, `check_calendar.py`, `metrics_a.py`–`metrics_e.py`, `merge_coding.py`, `reliability.py`, `build_site.py` |
+
+## 공개 자료로 재현되는 범위 / What the public files reproduce
+
+- `data/*.csv` 의 지표 표는 `data/articles.csv.gz`(기사 테이블)·천문 표(`solar_eclipses_seoul.csv` 등)·코딩 표에서 다시 계산할 수 있다. 사이트(`docs/`)는 `python src/build_site.py --derived data --out site` 로 `data/` 에서 다시 만들 수 있다(기사 중앙값은 `articles.csv.gz` 에서 읽는다).
+- 기사 테이블과 천문 표 자체를 처음부터 다시 만들려면 원자료(공공데이터포털 XML, JPL DE406, Espenak 목록)를 아래 경로에 내려받아야 한다. 원자료와 작업 중간물(parquet)은 이 저장소에 없다.
+- The metric tables in `data/*.csv` can be recomputed from `data/articles.csv.gz`, the astronomy tables and the coding tables; the site can be rebuilt from `data/` with `python src/build_site.py --derived data --out site`. Rebuilding the article table and the astronomy tables from scratch needs the raw sources (data.go.kr XML, JPL DE406, the Espenak catalog), which are not in this repository.
 
 ## 다시 만들기 / Rebuild
 

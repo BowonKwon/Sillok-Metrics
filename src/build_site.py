@@ -342,6 +342,7 @@ class Data:
         self.d = d
         self.ed = pd.read_csv(d / "a_editions.csv")
         self.yearly = pd.read_csv(d / "a_yearly.csv")
+        self.yearly_ed = pd.read_csv(d / "a_yearly_by_edition.csv")
         self.length = pd.read_csv(d / "a_length.csv")
         self.pairs = pd.read_csv(d / "b_pairs.csv")
         self.gw = pd.read_csv(d / "b_gwanghae.csv")
@@ -374,7 +375,8 @@ class Data:
         self.precision = json.load(open(d / "reliability.json", encoding="utf-8")) if (d / "reliability.json").exists() else {}
         self.agreement = json.load(open(d.parent / "coding" / "solar_eclipse_agreement.json", encoding="utf-8")) if (d.parent / "coding" / "solar_eclipse_agreement.json").exists() else {}
         self.cal = pd.read_csv(d / "lunar_month_starts.csv")
-        _a = pd.read_parquet(d / "articles.parquet", columns=["is_main", "n_han"])
+        _ap = d / "articles.parquet"
+        _a = pd.read_parquet(_ap, columns=["is_main", "n_han"]) if _ap.exists() else pd.read_csv(d / "articles.csv.gz", usecols=["is_main", "n_han"])
         self.articles_median = float(_a[_a.is_main].n_han.median())
 
     def main_ed(self):
@@ -646,6 +648,18 @@ def reign_ribbon(D, king_no, lang, width=1000, height=46) -> str:
     return "".join(out)
 
 
+def blurb(text: str, limit: int = 120) -> str:
+    """First whole sentence(s) of a takeaway up to about `limit` characters — the same rule in both languages."""
+    import re as _re
+    parts = _re.split(r"(?<=[.!?。])\s+", text.strip())
+    out = ""
+    for p in parts:
+        if out and len(out) + len(p) > limit:
+            break
+        out = (out + " " + p).strip()
+    return out
+
+
 def take_block(text: str, lang: str, small=False) -> str:
     lab = "핵심" if lang == "ko" else "Key point"
     return f'<div class="take{" small" if small else ""}"><div class="l">{lab}</div><p>{esc(text)}</p></div>'
@@ -733,13 +747,13 @@ def king_takeaway(D, r, lang):
         s += "로 이 책에는 사관의 논평이 없다. " if r.saron_share == 0 else "다. "
         s += f"사법 분류 기사 비율은 {jv:.1%}로 {len(M)}대 중앙값 {jm:.1%}보다 {'높고' if jv > jm else '낮고'}, 경연 키워드 비율은 {lv:.1%}(중앙값 {lm:.1%})다. 키워드 지표는 모두 기록 관행의 영향을 받으므로 왕대 간 차이는 「무엇을 적었나」의 차이로 먼저 읽는다."
         if r.edition in ("wza", "wzb"):
-            s += " 이 실록은 공공누리 4유형이라 건수만 셌고, 기사 제목·본문 발췌·표본 코딩은 싣지 않았다."
+            s += " 이 실록은 공공누리 4유형이라 건수만 셌고, 기사 제목·본문 발췌는 싣지 않았다."
     else:
         s = f"The {r.edition_en} rank {rk_h} of {len(M)} in characters per reign-year ({r.han_per_year:,.0f}) and {rk_a} in article count. {r.saron_share:.1%} of articles carry a historian's comment (rank {rk_s})"
         s += ", so this edition has no commentary. " if r.saron_share == 0 else ". "
         s += f"Justice-classified articles are {jv:.1%} against a median of {jm:.1%} across reigns; royal-lecture keywords {lv:.1%} (median {lm:.1%}). Keyword metrics follow recording practice, so read differences between reigns first as differences in what was written down."
         if r.edition in ("wza", "wzb"):
-            s += " This edition is KOGL Type 4, so only counts are used; no titles, excerpts or sample coding."
+            s += " This edition is KOGL Type 4, so only counts are used; no titles or excerpts are published."
     return s
 
 
@@ -785,8 +799,8 @@ def king_page(r, D, lang):
         (t["chars"] + " " + t["per_year"], f"{r.han_per_year:,.0f}"), (t["saron"] + " " + t["share"], f"{r.saron_share:.1%}")]) + "</div>")
     if len(eds) > 1:
         body.append("<h2>" + ("판본" if lang == "ko" else "Editions") + "</h2>" + table_html(eds, [(ec, t["edition"], None), ("n_articles", t["articles"], ",.0f"), ("n_han", t["chars"], ",.0f"), ("n_saron", t["saron"], ",.0f"), ("median_len", ("기사 길이 중앙값" if lang == "ko" else "median length"), ",.0f")], "t_k_ed", lang, filt=False))
-    y = D.yearly[(D.yearly.year_ce >= int(r.first_solar[:4])) & (D.yearly.year_ce <= int(r.last_solar[:4]))]
-    body.append(fig(svg_lines([(t["articles"], [(int(x.year_ce), float(x.n_articles)) for _, x in y.iterrows()], 0)], ",.0f", xstep=5 if len(y) < 60 else 10), ("연도별 기사 수(본실록)." if lang == "ko" else "Articles per year (principal edition).")))
+    y = D.yearly_ed[D.yearly_ed.edition == r.edition]
+    body.append(fig(svg_lines([(t["articles"], [(int(x.year_ce), float(x.n_articles)) for _, x in y.iterrows()], 0)], ",.0f", xstep=5 if len(y) < 60 else 10), ("이 판본의 연도별 기사 수. 즉위·승하 해는 앞뒤 왕대와 나뉘어 센다." if lang == "ko" else "Articles per year in this edition; accession and death years are split between adjoining reigns.")))
     # keyword shares vs all-reign median
     rows = []
     for name, tbl, col, mid in [(("경연" if lang == "ko" else "royal lecture"), D.lecture, "keyword_share", "royal_lecture_share"), (("상소·차자" if lang == "ko" else "memorials"), D.memorial, "keyword_share", "memorial_share"),
@@ -842,9 +856,9 @@ def home(D, lang):
              "2,937 days of daytime Venus sightings reproduce the planet's synodic period to 0.04%: observation records are observations.",
              "The top-10 clan share among first appointees to high office rose from 0.28 to 0.45 — concentration left a number.",
              "The Sejong peak in death-penalty articles is sentencing paperwork; the Sillok is not a source of penal statistics."])
-    scope = ("범위는 태조~순종 27대(1392~1910)다. 다만 고종·순종실록의 원문 데이터는 공공누리 제4유형(변경 금지·비상업)이라, 본문을 가공·인용하지 않는 집계(기사 수·글자 수·국편 분류·키워드 건수)에만 쓰고 기사 제목·본문 발췌·표본 코딩·천문 대조에는 쓰지 않았다. 태조~철종 25대의 원문은 제1유형(출처 표시)이다."
+    scope = ("범위는 태조~순종 27대(1392~1910)다. 다만 고종·순종실록의 원문 데이터는 공공누리 제4유형(변경 금지·비상업)이라, 본문을 가공·인용하지 않는 집계(기사 수·글자 수·국편 분류·키워드 건수)에만 쓰고, 기사 제목·본문 발췌·천문 대조에는 쓰지 않았다. 공개하는 표본 코딩 표에서도 이 두 실록 기사의 제목·인용문·요약은 비웠다(판정만 남김). 태조~철종 25대의 원문은 제1유형(출처 표시)이다."
              if lang == "ko" else
-             "Scope: the 27 reigns from Taejo to Sunjong (1392–1910). The Gojong and Sunjong records are released under KOGL Type 4 (no derivatives, non-commercial), so they enter only counts that neither alter nor quote the text (articles, characters, NIKH classification, keyword hits) and are excluded from titles, text excerpts, sample coding and the astronomical checks. The 25 reigns Taejo–Cheoljong are Type 1 (attribution).")
+             "Scope: the 27 reigns from Taejo to Sunjong (1392–1910). The Gojong and Sunjong records are released under KOGL Type 4 (no derivatives, non-commercial), so they enter only counts that neither alter nor quote the text (articles, characters, NIKH classification, keyword hits); titles, text excerpts and the astronomical checks exclude them, and in the published coding tables their rows keep the judgement but have title, quote and summary blanked. The 25 reigns Taejo–Cheoljong are Type 1 (attribution).")
     body = [f'<div class="hero"><div class="glyph" aria-hidden="true">實錄</div><h1>{t["site"]}</h1><p class="lead">{esc(t["tagline"])}</p><p class="src" style="max-width:70ch">{esc(scope)}</p>'
             f'<div class="strip">{density_strip(D, lang)}<p class="src">' + ("연도별 한자 수 1392–1910(본실록). 띠는 왕대." if lang == "ko" else "Characters per year 1392–1910 (principal editions); bands mark reigns.") + '</p></div></div>',
             '<div class="take"><div class="l">' + ("핵심" if lang == "ko" else "Key points") + '</div><p>' + "<br>".join(f"{i+1}. {esc(x)}" for i, x in enumerate(five)) + "</p></div>",
@@ -858,7 +872,7 @@ def home(D, lang):
         for m in METRICS:
             if m["series"] == s:
                 hv, hl = headline(m, D, lang)
-                body.append(f'<a class="card s-{s}" href="metrics/{m["id"]}.html"><b>{esc(m[lang]["name"])}</b><span class="kv">{esc(hv)}<small>{esc(hl)}</small></span><small>{esc(m["takeaway"][lang].split(". ")[0].split("。")[0])}.</small></a>')
+                body.append(f'<a class="card s-{s}" href="metrics/{m["id"]}.html"><b>{esc(m[lang]["name"])}</b><span class="kv">{esc(hv)}<small>{esc(hl)}</small></span><small>{esc(blurb(m["takeaway"][lang]))}</small></a>')
         body.append("</div>")
     body.append("<h2>" + t["king_list"] + "</h2>" + fig(svg_bars([(r[KING_COL[lang][0]], float(r.n_articles), 0) for _, r in M.iterrows()], ",.0f", row_h=18, label_w=150), ("왕대별 기사 수(본실록). 각 왕대 면으로 가려면 「왕대」 메뉴." if lang == "ko" else "Articles per reign (principal editions); see the Reigns menu for each reign's page.")))
     return page(lang, t["site"], "".join(body), depth=1, active="home")
@@ -895,12 +909,12 @@ def method_page(D, lang):
 <h1>방법·한계</h1>
 TAKE_METHOD_KO
 <h2>자료</h2>
-<p>{esc(SOURCES['nikh_xml']['ko'])} 그래서 범위는 태조부터 순종까지 1392~1910년이고, 고종·순종실록은 기사 테이블에 제목 없이(ID·날짜·글자 수·분류·링크만) 들어 있으며 키워드 표에도 문맥 발췌가 없다. 천문 대조(계열 C)와 표본 코딩은 본문을 인용해야 하므로 태조~철종에서만 했다.</p>
+<p>{esc(SOURCES['nikh_xml']['ko'])} 그래서 범위는 태조부터 순종까지 1392~1910년이고, 고종·순종실록은 기사 테이블에 제목 없이(ID·날짜·글자 수·분류·링크만) 들어 있으며 키워드 표에도 문맥 발췌가 없다. 천문 대조(계열 C)는 태조~철종에서만 했다. 표본 코딩에는 두 실록의 기사도 들어가지만, 공개 코딩 표에서 그 기사의 제목·인용문·요약은 비웠다. 재위 햇수는 첫·마지막 날짜 기사의 JDN 차이로 재어 1896년 양력 전환 전후를 같은 잣대로 센다.</p>
 <p>{esc(SOURCES['nikh_persons']['ko'])} {esc(SOURCES['aks_munkwa']['ko'])}</p>
 <h2>세는 단위</h2>
 <p>모든 수는 <b>기사</b> 단위다. 국편 XML에서 biblioData type="T" 인 요소 하나가 기사 하나이고, 전체 {int(D.ed.n_articles.sum()):,}건 가운데 {int(D.ed.n_dated.sum()):,}건에 날짜가 있다. 시계열은 본실록(광해군은 정초본)만 쓰고 수정·개수·보궐정오본은 판본 비교 계열에서만 다룬다. 글자 수는 기사 본문의 한자 수다.</p>
 <h2>날짜</h2>
-<p>실록의 날짜는 음력이다. 서기 연도와 음력 월일을 그대로 두고, 양력은 korean_lunar_calendar 로 환산했다. 1582년 10월 15일 이전은 율리우스력으로 표시한다. 1896년(건양 1) 1월 1일부터 조정은 양력을 썼고 국편 XML 도 그날부터 간지 자리에 「陽曆」을 적으므로, 그 기사들의 월일은 변환하지 않고 양력 그대로 둔다(`date_system` 열). 환산의 정확도는 천문으로 확인했다: 1392~1863년의 음력 매월 초하루 {len(D.cal):,}개를 DE406으로 계산한 합삭(서울 지방평균시) 날짜와 대조하니 {n0:,}개({n0/len(D.cal):.1%})가 같은 날이고 {n1}개가 하루 차이, 이틀 이상 어긋난 달은 없었다. 그래서 일식·월식 대조 창을 ±1일로 두고 같은 날 기준 값도 함께 보인다. 날짜 있는 기사 가운데 26건은 변환 패키지가 거부한 날이라 양력이 비어 있다 — 패키지가 29일까지로 보는 달의 30일 23건, 31일 2건, 날짜 미상(99일) 1건. 원전 날짜의 오류인지 역서 차이인지는 KASI 연력표와 대조하기 전에는 확정하지 않는다. 그 밖에 일(日) 자리가 「??」인 기사 38건은 날짜 없는 기사로 셌다.</p>
+<p>실록의 날짜는 음력이다. 서기 연도와 음력 월일을 그대로 두고, 양력은 korean_lunar_calendar 로 환산했다. 1582년 10월 15일 이전은 율리우스력으로 표시한다. 1896년(건양 1) 1월 1일부터 조정은 양력을 썼고 국편 XML 도 그날부터 간지 자리에 「陽曆」을 적으므로, 그 기사들의 월일은 변환하지 않고 양력 그대로 둔다(`date_system` 열). 환산의 정확도는 천문으로 확인했다: 1392~1928년의 음력 매월 초하루 {len(D.cal):,}개를 DE406으로 계산한 합삭의 서울 지방평균시(UT1 + 동경 126.978°, ΔT 는 Stephenson–Morrison–Hohenkerk 2016 모형) 날짜와 대조하니 {n0:,}개({n0/len(D.cal):.1%})가 같은 날이고 {n1}개가 하루 차이, 이틀 이상 어긋난 달은 없었다. 그래서 일식·월식 대조 창을 ±1일로 두고 같은 날 기준 값도 함께 보인다. 날짜 있는 기사 가운데 26건은 변환 패키지가 거부한 날이라 양력이 비어 있다 — 패키지가 29일까지로 보는 달의 30일 23건, 31일 2건, 날짜 미상(99일) 1건. 원전 날짜의 오류인지 역서 차이인지는 KASI 연력표와 대조하기 전에는 확정하지 않는다. 그 밖에 일(日) 자리가 「??」인 기사 38건은 날짜 없는 기사로 셌다.</p>
 <h2>천문 계산</h2>
 <p>{esc(SOURCES['de406']['ko'])} 일식은 합삭마다 서울(37.57°N, 126.98°E)에서 태양과 달의 겉보기 원반이 겹치는지, 태양이 지평선 위에 있는지를 2분 간격으로 검사했다. 겉보기 반지름은 태양 696,000km·달 1,737.4km 로 두었고(695,700km 로 바꾸면 1528-11-22의 극미한 접촉 한 건이 빠져 184회가 된다), 표의 `newmoon_jd`·`jd` 열은 TT 율리우스일이다. 그렇게 얻은 1392~1863년 서울 가시 일식 {len(D.solar_rec)}회는 모두 Espenak–Meeus 목록에 있고, 목록의 1,125회는 전부 같은 날(±1일)의 합삭과 맞았다. 월식은 skyfield 의 월식 탐색 함수로 구하고 식 최대 때 달이 지평선 위에 있는지로 서울 가시 여부를 정했다. 시각 비교는 당시 백각법·경점법 때문에 이 판에서는 하지 않았다.</p>
 <h2>키워드와 표본 코딩</h2>
@@ -922,12 +936,12 @@ TAKE_METHOD_KO
 <h1>Method and limits</h1>
 TAKE_METHOD_EN
 <h2>Sources</h2>
-<p>{esc(SOURCES['nikh_xml']['en'])} The range is therefore Taejo to Sunjong, 1392–1910; the Gojong and Sunjong records appear in the article table without titles (ID, date, character count, classification and link only) and without context excerpts in the keyword table. The sky series (C) and all sample coding quote the text and were done for Taejo–Cheoljong only.</p>
+<p>{esc(SOURCES['nikh_xml']['en'])} The range is therefore Taejo to Sunjong, 1392–1910; the Gojong and Sunjong records appear in the article table without titles (ID, date, character count, classification and link only) and without context excerpts in the keyword table. The sky series (C) covers Taejo–Cheoljong only. Sample coding does include articles from the two records, but in the published coding tables their title, quote and summary are blanked. Reign length is measured as the JDN span between first and last dated article, the same rule before and after the 1896 calendar switch.</p>
 <p>{esc(SOURCES['nikh_persons']['en'])} {esc(SOURCES['aks_munkwa']['en'])}</p>
 <h2>Counting unit</h2>
 <p>Everything is counted per <b>article</b>: one biblioData type="T" element in the NIKH XML. Of {int(D.ed.n_articles.sum()):,} articles, {int(D.ed.n_dated.sum()):,} carry a date. Time series use the principal editions only (the final draft for Gwanghaegun); revised and supplemented editions appear only in the editions series. Characters are the Chinese characters of the article text.</p>
 <h2>Dates</h2>
-<p>Sillok dates are lunar. The CE year and lunar month/day are kept as given; solar dates come from korean_lunar_calendar, shown in the Julian calendar before 15 October 1582. From 1 January 1896 (Geonyang 1) the court used the Gregorian calendar and the NIKH XML marks those days 陽曆, so their month and day are taken as given rather than converted (`date_system` column). The conversion was checked astronomically: the {len(D.cal):,} lunar month-starts of 1392–1863 were compared with DE406 new moons in Seoul local mean time — {n0:,} ({n0/len(D.cal):.1%}) fall on the same day, {n1} one day off, none two or more. Eclipse matching therefore uses a ±1-day window, with the same-day value shown alongside. 26 dated articles have no solar date because the conversion package rejected the day: 23 are a 30th in a month the package gives 29 days, 2 are a 31st, 1 has an unknown day (99). Whether these are errors in the source or differences between calendars is left open until a check against the KASI chronological tables. A further 38 articles whose day reads '??' are counted as undated.</p>
+<p>Sillok dates are lunar. The CE year and lunar month/day are kept as given; solar dates come from korean_lunar_calendar, shown in the Julian calendar before 15 October 1582. From 1 January 1896 (Geonyang 1) the court used the Gregorian calendar and the NIKH XML marks those days 陽曆, so their month and day are taken as given rather than converted (`date_system` column). The conversion was checked astronomically: the {len(D.cal):,} lunar month-starts of 1392–1928 were compared with DE406 new moons in Seoul local mean time (UT1 + 126.978° E; ΔT from the Stephenson–Morrison–Hohenkerk 2016 model) — {n0:,} ({n0/len(D.cal):.1%}) fall on the same day, {n1} one day off, none two or more. Eclipse matching therefore uses a ±1-day window, with the same-day value shown alongside. 26 dated articles have no solar date because the conversion package rejected the day: 23 are a 30th in a month the package gives 29 days, 2 are a 31st, 1 has an unknown day (99). Whether these are errors in the source or differences between calendars is left open until a check against the KASI chronological tables. A further 38 articles whose day reads '??' are counted as undated.</p>
 <h2>Astronomy</h2>
 <p>{esc(SOURCES['de406']['en'])} For every new moon the apparent discs of Sun and Moon were tested for overlap above the Seoul horizon (37.57° N, 126.98° E) at 2-minute steps. Apparent radii use 696,000 km for the Sun and 1,737.4 km for the Moon (with 695,700 km one grazing contact on 1528-11-22 drops out, giving 184); the `newmoon_jd` and `jd` columns are TT Julian dates. The {len(D.solar_rec)} eclipses visible from Seoul in 1392–1863 so obtained all appear in the Espenak–Meeus canon, and all 1,125 of its eclipses match a new moon within ±1 day. Lunar eclipses come from skyfield's eclipse finder; visibility is the Moon's altitude at maximum. Times of day were not compared in this version because of the period's hour systems.</p>
 <h2>Keywords and sample coding</h2>
@@ -959,7 +973,7 @@ def reading_page(D, lang):
     top = M.sort_values("han_per_year", ascending=False).iloc[0]; low = M.sort_values("han_per_year").iloc[0]
     ko = f"""
 <h1>읽기용 판</h1>
-<p class="lead">표와 그림 대신 산문으로 읽는 1.0의 결과다. 수치는 모두 지표 면에 있고, 여기서는 무엇이 보였는지만 적는다. 고종·순종실록은 공공누리 제4유형(변경 금지·비상업)이라 건수 집계에만 넣고 본문 발췌·표본 코딩에는 쓰지 않았다.</p>
+<p class="lead">표와 그림 대신 산문으로 읽는 1.0의 결과다. 수치는 모두 지표 면에 있고, 여기서는 무엇이 보였는지만 적는다. 고종·순종실록은 공공누리 제4유형(변경 금지·비상업)이라 건수 집계에만 넣고 본문 발췌는 싣지 않았다(공개 코딩 표에서도 그 기사의 제목·인용문은 비웠다).</p>
 TAKE_READ_KO
 <h2>얼마나 적었나</h2>
 <p>태조부터 순종까지 27대의 본실록은 기사 {int(M.n_articles.sum()):,}건, 한자 {M.n_han.sum()/1e6:.1f}백만 자다(고종·순종은 건수만 셌다). 재위 1년당 글자 수로 보면 {top.king_ko}실록이 {top.han_per_year:,.0f}자로 가장 촘촘하고 {low.king_ko}실록이 {low.han_per_year:,.0f}자로 가장 성글다. 성종·중종·선조·숙종이 10만 자를 넘고 정조 이후 급히 줄어든다. 국편이 「후기로 갈수록 기록이 빈약하다」고 적은 것이 이 수치다.</p>
@@ -976,7 +990,7 @@ TAKE_READ_KO
 """
     en = f"""
 <h1>Reading edition</h1>
-<p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; here is only what was seen. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; they are excluded from text excerpts and sample coding.</p>
+<p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; here is only what was seen. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; no excerpts are published, and their rows in the coding tables carry judgements without title or quote.</p>
 TAKE_READ_EN
 <h2>How much was written</h2>
 <p>The principal editions for the 27 reigns from Taejo to Sunjong hold {int(M.n_articles.sum()):,} articles and {M.n_han.sum()/1e6:.1f} million Chinese characters (Gojong and Sunjong counted only). Per reign-year the {top.king_en} records are the densest at {top.han_per_year:,.0f} characters and the {low.king_en} records the thinnest at {low.han_per_year:,.0f}. Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000; after Jeongjo the density collapses. This is the number behind NIKH's remark that the record thins toward the end.</p>
@@ -999,7 +1013,7 @@ TAKE_READ_EN
 DATA_FILES = ["articles.csv", "a_editions.csv", "a_yearly.csv", "a_monthly.csv", "a_length.csv", "b_pairs.csv", "b_gwanghae.csv", "b_gwanghae_yearly.csv",
               "c_solar.csv", "c_solar_articles.csv", "c_solar_eclipses_recorded.csv", "solar_eclipses_seoul.csv", "espenak_1392_1863.csv", "c_lunar.csv", "c_lunar_articles.csv", "lunar_eclipses_seoul.csv",
               "c_venus.csv", "c_venus_days.csv", "c_venus_periodogram.csv", "venus_inferior_conjunctions.csv", "c_comet.csv", "c_quake.csv", "c_quake_province.csv", "c_quake_articles.csv", "c_weather.csv",
-              "d_clan.csv", "d_clan_munkwa.csv", "d_lecture.csv", "d_memorial.csv", "d_justice.csv", "d_justice_decade.csv",
+              "d_clan.csv", "d_clan_munkwa.csv", "d_clan_fill.json", "a_yearly_by_edition.csv", "d_lecture.csv", "d_memorial.csv", "d_justice.csv", "d_justice_decade.csv",
               "e_death.csv", "e_death_reign.csv", "e_death_sample_summary.csv", "e_relief.csv", "e_relief_yearly.csv", "e_eonmun.csv", "e_slave.csv", "lunar_month_starts.csv", "keyword_hits.csv"]
 MAX_ROWS = 60
 GZIP_FILES = {"articles.csv", "keyword_hits.csv"}
@@ -1022,7 +1036,10 @@ def write_datapackage(data_dir: Path, files) -> None:
             src = ["de406", "klc"] if f == "lunar_month_starts.csv" else ["de406"]
         if f == "espenak_1392_1863.csv":
             src = ["espenak"]
-        resources.append({"name": f.split(".")[0].lower().replace("/", "-"), "path": f, "format": "csv" + (" (gzip)" if f.endswith(".gz") else "") if ".csv" in f else f.rsplit(".", 1)[1], "encoding": "utf-8",
+        desc = None
+        if f.startswith(("d_lecture", "d_memorial", "d_justice.csv", "e_relief.csv", "e_eonmun", "e_slave", "e_death_reign")):
+            desc = "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter."
+        resources.append({**({"description": desc} if desc else {}), "name": f.split(".")[0].lower().replace("/", "-"), "path": f, "format": "csv" + (" (gzip)" if f.endswith(".gz") else "") if ".csv" in f else f.rsplit(".", 1)[1], "encoding": "utf-8",
                           "rows": int(len(df)) if df is not None else None,
                           "licenses": [{"name": "KOGL-1-derivative + CC-BY-4.0", "path": "https://www.kogl.or.kr/info/license.do"}],
                           "sources": [{"title": SOURCES[k]["en"].split(". ")[0][:160], "path": SOURCES[k]["url"], "license": SOURCES[k]["license"]} for k in src]})
@@ -1059,10 +1076,23 @@ def main():
             shutil.copy(p, out / "data" / f); files.append(f)
     for f in CODING_FILES:
         p = root / "data" / "coding" / f
-        if p.exists():
-            shutil.copy(p, out / "data" / "coding" / f); files.append("coding/" + f)
+        if not p.exists():
+            continue
+        if f.endswith(".csv"):
+            # KOGL Type 4 editions (wza, wzb, wzc): judgements are kept, but any text taken from the records
+            # (title, quote, summary) is blanked in the published copy
+            c = pd.read_csv(p, encoding="utf-8-sig", dtype=str, keep_default_na=False)
+            idcol = "id" if "id" in c.columns else "article_id"
+            k4 = c[idcol].str[:3].isin(["wza", "wzb", "wzc"])
+            for col in ("title", "quote", "summary", "time_text", "magnitude_text", "context"):
+                if col in c.columns:
+                    c.loc[k4, col] = ""
+            c.to_csv(out / "data" / "coding" / f, index=False, encoding="utf-8")
+        else:
+            shutil.copy(p, out / "data" / "coding" / f)
+        files.append("coding/" + f)
     write_datapackage(out / "data", DATA_FILES)
-    (out / "index.html").write_text('<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=ko/index.html"><title>Sillok Metrics</title></head><body><a href="ko/index.html">한국어</a> · <a href="en/index.html">English</a></body></html>', encoding="utf-8")
+    (out / "index.html").write_text('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0; url=ko/index.html"><title>Sillok Metrics</title></head><body><a href="ko/index.html">한국어</a> · <a href="en/index.html">English</a></body></html>', encoding="utf-8")
     n = 0
     for lang in ("ko", "en"):
         (out / lang / "metrics").mkdir(parents=True); (out / lang / "kings").mkdir(parents=True)

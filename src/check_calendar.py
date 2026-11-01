@@ -5,7 +5,8 @@
 
 For every lunar month 1392–1863 (leap months included) the package korean_lunar_calendar gives
 the solar date of day 1. The true new moon (conjunction) is computed with JPL DE406 via skyfield
-and expressed in Seoul local mean time (UT + 8h28m, longitude 126.98° E). The Joseon civil
+and expressed in Seoul local mean time: UT1 (Earth-rotation time, from the ephemeris ΔT model) plus the longitude
+126.978° E as a fraction of a day. UT1, not UTC, is the right basis for a historical local mean time. The Joseon civil
 calendar put day 1 on the day of the computed conjunction, so the two should agree to the day,
 with ±1-day differences where the historical calendar's own computation or the midnight boundary
 differed. Any difference of two days or more would indicate an error in the package.
@@ -21,7 +22,7 @@ from skyfield import almanac, api
 ROOT = Path(__file__).resolve().parent.parent
 EPH = ROOT / "data" / "raw" / "eph"
 OUT = ROOT / "data" / "derived" / "lunar_month_starts.csv"
-SEOUL_OFFSET = dt.timedelta(hours=8, minutes=28)
+SEOUL_LON = 126.978   # degrees east; local mean time = UT1 + lon/360 day
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
     ts = load.timescale()
     eph = load("de406.bsp")
     t, y = almanac.find_discrete(ts.utc(1391, 1, 1), ts.utc(1930, 1, 1), almanac.moon_phases(eph))
-    newmoons = sorted((ti.utc_datetime() + SEOUL_OFFSET).date() for ti, yi in zip(t, y) if yi == 0)
+    newmoons = sorted(dt.date.fromordinal(int(ti.ut1 + 0.5 + SEOUL_LON / 360) - 1721425) for ti, yi in zip(t, y) if yi == 0)
     nm = set(newmoons)
     rows = []
     for yr in range(1392, 1929):

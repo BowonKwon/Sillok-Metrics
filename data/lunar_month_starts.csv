@@ -10,7 +10,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1392,9,False,1392-09-25,0
 1392,10,False,1392-10-25,0
 1392,11,False,1392-11-23,0
-1392,12,False,1392-12-22,-1
+1392,12,False,1392-12-22,0
 1392,12,True,1393-01-21,0
 1393,1,False,1393-02-20,0
 1393,2,False,1393-03-21,0
@@ -178,7 +178,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1406,4,False,1406-04-28,0
 1406,5,False,1406-05-27,0
 1406,6,False,1406-06-25,0
-1406,7,False,1406-07-24,-1
+1406,7,False,1406-07-24,0
 1406,7,True,1406-08-23,0
 1406,8,False,1406-09-21,0
 1406,9,False,1406-10-21,0
@@ -208,7 +208,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1408,9,False,1408-09-29,0
 1408,10,False,1408-10-28,0
 1408,11,False,1408-11-27,0
-1408,12,False,1408-12-26,-1
+1408,12,False,1408-12-26,0
 1409,1,False,1409-01-25,0
 1409,2,False,1409-02-24,0
 1409,3,False,1409-03-26,0
@@ -245,7 +245,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1411,9,False,1411-09-27,0
 1411,10,False,1411-10-27,0
 1411,11,False,1411-11-25,0
-1411,12,False,1411-12-24,-1
+1411,12,False,1411-12-24,0
 1411,12,True,1412-01-23,0
 1412,1,False,1412-02-21,0
 1412,2,False,1412-03-22,0
@@ -782,7 +782,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1455,2,False,1455-02-26,0
 1455,3,False,1455-03-27,0
 1455,4,False,1455-04-26,0
-1455,5,False,1455-05-25,-1
+1455,5,False,1455-05-25,0
 1455,6,False,1455-06-24,0
 1455,6,True,1455-07-24,0
 1455,7,False,1455-08-22,0
@@ -1066,7 +1066,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1478,1,False,1478-02-12,0
 1478,2,False,1478-03-14,0
 1478,3,False,1478-04-12,0
-1478,4,False,1478-05-11,-1
+1478,4,False,1478-05-11,0
 1478,5,False,1478-06-10,0
 1478,6,False,1478-07-09,0
 1478,7,False,1478-08-07,0
@@ -1164,7 +1164,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1485,12,False,1486-01-15,0
 1486,1,False,1486-02-14,0
 1486,2,False,1486-03-15,0
-1486,3,False,1486-04-13,-1
+1486,3,False,1486-04-13,0
 1486,4,False,1486-05-13,0
 1486,5,False,1486-06-11,0
 1486,6,False,1486-07-10,0
@@ -1490,7 +1490,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1512,5,False,1512-05-25,0
 1512,5,True,1512-06-24,0
 1512,6,False,1512-07-23,0
-1512,7,False,1512-08-21,-1
+1512,7,False,1512-08-21,0
 1512,8,False,1512-09-20,0
 1512,9,False,1512-10-20,0
 1512,10,False,1512-11-18,-1
@@ -1644,7 +1644,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1524,10,False,1524-11-06,0
 1524,11,False,1524-12-05,0
 1524,12,False,1525-01-04,0
-1525,1,False,1525-02-02,-1
+1525,1,False,1525-02-02,0
 1525,2,False,1525-03-04,0
 1525,3,False,1525-04-03,0
 1525,4,False,1525-05-03,0
@@ -1699,7 +1699,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1529,3,False,1529-04-18,0
 1529,4,False,1529-05-18,0
 1529,5,False,1529-06-16,0
-1529,6,False,1529-07-15,-1
+1529,6,False,1529-07-15,0
 1529,7,False,1529-08-14,0
 1529,8,False,1529-09-13,0
 1529,9,False,1529-10-12,0
@@ -3965,7 +3965,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1712,6,False,1712-07-04,0
 1712,7,False,1712-08-02,0
 1712,8,False,1712-09-01,0
-1712,9,False,1712-09-30,0
+1712,9,False,1712-09-30,-1
 1712,10,False,1712-10-30,0
 1712,11,False,1712-11-28,0
 1712,12,False,1712-12-28,0
@@ -4491,7 +4491,7 @@ year_ce,lunar_month,is_leap,day1_gregorian_proleptic,offset_from_new_moon_days
 1754,12,False,1755-01-12,0
 1755,1,False,1755-02-11,0
 1755,2,False,1755-03-13,0
-1755,3,False,1755-04-11,0
+1755,3,False,1755-04-11,-1
 1755,4,False,1755-05-11,0
 1755,5,False,1755-06-10,0
 1755,6,False,1755-07-09,0

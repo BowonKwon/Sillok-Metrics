@@ -15,7 +15,7 @@ that flag is only used to cross-check the count against the Espenak–Meeus cano
 Lunar eclipses come from skyfield.eclipselib.lunar_eclipses (penumbral ones excluded) and are
 "visible from Seoul" when the Moon is above the horizon at the moment of maximum.
 
-Times are UT; Seoul local mean time = UT + 8h28m. ΔT is skyfield's built-in long-term model
+Times are UT; Seoul local mean dates use UT1 + 126.978°/360 day (Earth-rotation time, not UTC). ΔT is skyfield's built-in long-term model
 (Stephenson, Morrison & Hohenkerk 2016 before telescopic times).
 """
 import datetime as dt
@@ -68,7 +68,7 @@ def main():
             row.update(seoul_max_magnitude=float(min(mag[i], 1.0) if r_m[i] >= r_s[i] else mag[i]),
                        seoul_max_ut=tt[i].utc_iso(), seoul_start_ut=tt[first].utc_iso(), seoul_end_ut=tt[last].utc_iso(),
                        sun_alt_at_max=float(alt[i]),
-                       seoul_max_lmt=(tt[i].utc_datetime() + dt.timedelta(hours=8, minutes=28)).isoformat())
+                       seoul_max_lmt=dt.date.fromordinal(int(tt[i].ut1 + 0.5 + 126.978 / 360) - 1721425).isoformat())
         elif (overlap > 0).any():
             i = np.argmax(overlap)
             row.update(seoul_max_magnitude=float(mag[i]), sun_alt_at_max=float(alt[i]), below_horizon=True)
@@ -88,7 +88,7 @@ def main():
         alt = m.altaz()[0].degrees
         lrows.append(dict(max_ut=ti.utc_iso(), max_jd=ti.tt, kind=eclipselib.LUNAR_ECLIPSES[yi],
                           moon_alt_at_max=float(alt), seoul_visible=bool(alt > -0.5),
-                          max_lmt=(ti.utc_datetime() + dt.timedelta(hours=8, minutes=28)).isoformat()))
+                          max_lmt=dt.date.fromordinal(int(ti.ut1 + 0.5 + 126.978 / 360) - 1721425).isoformat()))
     le = pd.DataFrame(lrows)
     le["max_date_lmt"] = le.max_lmt.str[:10]
     le.to_csv(D / "lunar_eclipses_seoul.csv", index=False)

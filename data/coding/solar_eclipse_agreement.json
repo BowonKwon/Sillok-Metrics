@@ -1,0 +1,42 @@
+{
+ "n": 332,
+ "by_type": {
+  "discussion": 140,
+  "observed": 84,
+  "forecast": 46,
+  "other": 46,
+  "not_occurred": 8,
+  "ritual": 8
+ },
+ "reserved": 10,
+ "not_seen_reason": {
+  "": 306,
+  "below_horizon": 11,
+  "cloud": 8,
+  "foreign": 7
+ },
+ "recode": {
+  "n": 34,
+  "agreement": 0.9117647058823529,
+  "kappa": 0.8871681415929203,
+  "agreement_pooled": 0.9705882352941176,
+  "kappa_pooled": 0.9442622950819672,
+  "disagreements": [
+   [
+    "wda_11501006_003",
+    "discussion",
+    "ritual"
+   ],
+   [
+    "wia_10802015_002",
+    "other",
+    "discussion"
+   ],
+   [
+    "wva_11011009_002",
+    "discussion",
+    "ritual"
+   ]
+  ]
+ }
+}

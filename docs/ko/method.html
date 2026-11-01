@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>방법·한계 — 실록 메트릭스</title><meta name="description" content="조선왕조실록을 기사 단위로 센 수치와, 그 수치를 얼마나 믿어도 되는지">
+<script>(function(){var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark"){localStorage.setItem("skm-theme",q)}else if(q==="auto"){localStorage.removeItem("skm-theme")}var v=localStorage.getItem("skm-theme");if(v)document.documentElement.setAttribute("data-theme",v)})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;
+  --bg:#f7f6f2;--bg2:#edebe4;--card:#ffffff;--line:#dcd9d0;--line2:#e9e6de;
+  --fg:#1e2024;--fg2:#5b5f67;--fg3:#8a8e96;
+  --accent:#2f5d8a;--accent2:#9a6b2f;
+  --s1:#2f5d8a;--s2:#9a6b2f;--s3:#5e6b5e;--s4:#8a4f5c;--grid:#e4e1d9;
+  --shadow:0 1px 2px rgba(30,32,40,.05),0 6px 18px rgba(30,32,40,.05);
+  --display:"Noto Serif KR","Source Serif 4",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans KR",-apple-system,"Segoe UI","Apple SD Gothic Neo",Roboto,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#1a1c1f;--bg2:#222326;--card:#232428;--line:#34363c;--line2:#2b2d32;
+  --fg:#ebe9e4;--fg2:#b3b1aa;--fg3:#80827f;
+  --accent:#7ea4d6;--accent2:#d1a35f;
+  --s1:#6f9bd0;--s2:#c89a56;--s3:#8fa08f;--s4:#c08595;--grid:#2e3035;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 20px rgba(0,0,0,.25)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#1a1c1f;--bg2:#222326;--card:#232428;--line:#34363c;--line2:#2b2d32;
+  --fg:#ebe9e4;--fg2:#b3b1aa;--fg3:#80827f;
+  --accent:#7ea4d6;--accent2:#d1a35f;
+  --s1:#6f9bd0;--s2:#c89a56;--s3:#8fa08f;--s4:#c08595;--grid:#2e3035;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 20px rgba(0,0,0,.25)}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;font:16px/1.7 var(--body);background:var(--bg);color:var(--fg);overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.55rem 1.1rem;display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap}
+header .brand{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--fg);letter-spacing:-.01em}
+header nav{display:flex;gap:1rem;flex-wrap:wrap}header nav a{color:var(--fg2);font-size:.92rem;padding:.2rem 0;border-bottom:2px solid transparent}
+header nav a:hover{text-decoration:none;color:var(--fg)}header nav a.on{color:var(--fg);border-bottom-color:var(--accent2)}
+header .right{margin-left:auto;display:flex;gap:.6rem;align-items:center}
+header .lang{font-size:.88rem;color:var(--fg2);border:1px solid var(--line);border-radius:999px;padding:.15rem .7rem}header .lang:hover{text-decoration:none;color:var(--fg);border-color:var(--fg3)}
+.theme{border:1px solid var(--line);background:transparent;color:var(--fg2);border-radius:999px;width:30px;height:30px;cursor:pointer;font-size:.9rem;line-height:1;padding:0}.theme:hover{color:var(--fg);border-color:var(--fg3)}
+main{max-width:1060px;margin:0 auto;padding:1.6rem 1.1rem 4rem;min-width:0}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.2rem);line-height:1.25;letter-spacing:-.015em;margin:.3rem 0 .5rem;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:1.3rem;line-height:1.3;margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);text-wrap:balance}
+h3{font-size:1.02rem;margin:1.4rem 0 .4rem}
+.eyebrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.tag{display:inline-block;font-size:.74rem;letter-spacing:.04em;padding:.1rem .55rem;border-radius:999px;color:var(--fg2);background:var(--bg2);border:1px solid var(--line2)}
+.tag.layer{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.lead{color:var(--fg2);font-size:1.05rem;max-width:70ch;margin:0 0 1.2rem}
+.hero{padding:.6rem 0 1.4rem;border-bottom:1px solid var(--line);margin-bottom:1.4rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.7rem)}.hero .lead{font-size:1.12rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:.8rem;margin:.9rem 0 1.4rem}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem .9rem;box-shadow:var(--shadow);color:var(--fg);transition:transform .15s,border-color .15s}
+a.card:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--fg3)}
+.card b{display:block;margin-bottom:.25rem;font-size:.98rem;color:var(--accent)}.card small{color:var(--fg2);font-size:.86rem;line-height:1.5;display:block}
+.card.s-A{border-top:3px solid var(--s1)}.card.s-B{border-top:3px solid var(--s3)}.card.s-C{border-top:3px solid var(--s2)}.card.s-D{border-top:3px solid var(--s4)}.card.s-E{border-top:3px solid var(--fg3)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:.8rem;margin:1.2rem 0 1.6rem}
+.stat{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;box-shadow:var(--shadow);color:var(--fg)}
+.stat .n{font-family:var(--display);font-size:2rem;font-weight:600;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat small{display:block;color:var(--fg2);margin-top:.35rem;font-size:.86rem;line-height:1.45}
+a.stat:hover{text-decoration:none;border-color:var(--fg3)}
+.spec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0 1.4rem;box-shadow:var(--shadow)}
+.rel{border-left:4px solid var(--accent2)}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.4rem;margin:0}dt{color:var(--fg3);font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;padding-top:.15rem}dd{margin:0;min-width:0}
+dd.formula{font-family:ui-monospace,"SF Mono",Consolas,"Noto Sans KR",monospace;font-size:.9rem;background:var(--bg2);border-radius:6px;padding:.45rem .65rem;line-height:1.6}
+@media(max-width:640px){dl{grid-template-columns:1fr}dt{margin-top:.5rem}}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.6rem 0}
+th,td{border-bottom:1px solid var(--line2);padding:.42rem .6rem;text-align:left;vertical-align:top}
+thead th{color:var(--fg2);font-weight:600;font-size:.82rem;letter-spacing:.02em;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--line)}
+thead th:hover{color:var(--fg)}tbody tr:nth-child(even){background:color-mix(in srgb,var(--bg2) 55%,transparent)}tbody tr:hover{background:var(--bg2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}td:first-child{white-space:nowrap}
+table.fixed{table-layout:fixed;min-width:900px}table.fixed th{white-space:normal}table.fixed td{white-space:normal;overflow-wrap:normal;word-break:break-all}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:0 .3rem;margin:.6rem 0 1rem}.wrap table{margin:0}
+figure{margin:1.2rem 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1rem .8rem;box-shadow:var(--shadow)}
+figcaption{font-size:.86rem;color:var(--fg2);margin-top:.5rem;line-height:1.5}
+svg{max-width:100%;height:auto;display:block}svg text{font-family:var(--body);fill:var(--fg2);font-size:11px}svg .ax{stroke:var(--line)}svg .grid{stroke:var(--grid)}
+.legend{display:flex;gap:1.1rem;font-size:.86rem;color:var(--fg2);flex-wrap:wrap;margin:.2rem 0 .4rem}.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:.4rem;vertical-align:-1px;background:var(--c)}
+.note{background:color-mix(in srgb,var(--accent) 7%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-left:4px solid var(--accent);border-radius:8px;padding:.7rem 1rem;margin:1.2rem 0;font-size:.95rem}
+.prose p,.prose ul,.prose ol,.prose .note,.prose .lead{max-width:72ch}.prose p{margin:.8rem 0}.prose ul,.prose ol{padding-left:1.2rem}.prose li{margin:.3rem 0}
+.src{color:var(--fg2);font-size:.92rem}.files a{display:inline-block;font-size:.85rem;background:var(--bg2);border:1px solid var(--line2);border-radius:6px;padding:.15rem .55rem;margin:.2rem .3rem .2rem 0;color:var(--fg2)}.files a:hover{color:var(--fg);text-decoration:none;border-color:var(--fg3)}
+footer{border-top:1px solid var(--line);color:var(--fg3);font-size:.82rem;padding:1.2rem;text-align:center;line-height:1.6}
+.filter{margin:.5rem 0}.filter input{padding:.4rem .7rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);width:min(100%,340px);font:inherit;font-size:.9rem}
+.filter input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.links{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:2rem;font-size:.95rem}
+@media(prefers-reduced-motion:reduce){.card,a.card:hover{transition:none;transform:none}}
+/* --- visual layer: hero band, glyph watermark, key values, takeaways, ribbons --- */
+.hero{position:relative;padding:1.4rem 0 1.2rem;margin:-.4rem 0 1.4rem;border-bottom:1px solid var(--line);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 -1.1rem auto -1.1rem;height:6px;background:linear-gradient(90deg,var(--s1),var(--s2) 50%,var(--s3))}
+.hero .glyph{position:absolute;right:-.2rem;top:.6rem;font-family:var(--display);font-size:clamp(5rem,14vw,9rem);line-height:1;color:var(--accent);opacity:.07;pointer-events:none;user-select:none;letter-spacing:-.04em}
+.hero .lead{max-width:62ch}
+.strip{margin:1.2rem 0 .2rem}.strip svg text{font-size:10.5px}
+.take{position:relative;background:color-mix(in srgb,var(--accent2) 9%,var(--card));border:1px solid color-mix(in srgb,var(--accent2) 30%,var(--line));border-left:5px solid var(--accent2);border-radius:10px;padding:.9rem 1.2rem 1rem;margin:1.2rem 0 1.4rem;box-shadow:var(--shadow)}
+.take .l{font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--accent2);letter-spacing:-.005em}
+.take p{margin:.3rem 0 0;font-size:1.02rem;line-height:1.65;max-width:76ch}
+.take.small p{font-size:.95rem}
+.card{position:relative}.card .kv{display:block;font-family:var(--display);font-weight:600;font-size:1.55rem;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--fg);margin:.1rem 0 .35rem}
+.card .kv small{display:inline;font:inherit;font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--fg3);margin-left:.4rem;letter-spacing:0}
+h2.num{counter-increment:sec}h2.num::before{content:attr(data-n);font-family:var(--display);font-weight:600;color:var(--accent2);margin-right:.6rem;font-size:.95rem;vertical-align:.12em;font-variant-numeric:tabular-nums}
+.mhero{display:grid;grid-template-columns:1fr auto;gap:1rem 2rem;align-items:end;margin-bottom:.4rem}
+.mhero .big{font-family:var(--display);font-weight:600;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;color:var(--accent);text-align:right;white-space:nowrap}
+.mhero .big small{display:block;font:inherit;font-family:var(--body);font-weight:400;font-size:.82rem;color:var(--fg2);letter-spacing:0;margin-top:.35rem;white-space:normal;max-width:22ch;margin-left:auto}
+@media(max-width:720px){.mhero{grid-template-columns:1fr}.mhero .big{text-align:left}.mhero .big small{margin-left:0}}
+.ribbon{margin:.8rem 0 1.2rem}.ribbon svg text{font-size:10px}
+.rel .badge{display:inline-block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .5rem;border-radius:999px;background:var(--accent2);color:#fff;margin-right:.5rem;vertical-align:.1em}
+.stat .n{color:var(--accent)}
+
+</style></head><body>
+<header><a class="brand" href="../ko/index.html">실록 메트릭스</a>
+<nav><a href="../ko/index.html">홈</a><a href="../ko/kings/index.html">왕대</a><a href="../ko/metrics/index.html">지표</a><a href="../ko/prior.html">선행 결과</a><a href="../ko/reading.html">읽기용 판</a><a href="../ko/data.html">데이터</a><a href="../ko/method.html" class="on">방법·한계</a></nav>
+<div class="right"><button id="theme" class="theme" type="button" aria-label="theme">◑</button><a class="lang" href="../en/index.html">English</a></div></header>
+<main><div class="prose">
+<h1>방법·한계</h1>
+<div class="take small"><div class="l">핵심</div><p>세는 단위는 기사, 날짜는 음력 원문 그대로에 양력 환산을 더한 것, 천문은 DE406 직접 계산이다. 키워드 지표는 손으로 코딩한 표본의 정밀도를 곱해 읽는다. 실록은 「일어난 일」이 아니라 「적은 일」의 기록이라는 한계가 모든 빈도형 지표에 걸린다.</p></div>
+<h2>자료</h2>
+<p>교육부 국사편찬위원회, 「조선왕조실록 정보_실록원문」(공공데이터포털 15053647, 공공누리 제1유형). 태조~철종 25대, 본실록 25종·수정 2종·개수 1종·보궐정오 1종·광해군일기 중초본·정초본, XML 676파일. 고종·순종실록은 「고순종실록 원문」(15053646, 제4유형 — 변경 금지·비상업)으로, 본문을 가공·인용하지 않는 집계(기사 수·글자 수·분류·키워드 건수)에만 썼다. 기사(biblioData type=&quot;T&quot;) 단위로 셌다. 그래서 범위는 태조부터 순종까지 1392~1910년이고, 고종·순종실록은 기사 테이블에 제목 없이(ID·날짜·글자 수·분류·링크만) 들어 있으며 키워드 표에도 문맥 발췌가 없다. 천문 대조(계열 C)와 표본 코딩은 본문을 인용해야 하므로 태조~철종에서만 했다.</p>
+<p>국사편찬위원회, 「조선왕조실록 정보_부가정보 인물 데이터」(15053645): 인물 115,859명·관직 이력 336,255행. 한국학중앙연구원, 「조선조문과급제자」(15052752): 문과 급제자 15,151명의 성명·본관·급제 연도.</p>
+<h2>세는 단위</h2>
+<p>모든 수는 <b>기사</b> 단위다. 국편 XML에서 biblioData type="T" 인 요소 하나가 기사 하나이고, 전체 414,501건 가운데 412,769건에 날짜가 있다. 시계열은 본실록(광해군은 정초본)만 쓰고 수정·개수·보궐정오본은 판본 비교 계열에서만 다룬다. 글자 수는 기사 본문의 한자 수다.</p>
+<h2>날짜</h2>
+<p>실록의 날짜는 음력이다. 서기 연도와 음력 월일을 그대로 두고, 양력은 korean_lunar_calendar 로 환산했다. 1582년 10월 15일 이전은 율리우스력으로 표시한다. 1896년(건양 1) 1월 1일부터 조정은 양력을 썼고 국편 XML 도 그날부터 간지 자리에 「陽曆」을 적으므로, 그 기사들의 월일은 변환하지 않고 양력 그대로 둔다(`date_system` 열). 환산의 정확도는 천문으로 확인했다: 1392~1863년의 음력 매월 초하루 6,642개를 DE406으로 계산한 합삭(서울 지방평균시) 날짜와 대조하니 6,455개(97.2%)가 같은 날이고 187개가 하루 차이, 이틀 이상 어긋난 달은 없었다. 그래서 일식·월식 대조 창을 ±1일로 두고 같은 날 기준 값도 함께 보인다. 날짜 있는 기사 가운데 26건은 변환 패키지가 거부한 날이라 양력이 비어 있다 — 패키지가 29일까지로 보는 달의 30일 23건, 31일 2건, 날짜 미상(99일) 1건. 원전 날짜의 오류인지 역서 차이인지는 KASI 연력표와 대조하기 전에는 확정하지 않는다. 그 밖에 일(日) 자리가 「??」인 기사 38건은 날짜 없는 기사로 셌다.</p>
+<h2>천문 계산</h2>
+<p>JPL DE406 행성력(skyfield 로 읽음). 합삭·일식·월식·금성 내합을 직접 계산했다. ΔT 는 Stephenson–Morrison–Hohenkerk 2016 장기 모형. 일식은 합삭마다 서울(37.57°N, 126.98°E)에서 태양과 달의 겉보기 원반이 겹치는지, 태양이 지평선 위에 있는지를 2분 간격으로 검사했다. 겉보기 반지름은 태양 696,000km·달 1,737.4km 로 두었고(695,700km 로 바꾸면 1528-11-22의 극미한 접촉 한 건이 빠져 184회가 된다), 표의 `newmoon_jd`·`jd` 열은 TT 율리우스일이다. 그렇게 얻은 1392~1863년 서울 가시 일식 185회는 모두 Espenak–Meeus 목록에 있고, 목록의 1,125회는 전부 같은 날(±1일)의 합삭과 맞았다. 월식은 skyfield 의 월식 탐색 함수로 구하고 식 최대 때 달이 지평선 위에 있는지로 서울 가시 여부를 정했다. 시각 비교는 당시 백각법·경점법 때문에 이 판에서는 하지 않았다.</p>
+<h2>키워드와 표본 코딩</h2>
+<p>계열 C·D·E의 많은 지표는 한문 키워드로 기사를 고른다. 키워드는 뜻이 다른 자리에도 걸리므로(「日食一升」은 하루 한 되를 먹는다는 뜻이다) 지표마다 층화 표본을 손으로 코딩해 정밀도와 윌슨 95% 구간을 신뢰도 카드에 적었다. 일식 기사 332건은 전수를 유형 분류했고 34건을 다른 코더가 블라인드로 다시 코딩했다. 코딩은 코드북에 따라 복수의 언어모델 코더가 했고, 인용문은 모두 원문과 문자열로 대조했다. 코드북과 판정 전체를 공개한다.</p>
+<h2>신뢰도 카드</h2>
+<p>세 종류다. <b>집계값</b>은 원본에서 그대로 센 수이며 외부 수치(Bak & Oh 2015, 2026-09 색인)와 대조했다. <b>외부 대조값</b>은 천문 계산과 맞춰 본 비율이다. <b>표본 정밀도</b>는 키워드가 지표의 뜻대로 쓰인 비율이다. 키워드 지표의 건수는 정밀도를 곱해 읽어야 한다.</p>
+<h2>한계</h2>
+<ul><li>실록은 「일어난 일」이 아니라 「적은 일」의 기록이다. 빈도형 지표(재이·사형 언급·진휼)는 기록 관행의 영향을 받는다. 세종실록의 사형 언급 정점이 판결 재가 기록이었던 것이 그 예다.</li>
+<li>국편의 분류·사론 태그·인물 연결은 현대 편집진의 것이고 책마다 세밀함이 다르다. 인물별 등장 건수는 오연결 때문에 지표로 쓰지 않았다.</li>
+<li>성관 집중도의 방목 보충은 정확도 91%이고 1850년 이후는 결측 20%가 남는다.</li>
+<li>월식 기사는 유형 분류를 하지 않아 일치율이 하한이다.</li></ul>
+<h2>선행 연구</h2>
+<p>이 사이트가 새로 보태는 것은 기사 단위 메타 테이블, 키워드 지표의 정밀도, 일식 기사의 유형별 일치율, 판본 쌍의 같은 잣대 비교, 광해군일기 산삭의 글자 단위 계량이다. 왕별 기사 수(Bak & Oh 2015), 조선 일식 기록 집계(안영숙·이용삼 2004), 조선 전기 사론 수(차장섭), 실록의 형옥 기사 수(유승희 2007)는 이미 있는 수치이므로 「선행 결과」 면에서 재계산과 나란히 보인다.</p>
+<h2>출처 표시</h2>
+<p>본 저작물은 '교육부 국사편찬위원회'에서 2022년 작성하여 공공누리 제1유형으로 개방한 '조선왕조실록 정보_실록원문'·'조선왕조실록 정보_부가정보 인물 데이터'를 이용하였으며, 해당 저작물은 '공공데이터포털(https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do)'에서 무료로 다운받으실 수 있습니다. 성관 보충에는 '한국학중앙연구원'이 공공데이터포털(https://www.data.go.kr/data/15052752/fileData.do)에 개방한 '조선조문과급제자'를 이용하였습니다. 천문 계산은 NASA/JPL DE406, 일식 목록은 Espenak & Meeus (NASA/TP-2006-214141)를 썼다.</p>
+<h2>판</h2><p>1.0 (2026-11-02) — 첫 공개. 지표 24개, 판본 30종, 왕대 25.<br>1.1 (2026-11-02) — 고종·순종실록을 건수 집계에 포함(판본 33종, 왕대 27). 계열 C 와 표본 코딩은 태조~철종 그대로.</p>
+</div></main>
+<footer>실록 메트릭스 · 판 1.1 · 생성일 2026-11-02 · <a href="https://github.com/BowonKwon/Sillok-Metrics">GitHub</a> · 공개 자료 전체 <a href="https://bowonkwon.github.io/">bowonkwon.github.io</a><br>본 사이트의 집계는 교육부 국사편찬위원회가 공공누리 제1유형으로 개방한 「조선왕조실록 정보_실록원문」·「부가정보 인물 데이터」와 한국학중앙연구원 「조선조문과급제자」(공공데이터포털)를 이용하였습니다.</footer>
+<script>
+(function(){var k="skm-theme",r=document.documentElement,b=document.getElementById("theme");function ap(v){if(v)r.setAttribute("data-theme",v);else r.removeAttribute("data-theme");if(b)b.textContent=v==="dark"?"\u263E":v==="light"?"\u2600":"\u25D1"}var cur=localStorage.getItem(k)||"";ap(cur);if(b)b.addEventListener("click",function(){cur=cur===""?"light":cur==="light"?"dark":"";if(cur)localStorage.setItem(k,cur);else localStorage.removeItem(k);ap(cur)})})();
+document.querySelectorAll('table.sort').forEach(function(t){
+  var ths=t.querySelectorAll('th');ths.forEach(function(th,i){th.addEventListener('click',function(){
+    var rows=Array.from(t.tBodies[0].rows),asc=th.dataset.asc!=='1';th.dataset.asc=asc?'1':'0';
+    rows.sort(function(a,b){var x=a.cells[i].dataset.v||a.cells[i].textContent,y=b.cells[i].dataset.v||b.cells[i].textContent;
+      var nx=parseFloat(x),ny=parseFloat(y);if(!isNaN(nx)&&!isNaN(ny))return asc?nx-ny:ny-nx;return asc?x.localeCompare(y):y.localeCompare(x)});
+    rows.forEach(function(r){t.tBodies[0].appendChild(r)})})})});
+document.querySelectorAll('.filter input').forEach(function(inp){inp.addEventListener('input',function(){
+  var q=inp.value.toLowerCase(),t=document.getElementById(inp.dataset.target);
+  Array.from(t.tBodies[0].rows).forEach(function(r){r.style.display=r.textContent.toLowerCase().indexOf(q)>=0?'':'none'})})});
+</script></body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading edition — Sillok Metrics</title><meta name="description" content="The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number">
+<script>(function(){var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark"){localStorage.setItem("skm-theme",q)}else if(q==="auto"){localStorage.removeItem("skm-theme")}var v=localStorage.getItem("skm-theme");if(v)document.documentElement.setAttribute("data-theme",v)})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;
+  --bg:#f7f6f2;--bg2:#edebe4;--card:#ffffff;--line:#dcd9d0;--line2:#e9e6de;
+  --fg:#1e2024;--fg2:#5b5f67;--fg3:#8a8e96;
+  --accent:#2f5d8a;--accent2:#9a6b2f;
+  --s1:#2f5d8a;--s2:#9a6b2f;--s3:#5e6b5e;--s4:#8a4f5c;--grid:#e4e1d9;
+  --shadow:0 1px 2px rgba(30,32,40,.05),0 6px 18px rgba(30,32,40,.05);
+  --display:"Noto Serif KR","Source Serif 4",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans KR",-apple-system,"Segoe UI","Apple SD Gothic Neo",Roboto,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#1a1c1f;--bg2:#222326;--card:#232428;--line:#34363c;--line2:#2b2d32;
+  --fg:#ebe9e4;--fg2:#b3b1aa;--fg3:#80827f;
+  --accent:#7ea4d6;--accent2:#d1a35f;
+  --s1:#6f9bd0;--s2:#c89a56;--s3:#8fa08f;--s4:#c08595;--grid:#2e3035;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 20px rgba(0,0,0,.25)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#1a1c1f;--bg2:#222326;--card:#232428;--line:#34363c;--line2:#2b2d32;
+  --fg:#ebe9e4;--fg2:#b3b1aa;--fg3:#80827f;
+  --accent:#7ea4d6;--accent2:#d1a35f;
+  --s1:#6f9bd0;--s2:#c89a56;--s3:#8fa08f;--s4:#c08595;--grid:#2e3035;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 20px rgba(0,0,0,.25)}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;font:16px/1.7 var(--body);background:var(--bg);color:var(--fg);overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.55rem 1.1rem;display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap}
+header .brand{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--fg);letter-spacing:-.01em}
+header nav{display:flex;gap:1rem;flex-wrap:wrap}header nav a{color:var(--fg2);font-size:.92rem;padding:.2rem 0;border-bottom:2px solid transparent}
+header nav a:hover{text-decoration:none;color:var(--fg)}header nav a.on{color:var(--fg);border-bottom-color:var(--accent2)}
+header .right{margin-left:auto;display:flex;gap:.6rem;align-items:center}
+header .lang{font-size:.88rem;color:var(--fg2);border:1px solid var(--line);border-radius:999px;padding:.15rem .7rem}header .lang:hover{text-decoration:none;color:var(--fg);border-color:var(--fg3)}
+.theme{border:1px solid var(--line);background:transparent;color:var(--fg2);border-radius:999px;width:30px;height:30px;cursor:pointer;font-size:.9rem;line-height:1;padding:0}.theme:hover{color:var(--fg);border-color:var(--fg3)}
+main{max-width:1060px;margin:0 auto;padding:1.6rem 1.1rem 4rem;min-width:0}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.2rem);line-height:1.25;letter-spacing:-.015em;margin:.3rem 0 .5rem;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:1.3rem;line-height:1.3;margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);text-wrap:balance}
+h3{font-size:1.02rem;margin:1.4rem 0 .4rem}
+.eyebrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.tag{display:inline-block;font-size:.74rem;letter-spacing:.04em;padding:.1rem .55rem;border-radius:999px;color:var(--fg2);background:var(--bg2);border:1px solid var(--line2)}
+.tag.layer{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.lead{color:var(--fg2);font-size:1.05rem;max-width:70ch;margin:0 0 1.2rem}
+.hero{padding:.6rem 0 1.4rem;border-bottom:1px solid var(--line);margin-bottom:1.4rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.7rem)}.hero .lead{font-size:1.12rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:.8rem;margin:.9rem 0 1.4rem}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem .9rem;box-shadow:var(--shadow);color:var(--fg);transition:transform .15s,border-color .15s}
+a.card:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--fg3)}
+.card b{display:block;margin-bottom:.25rem;font-size:.98rem;color:var(--accent)}.card small{color:var(--fg2);font-size:.86rem;line-height:1.5;display:block}
+.card.s-A{border-top:3px solid var(--s1)}.card.s-B{border-top:3px solid var(--s3)}.card.s-C{border-top:3px solid var(--s2)}.card.s-D{border-top:3px solid var(--s4)}.card.s-E{border-top:3px solid var(--fg3)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:.8rem;margin:1.2rem 0 1.6rem}
+.stat{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;box-shadow:var(--shadow);color:var(--fg)}
+.stat .n{font-family:var(--display);font-size:2rem;font-weight:600;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat small{display:block;color:var(--fg2);margin-top:.35rem;font-size:.86rem;line-height:1.45}
+a.stat:hover{text-decoration:none;border-color:var(--fg3)}
+.spec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0 1.4rem;box-shadow:var(--shadow)}
+.rel{border-left:4px solid var(--accent2)}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.4rem;margin:0}dt{color:var(--fg3);font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;padding-top:.15rem}dd{margin:0;min-width:0}
+dd.formula{font-family:ui-monospace,"SF Mono",Consolas,"Noto Sans KR",monospace;font-size:.9rem;background:var(--bg2);border-radius:6px;padding:.45rem .65rem;line-height:1.6}
+@media(max-width:640px){dl{grid-template-columns:1fr}dt{margin-top:.5rem}}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.6rem 0}
+th,td{border-bottom:1px solid var(--line2);padding:.42rem .6rem;text-align:left;vertical-align:top}
+thead th{color:var(--fg2);font-weight:600;font-size:.82rem;letter-spacing:.02em;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--line)}
+thead th:hover{color:var(--fg)}tbody tr:nth-child(even){background:color-mix(in srgb,var(--bg2) 55%,transparent)}tbody tr:hover{background:var(--bg2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}td:first-child{white-space:nowrap}
+table.fixed{table-layout:fixed;min-width:900px}table.fixed th{white-space:normal}table.fixed td{white-space:normal;overflow-wrap:normal;word-break:break-all}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:0 .3rem;margin:.6rem 0 1rem}.wrap table{margin:0}
+figure{margin:1.2rem 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1rem .8rem;box-shadow:var(--shadow)}
+figcaption{font-size:.86rem;color:var(--fg2);margin-top:.5rem;line-height:1.5}
+svg{max-width:100%;height:auto;display:block}svg text{font-family:var(--body);fill:var(--fg2);font-size:11px}svg .ax{stroke:var(--line)}svg .grid{stroke:var(--grid)}
+.legend{display:flex;gap:1.1rem;font-size:.86rem;color:var(--fg2);flex-wrap:wrap;margin:.2rem 0 .4rem}.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:.4rem;vertical-align:-1px;background:var(--c)}
+.note{background:color-mix(in srgb,var(--accent) 7%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-left:4px solid var(--accent);border-radius:8px;padding:.7rem 1rem;margin:1.2rem 0;font-size:.95rem}
+.prose p,.prose ul,.prose ol,.prose .note,.prose .lead{max-width:72ch}.prose p{margin:.8rem 0}.prose ul,.prose ol{padding-left:1.2rem}.prose li{margin:.3rem 0}
+.src{color:var(--fg2);font-size:.92rem}.files a{display:inline-block;font-size:.85rem;background:var(--bg2);border:1px solid var(--line2);border-radius:6px;padding:.15rem .55rem;margin:.2rem .3rem .2rem 0;color:var(--fg2)}.files a:hover{color:var(--fg);text-decoration:none;border-color:var(--fg3)}
+footer{border-top:1px solid var(--line);color:var(--fg3);font-size:.82rem;padding:1.2rem;text-align:center;line-height:1.6}
+.filter{margin:.5rem 0}.filter input{padding:.4rem .7rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);width:min(100%,340px);font:inherit;font-size:.9rem}
+.filter input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.links{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:2rem;font-size:.95rem}
+@media(prefers-reduced-motion:reduce){.card,a.card:hover{transition:none;transform:none}}
+/* --- visual layer: hero band, glyph watermark, key values, takeaways, ribbons --- */
+.hero{position:relative;padding:1.4rem 0 1.2rem;margin:-.4rem 0 1.4rem;border-bottom:1px solid var(--line);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 -1.1rem auto -1.1rem;height:6px;background:linear-gradient(90deg,var(--s1),var(--s2) 50%,var(--s3))}
+.hero .glyph{position:absolute;right:-.2rem;top:.6rem;font-family:var(--display);font-size:clamp(5rem,14vw,9rem);line-height:1;color:var(--accent);opacity:.07;pointer-events:none;user-select:none;letter-spacing:-.04em}
+.hero .lead{max-width:62ch}
+.strip{margin:1.2rem 0 .2rem}.strip svg text{font-size:10.5px}
+.take{position:relative;background:color-mix(in srgb,var(--accent2) 9%,var(--card));border:1px solid color-mix(in srgb,var(--accent2) 30%,var(--line));border-left:5px solid var(--accent2);border-radius:10px;padding:.9rem 1.2rem 1rem;margin:1.2rem 0 1.4rem;box-shadow:var(--shadow)}
+.take .l{font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--accent2);letter-spacing:-.005em}
+.take p{margin:.3rem 0 0;font-size:1.02rem;line-height:1.65;max-width:76ch}
+.take.small p{font-size:.95rem}
+.card{position:relative}.card .kv{display:block;font-family:var(--display);font-weight:600;font-size:1.55rem;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--fg);margin:.1rem 0 .35rem}
+.card .kv small{display:inline;font:inherit;font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--fg3);margin-left:.4rem;letter-spacing:0}
+h2.num{counter-increment:sec}h2.num::before{content:attr(data-n);font-family:var(--display);font-weight:600;color:var(--accent2);margin-right:.6rem;font-size:.95rem;vertical-align:.12em;font-variant-numeric:tabular-nums}
+.mhero{display:grid;grid-template-columns:1fr auto;gap:1rem 2rem;align-items:end;margin-bottom:.4rem}
+.mhero .big{font-family:var(--display);font-weight:600;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;color:var(--accent);text-align:right;white-space:nowrap}
+.mhero .big small{display:block;font:inherit;font-family:var(--body);font-weight:400;font-size:.82rem;color:var(--fg2);letter-spacing:0;margin-top:.35rem;white-space:normal;max-width:22ch;margin-left:auto}
+@media(max-width:720px){.mhero{grid-template-columns:1fr}.mhero .big{text-align:left}.mhero .big small{margin-left:0}}
+.ribbon{margin:.8rem 0 1.2rem}.ribbon svg text{font-size:10px}
+.rel .badge{display:inline-block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .5rem;border-radius:999px;background:var(--accent2);color:#fff;margin-right:.5rem;vertical-align:.1em}
+.stat .n{color:var(--accent)}
+
+</style></head><body>
+<header><a class="brand" href="../en/index.html">Sillok Metrics</a>
+<nav><a href="../en/index.html">Home</a><a href="../en/kings/index.html">Reigns</a><a href="../en/metrics/index.html">Metrics</a><a href="../en/prior.html">Prior results</a><a href="../en/reading.html" class="on">Reading edition</a><a href="../en/data.html">Data</a><a href="../en/method.html">Method & limits</a></nav>
+<div class="right"><button id="theme" class="theme" type="button" aria-label="theme">◑</button><a class="lang" href="../ko/index.html">한국어</a></div></header>
+<main><div class="prose">
+<h1>Reading edition</h1>
+<p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; here is only what was seen. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; they are excluded from text excerpts and sample coding.</p>
+<div class="take"><div class="l">Key point</div><p>The Sillok&#x27;s observational entries are accurate enough for quantitative use; its frequency entries follow recording practice. Reading the two apart is this site in one sentence.</p></div>
+<h2>How much was written</h2>
+<p>The principal editions for the 27 reigns from Taejo to Sunjong hold 375,368 articles and 47.4 million Chinese characters (Gojong and Sunjong counted only). Per reign-year the Injong records are the densest at 184,521 characters and the Heonjong records the thinnest at 12,677. Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000; after Jeongjo the density collapses. This is the number behind NIKH's remark that the record thins toward the end.</p>
+<p>Historians' comments first exceed 2% of articles under Seongjong, peak under Jungjong, Myeongjong and Seonjo, and vanish from Jeongjo onward. Cha Jang-seop's hand count for early Joseon and the NIKH tags agree to within a few dozen per reign.</p>
+<h2>Where the editions diverge</h2>
+<p>The Revised Seonjo records are 7% of the original by articles and 10% by characters; NIKH's 'one fifth' is an impression by fascicle count. 60% of the revised edition's days also have an article in the original. The Supplemented Hyeonjong records have 13% more articles and 34% more characters than the original — a rewrite, not a cut. The Gwanghaegun diary lost 15% of its articles and 18% of its characters between drafts, and 16% of the second draft's characters sit inside deletion marks.</p>
+<h2>Was the sky right?</h2>
+<p>Reading all 332 articles containing '日食', one in three turned out to be a memorial or edict using an eclipse as an argument, and one in seven was not an eclipse at all ('日食一升' is a daily ration of rice). Of the 84 read as a report that an eclipse occurred that day, 65% fall within ±1 day of a computed eclipse visible from Seoul and 95% match an eclipse somewhere on Earth. Most of the rest are '地下日食' — eclipses after sunset entered as computed. Seen the other way, 33% of the 185 eclipses visible from Seoul have an article.</p>
+<p>The 2,937 days on which Venus was reported visible in daylight are sharper still. A period search returns 583.7 days, 0.04% from the synodic period of 583.92; 66% of the records fall within 90 days of inferior conjunction and the conjunction itself is empty. At least this kind of record carries the signal of real observation.</p>
+<h2>Who held office</h2>
+<p>Grouping first appointees to the highest offices by 50-year period, the share of the top ten clans rises from 0.28 to 0.45; concentration among examination passers over the same period is smaller. The two groups differ in composition, so the gap is not read as a promotion effect.</p>
+<h2>A death-penalty article is not an execution</h2>
+<p>Articles with capital-punishment terms are most frequent under Sejong, but the sample shows most of them are sentencing reports applying the code; execution is confirmed in 2 of 20. In the sample the confirmation rate is higher in the late 16th to early 18th century, but with 20 articles per period the distribution is not settled. Of the 2,853 capital cases Yu Seung-hui counted in the Ilseongnok for Jeongjo–Cheoljong, only 111 can be found in the Sillok. The Sillok is not a source of penal statistics.</p>
+</div></main>
+<footer>Sillok Metrics · Version 1.1 · Built 2026-11-02 · <a href="https://github.com/BowonKwon/Sillok-Metrics">GitHub</a> · All public materials <a href="https://bowonkwon.github.io/en/">bowonkwon.github.io</a><br>Counts on this site use the 'Veritable Records — original text' and 'supplementary person data' released by the National Institute of Korean History under KOGL Type 1, and the civil-examination roster of the Academy of Korean Studies (data.go.kr).</footer>
+<script>
+(function(){var k="skm-theme",r=document.documentElement,b=document.getElementById("theme");function ap(v){if(v)r.setAttribute("data-theme",v);else r.removeAttribute("data-theme");if(b)b.textContent=v==="dark"?"\u263E":v==="light"?"\u2600":"\u25D1"}var cur=localStorage.getItem(k)||"";ap(cur);if(b)b.addEventListener("click",function(){cur=cur===""?"light":cur==="light"?"dark":"";if(cur)localStorage.setItem(k,cur);else localStorage.removeItem(k);ap(cur)})})();
+document.querySelectorAll('table.sort').forEach(function(t){
+  var ths=t.querySelectorAll('th');ths.forEach(function(th,i){th.addEventListener('click',function(){
+    var rows=Array.from(t.tBodies[0].rows),asc=th.dataset.asc!=='1';th.dataset.asc=asc?'1':'0';
+    rows.sort(function(a,b){var x=a.cells[i].dataset.v||a.cells[i].textContent,y=b.cells[i].dataset.v||b.cells[i].textContent;
+      var nx=parseFloat(x),ny=parseFloat(y);if(!isNaN(nx)&&!isNaN(ny))return asc?nx-ny:ny-nx;return asc?x.localeCompare(y):y.localeCompare(x)});
+    rows.forEach(function(r){t.tBodies[0].appendChild(r)})})})});
+document.querySelectorAll('.filter input').forEach(function(inp){inp.addEventListener('input',function(){
+  var q=inp.value.toLowerCase(),t=document.getElementById(inp.dataset.target);
+  Array.from(t.tBodies[0].rows).forEach(function(r){r.style.display=r.textContent.toLowerCase().indexOf(q)>=0?'':'none'})})});
+</script></body></html>

@@ -1,0 +1,832 @@
+{
+ "profile": "data-package",
+ "name": "sillok-metrics",
+ "title": "Sillok Metrics — derived data",
+ "version": "1.1",
+ "created": "2026-11-02",
+ "homepage": "https://bowonkwon.github.io/Sillok-Metrics/",
+ "contributors": [
+  {
+   "title": "Bowon Kwon",
+   "role": "author"
+  }
+ ],
+ "description": "Article-level counts and metrics for the Veritable Records of the Joseon Dynasty (Taejo–Cheoljong). No article text is included; each article ID links to the NIKH site. Source data: NIKH (KOGL Type 1), AKS; astronomy from JPL DE406 and the Espenak–Meeus canon.",
+ "resources": [
+  {
+   "name": "articles",
+   "path": "articles.csv.gz",
+   "format": "csv (gzip)",
+   "encoding": "utf-8",
+   "rows": 414501,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "a_editions",
+   "path": "a_editions.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 33,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "a_yearly",
+   "path": "a_yearly.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 519,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "a_monthly",
+   "path": "a_monthly.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 7748,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "a_length",
+   "path": "a_length.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 33,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "b_pairs",
+   "path": "b_pairs.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 5,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "b_gwanghae",
+   "path": "b_gwanghae.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "b_gwanghae_yearly",
+   "path": "b_gwanghae_yearly.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 16,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_solar",
+   "path": "c_solar.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 21,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_solar_articles",
+   "path": "c_solar_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 322,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_solar_eclipses_recorded",
+   "path": "c_solar_eclipses_recorded.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 185,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "solar_eclipses_seoul",
+   "path": "solar_eclipses_seoul.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 5863,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "espenak_1392_1863",
+   "path": "espenak_1392_1863.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1125,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "Espenak & Meeus, Five Millennium Canon of Solar Eclipses (NASA/TP-2006-214141), used to cross-check the count of Earth-wide eclipses.",
+     "path": "https://eclipse.gsfc.nasa.gov/SEpubs/5MCSE.html",
+     "license": "reproduction freely granted with credit"
+    }
+   ]
+  },
+  {
+   "name": "c_lunar",
+   "path": "c_lunar.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 3,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_lunar_articles",
+   "path": "c_lunar_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 359,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "lunar_eclipses_seoul",
+   "path": "lunar_eclipses_seoul.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 730,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "c_venus",
+   "path": "c_venus.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_venus_days",
+   "path": "c_venus_days.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 2937,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_venus_periodogram",
+   "path": "c_venus_periodogram.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 601,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "venus_inferior_conjunctions",
+   "path": "venus_inferior_conjunctions.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 296,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "c_comet",
+   "path": "c_comet.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 126,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_quake",
+   "path": "c_quake.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 309,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_quake_province",
+   "path": "c_quake_province.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 309,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_quake_articles",
+   "path": "c_quake_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1768,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "c_weather",
+   "path": "c_weather.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 47,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "d_clan",
+   "path": "d_clan.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 10,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "NIKH, 'Veritable Records — supplementary person data' (15053645): 115,859 persons, 336,255 office-holding rows.",
+     "path": "https://www.data.go.kr/data/15053645/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Academy of Korean Studies, 'Successful candidates of the civil service examination' (15052752): 15,151 passers with name, clan seat and year.",
+     "path": "https://www.data.go.kr/data/15052752/fileData.do",
+     "license": "No restriction (data.go.kr)"
+    }
+   ]
+  },
+  {
+   "name": "d_clan_munkwa",
+   "path": "d_clan_munkwa.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 10,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "NIKH, 'Veritable Records — supplementary person data' (15053645): 115,859 persons, 336,255 office-holding rows.",
+     "path": "https://www.data.go.kr/data/15053645/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Academy of Korean Studies, 'Successful candidates of the civil service examination' (15052752): 15,151 passers with name, clan seat and year.",
+     "path": "https://www.data.go.kr/data/15052752/fileData.do",
+     "license": "No restriction (data.go.kr)"
+    }
+   ]
+  },
+  {
+   "name": "d_lecture",
+   "path": "d_lecture.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "d_memorial",
+   "path": "d_memorial.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "d_justice",
+   "path": "d_justice.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "d_justice_decade",
+   "path": "d_justice_decade.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 53,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_death",
+   "path": "e_death.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_death_reign",
+   "path": "e_death_reign.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_death_sample_summary",
+   "path": "e_death_sample_summary.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_relief",
+   "path": "e_relief.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_relief_yearly",
+   "path": "e_relief_yearly.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 519,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_eonmun",
+   "path": "e_eonmun.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "e_slave",
+   "path": "e_slave.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 27,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "lunar_month_starts",
+   "path": "lunar_month_starts.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 6642,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    },
+    {
+     "title": "korean_lunar_calendar 0.4.0 (MIT) for lunar→solar conversion",
+     "path": "https://github.com/usingsky/korean_lunar_calendar_py",
+     "license": "MIT"
+    }
+   ]
+  },
+  {
+   "name": "keyword_hits",
+   "path": "keyword_hits.csv.gz",
+   "format": "csv (gzip)",
+   "encoding": "utf-8",
+   "rows": 94965,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  }
+ ]
+}

@@ -3341,6 +3341,7 @@ sjw: all comet-keyword articles,SJW-K28110210-01600,sjw,1891-12-21,True
 sjw: all comet-keyword articles,SJW-K32100150-01800,sjw,1895-12-01,True
 sillok: precision-sample observation reports,waa_10711028_002,sillok,1399-01-05,False
 sillok: precision-sample observation reports,wca_10202005_002,sillok,1402-03-08,True
+sillok: precision-sample observation reports,wca_10202016_001,sillok,1402-03-19,True
 sillok: precision-sample observation reports,wca_10311105_001,sillok,1403-12-18,False
 sillok: precision-sample observation reports,wca_11703001_001,sillok,1417-03-18,False
 sillok: precision-sample observation reports,wda_11509021_004,sillok,1433-11-02,True
@@ -3393,9 +3394,13 @@ sillok: precision-sample observation reports,wua_12404014_001,sillok,1748-05-10,
 sillok: precision-sample observation reports,wua_14508003_001,sillok,1769-09-02,True
 sillok: precision-sample observation reports,wua_14508004_001,sillok,1769-09-03,True
 sillok: precision-sample observation reports,wua_14508014_001,sillok,1769-09-13,True
+sillok: precision-sample observation reports,wua_14605111_002,sillok,1770-07-03,True
+sillok: precision-sample observation reports,wwa_11112018_001,sillok,1812-01-31,True
 sillok: precision-sample observation reports,wwa_11905021_001,sillok,1819-07-12,True
 sillok: precision-sample observation reports,wwa_12101022_001,sillok,1821-02-24,True
+sillok: precision-sample observation reports,wwa_12102017_001,sillok,1821-03-20,True
 sillok: precision-sample observation reports,wwa_12508007_001,sillok,1825-09-18,True
+sillok: precision-sample observation reports,wxa_10109029_001,sillok,1835-11-19,False
 sillok: precision-sample observation reports,wya_10407018_001,sillok,1853-08-22,True
 sillok: precision-sample observation reports,wya_10503008_001,sillok,1854-04-05,True
 sillok: precision-sample observation reports,wya_10908007_001,sillok,1858-09-13,True

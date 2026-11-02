@@ -85,8 +85,15 @@ def apply_rules(df, bundle):
     for r in load_rules():
         if bundle not in r["bundles"]:
             continue
-        pat = re.compile(r["regex"])
-        hit = (df["quote"].fillna("") + " " + df["summary"].fillna("")).map(lambda s: bool(pat.search(s))) & (df["type"] != r["set_type"])
+        pat = re.compile(r["regex"]) if r.get("regex") else None
+        hit = (df["quote"].fillna("") + " " + df["summary"].fillna("")).map(lambda s: bool(pat.search(s))) if pat else pd.Series(False, index=df.index)
+        ids = r.get("article_ids", {})          # 1.2.2: explicit ids per bundle, for wording the regex misses (今纔出來, 尙不出來 ...)
+        ids = ids.get(bundle, []) if isinstance(ids, dict) else ids
+        aid = df["article_id"] if "article_id" in df.columns else pd.Series(df.index, index=df.index)
+        hit = hit | aid.isin(ids)
+        if r.get("from_types"):                 # 1.2.2: only rows whose coder type is in the list (e.g. forecast -> ritual for 齋戒)
+            hit = hit & df["type_coder"].isin(r["from_types"])
+        hit = hit & ~aid.isin(r.get("exclude_ids", [])) & (df["type"] != r["set_type"])
         df.loc[hit, "type"] = r["set_type"]; df.loc[hit, "rule"] = r["name"]
     return df
 
@@ -258,7 +265,10 @@ def g4_comet(A, K):
         sets[f"{src}: all comet-keyword articles"] = g
     # Sillok 1.0 precision sample: coded observation reports
     try:
-        pc = pd.DataFrame(read_jsonl(C / "comet_coded.jsonl")); yes = pc[pc.relevant == "yes"].article_id
+        pc = pd.DataFrame(read_jsonl(C / "comet_coded.jsonl"))
+        ov = json.load(open(C / "overrides.json", encoding="utf-8")).get("overrides", {}).get("comet", {}) if (C / "overrides.json").exists() else {}
+        pc["relevant_final"] = [ov.get(i, r) for i, r in zip(pc.article_id, pc.relevant)]   # 1.2.2: the published final judgment (1.2.1 used the coder column only: 64 instead of 69)
+        yes = pc[pc.relevant_final == "yes"].article_id
         sets["sillok: precision-sample observation reports"] = a.loc[a.index.intersection(yes)]
     except FileNotFoundError:
         pass

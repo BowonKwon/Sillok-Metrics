@@ -597,7 +597,7 @@ SJW-A04061300-00500,sjw,ritual,ritual,,ritual_prep,,,,일식 예정으로 혼궁
 SJW-A04100260-01400,sjw,other,other,,,,,,「日食」은 날마다 먹는다는 뜻으로 일식 아님,則日食市井之攘,solar_eclipse_v2_coded_sjw_1
 SJW-A05070010-00900,sjw,observed,observed,,,,,,당일 일식 보고,"○ 日食。
 經筵日記",solar_eclipse_v2_coded_sjw_1
-SJW-A06120010-00500,sjw,forecast,forecast,,below_horizon,,,below_horizon,지하 일식으로 재계함,"以地下日食齋戒, 無所啓",solar_eclipse_v2_coded_sjw_1
+SJW-A06120010-00500,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,지하 일식으로 재계함,"以地下日食齋戒, 無所啓",solar_eclipse_v2_coded_sjw_1
 SJW-A07050010-00100,sjw,ritual,ritual,,,,,,일식으로 당일 상참·경연을 정지함,"以日食, 停常參·經筵",solar_eclipse_v2_coded_sjw_1
 SJW-A07050010-01800,sjw,observed,observed,,,午時·未時,,,오시·미시에 일식과 햇무리 관측,"午時·未時, 日食, 日暈",solar_eclipse_v2_coded_sjw_1
 SJW-A09100020-00500,sjw,observed,observed,,,未時,,,관상감이 초하루 미시의 일식을 다음 날 보고,今月初一日未時日食,solar_eclipse_v2_coded_sjw_1
@@ -613,7 +613,7 @@ SJW-A15010010-00600,sjw,ritual,ritual,,,,,,인견 중 일식 시각이 임박해
 SJW-A15120010-00200,sjw,observed,observed,,,"午時, 日食。未時, 日食, 日暈左珥。申時, 日食",,,오시·미시·신시에 일식과 햇무리 관측,"午時, 日食。未時, 日食, 日暈左珥",solar_eclipse_v2_coded_sjw_1
 SJW-A15120010-00300,sjw,forecast,forecast,,,午正二刻食甚,日食分六分,,관상감이 내편법·대명력법의 일식 추산 시각을 아룀,"大明曆法, 日食分六分",solar_eclipse_v2_coded_sjw_1
 SJW-A16040220-01000,sjw,discussion,discussion,,,,,,차자에서 지난 일식을 재이로 열거,"風雷日蝕之災, 星殞虹貫之變",solar_eclipse_v2_coded_sjw_1
-SJW-A17050010-00200,sjw,forecast,forecast,,below_horizon,,,below_horizon,지하 일식 재계로 시사를 정지함,"地下日食, 齋戒",solar_eclipse_v2_coded_sjw_1
+SJW-A17050010-00200,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,지하 일식 재계로 시사를 정지함,"地下日食, 齋戒",solar_eclipse_v2_coded_sjw_1
 SJW-A18070160-01600,sjw,other,other,,,,,,"「今日食後」로 식사 뒤의 뜻, 일식 아님",今日食後始爲來傳,solar_eclipse_v2_coded_sjw_1
 SJW-A22010270-00600,sjw,other,other,,,,,,"「明日食後」로 식사 뒤의 뜻, 일식 아님","明日食後, 當出往漢江",solar_eclipse_v2_coded_sjw_1
 SJW-A24010090-00400,sjw,other,other,,,,,,"「今日食後」로 식사 뒤의 뜻, 일식 아님","今日食後, 臣等, 與百官同往館所",solar_eclipse_v2_coded_sjw_1
@@ -634,7 +634,7 @@ SJW-B02110120-00600,sjw,other,other,,,,,,"「今日食後」로 식사 뒤의 �
 SJW-B02110270-00500,sjw,other,other,,,,,,「一日食其祿」으로 일식 아님,苟一日食其祿而立其朝,solar_eclipse_v2_coded_sjw_1
 SJW-B03030010-00200,sjw,forecast,forecast,,below_horizon,酉時,,below_horizon,"유시 지하 일식, 남쪽에서 초휴","酉時, 地下日食, 南初虧",solar_eclipse_v2_coded_sjw_1
 SJW-B03030010-00300,sjw,ritual,ritual,,,,,,당일 일식 구식 적간을 명하는 전교,日食救食摘奸事,solar_eclipse_v2_coded_sjw_1
-SJW-B09030220-01100,sjw,forecast,forecast,,,,,,5월 초하루 일식 재계일과 겹쳐 작헌례 퇴행을 청함,"五月朔日, 則乃日食齋戒日也",solar_eclipse_v2_coded_sjw_1
+SJW-B09030220-01100,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,5월 초하루 일식 재계일과 겹쳐 작헌례 퇴행을 청함,"五月朔日, 則乃日食齋戒日也",solar_eclipse_v2_coded_sjw_1
 SJW-B09100270-00500,sjw,forecast,forecast,,,,,,11월 초하루 일식이라 동지사 배표일 개택을 청함,"此日, 卽日食也。日食日拜表",solar_eclipse_v2_coded_sjw_1
 SJW-B10031160-00400,sjw,ritual,ritual,,ritual_prep,,,,일식 재계와 겹쳐 입직 군사 습사를 못 함(준비),"日食齋戒相値, 不得爲之之意",solar_eclipse_v2_coded_sjw_1
 SJW-C01060200-01400,sjw,other,other,,,,,,「前日食物」 등으로 일식 아님,"前日食物, 終使領受",solar_eclipse_v2_coded_sjw_1
@@ -646,7 +646,7 @@ SJW-C07060010-00200,sjw,observed,observed,,,申時酉時,,,신시·유시에 일
 SJW-C07060010-00600,sjw,ritual,ritual,,,,,,당일 일식 재계처 적간,日食齋戒處摘奸,solar_eclipse_v2_coded_sjw_1
 SJW-C07060030-01400,sjw,discussion,discussion,,,至申正二刻初虧,,,초하루 일식 간망이 부실했다며 개성유수 추고 청함,"今月初一日救食, 時憲曆及內外篇法",solar_eclipse_v2_coded_sjw_1
 SJW-C08090120-00600,sjw,other,other,,,,,,"「今日食後」로 식사 뒤의 뜻, 일식 아님","今日食後, 別雌牛一隻入給云",solar_eclipse_v2_coded_sjw_1
-SJW-C09100010-00700,sjw,forecast,forecast,,below_horizon,,,below_horizon,지하 일식 재계로 정사를 승정원에 머물러 둠,"地下日食齋戒, 留政院",solar_eclipse_v2_coded_sjw_1
+SJW-C09100010-00700,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,지하 일식 재계로 정사를 승정원에 머물러 둠,"地下日食齋戒, 留政院",solar_eclipse_v2_coded_sjw_1
 SJW-C10030221-01000,sjw,ritual,ritual,,ritual_prep,,,,4월 초하루 일식 구식관의 복색·처소를 정함(준비),"來四月初一日, 當爲日食云",solar_eclipse_v2_coded_sjw_1
 SJW-C10040011-00400,sjw,ritual,ritual,,,,,,당일 일식 구식 적간 전교,日食捄食摘奸,solar_eclipse_v2_coded_sjw_1
 SJW-C10040200-01300,sjw,discussion,discussion,,,,,,일식 도형이 실제와 다르다며 관상감 관원 과죄 청함,以留司觀象監官員日食圖形,solar_eclipse_v2_coded_sjw_1
@@ -655,47 +655,47 @@ SJW-C11021160-00900,sjw,ritual,ritual,,ritual_prep,,,,일식 재계와 겹쳐 �
 SJW-C14070010-00900,sjw,ritual,ritual,,,,,,일식 당일 재계로 사직 상소를 승정원에 머물러 둠,"辭職上疏, 日食齋戒, 留政院",solar_eclipse_v2_coded_sjw_1
 SJW-C14070010-01300,sjw,discussion,discussion,,,,,,입시 중 오늘 일식이 있어 뜸 시술을 재고하자는 논의 (판단 유보),"今日旣是朔日, 且有日食之異",solar_eclipse_v2_coded_sjw_1
 SJW-D00110220-00800,sjw,other,other,,,,,,"「今日食後」로 식사 뒤의 뜻, 일식 아님","今日食後, 不參疏儒生八人",solar_eclipse_v2_coded_sjw_1
-SJW-D02100260-00500,sjw,forecast,forecast,,below_horizon,,,below_horizon,11월 초하루 지하 일식 재계와 겹쳐 배표일을 고침,適與地下日食齋戒相値,solar_eclipse_v2_coded_sjw_1
+SJW-D02100260-00500,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,11월 초하루 지하 일식 재계와 겹쳐 배표일을 고침,適與地下日食齋戒相値,solar_eclipse_v2_coded_sjw_1
 SJW-D02110010-00900,sjw,ritual,ritual,,,,,,당일 일식 재계와 겹쳐 습사를 못 함,"日食齋戒相値, 不得爲之之意",solar_eclipse_v2_coded_sjw_1
 SJW-D03060040-00800,sjw,other,other,,,,,,"「昨日食代」로 식사 교대의 뜻, 일식 아님","昨日食代出去, 不爲入來",solar_eclipse_v2_coded_sjw_1
-SJW-D03100270-00700,sjw,forecast,forecast,,,,,,11월 초하루 일식 재계와 겹쳐 반교 일자를 조정,初一日則與日食齋戒相値,solar_eclipse_v2_coded_sjw_1
-SJW-D03100290-00600,sjw,forecast,forecast,,,,,,초하루 일식 재계로 반교를 물리고 방물 봉과를 조정,"初一日, 乃是日食齋戒",solar_eclipse_v2_coded_sjw_1
+SJW-D03100270-00700,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,11월 초하루 일식 재계와 겹쳐 반교 일자를 조정,初一日則與日食齋戒相値,solar_eclipse_v2_coded_sjw_1
+SJW-D03100290-00600,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,초하루 일식 재계로 반교를 물리고 방물 봉과를 조정,"初一日, 乃是日食齋戒",solar_eclipse_v2_coded_sjw_1
 SJW-D03110010-00200,sjw,observed,observed,,,卯正三刻,,,묘정 3각에 일식 보고,"○ 卯正三刻, 日食。",solar_eclipse_v2_coded_sjw_1
 SJW-D03110010-01000,sjw,ritual,ritual,,,,,,일식 재계로 당일 양사 논계를 정지,"府院前啓, 日食齋戒, 今日姑停",solar_eclipse_v2_coded_sjw_1
 SJW-D05030120-01900,sjw,discussion,discussion,,,,,,소대에서 『강목』 한 문제 기 일식 기사를 진강,自三年冬十月晦日食,solar_eclipse_v2_coded_sjw_1
 SJW-D05050220-01800,sjw,discussion,discussion,,,,,,주강에서 일식을 군약신강의 재이로 논함,"日食之變, 乃君弱臣强之致",solar_eclipse_v2_coded_sjw_1
-SJW-D06080270-00700,sjw,forecast,forecast,,below_horizon,,,below_horizon,초하루 지하 일식 재계일과 겹쳐 반축례 퇴행을 청함,其日卽地下日食齋戒日也,solar_eclipse_v2_coded_sjw_1
+SJW-D06080270-00700,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,초하루 지하 일식 재계일과 겹쳐 반축례 퇴행을 청함,其日卽地下日食齋戒日也,solar_eclipse_v2_coded_sjw_1
 SJW-D06081130-01100,sjw,other,other,,,,,,"「明日食前」으로 식사 전의 뜻, 일식 아님","以明日食前行禮, 爲答云",solar_eclipse_v2_coded_sjw_1
 SJW-D06100020-02000,sjw,discussion,discussion,,,,,,성변 구언 입시에서 일식은 수덕으로 응한다는 일반론,"日食則修德, 月食則修刑",solar_eclipse_v2_coded_sjw_1
 SJW-D06100140-01700,sjw,discussion,discussion,,,,,,소대에서 『강목』 일식 기사와 일식 재이론을 논함,"日食卽陰盛陽微之致, 春秋多有之",solar_eclipse_v2_coded_sjw_1
-SJW-D07070270-00500,sjw,forecast,forecast,,,,,,8월 초하루 윤대일이 일식 재계와 겹쳐 품의,"及日食齋戒相値, 頉稟",solar_eclipse_v2_coded_sjw_1
+SJW-D07070270-00500,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,8월 초하루 윤대일이 일식 재계와 겹쳐 품의,"及日食齋戒相値, 頉稟",solar_eclipse_v2_coded_sjw_1
 SJW-D07080010-00600,sjw,ritual,ritual,,,,,,당일 일식 기도소 적간 전교,日食祈禱所摘奸,solar_eclipse_v2_coded_sjw_1
 SJW-D08030100-01700,sjw,other,other,,,,,,"「明日食後」로 식사 뒤의 뜻, 일식 아님","明日食後, 次通官一員",solar_eclipse_v2_coded_sjw_1
 SJW-D08120110-01800,sjw,discussion,discussion,,,,,,주강에서 『강목』 무제기 일식 기사까지 진강,至三月晦日食。上親讀一遍,solar_eclipse_v2_coded_sjw_1
-SJW-D08120270-02100,sjw,forecast,forecast,,below_horizon,,,below_horizon,정월 초하루 지하 일식 재계와 겹쳐 하정례 권정 품의,適與地下日食齋戒相値,solar_eclipse_v2_coded_sjw_1
+SJW-D08120270-02100,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,정월 초하루 지하 일식 재계와 겹쳐 하정례 권정 품의,適與地下日食齋戒相値,solar_eclipse_v2_coded_sjw_1
 SJW-D10120190-01100,sjw,discussion,discussion,,,,,,간원 계에서 일식을 비유로 들어 환수 청함,若不速視日蝕之更,solar_eclipse_v2_coded_sjw_1
 SJW-D11050280-00400,sjw,ritual,ritual,,ritual_prep,,,,이틀 뒤 일식과 겹쳐 영모전 삭제 섭행을 청함(준비),"且與日食相値, 其在敬天恐懼之道",solar_eclipse_v2_coded_sjw_1
 SJW-D11050290-00300,sjw,ritual,ritual,,ritual_prep,,,,일식으로 영모전 삭제 섭행을 거듭 청함(준비),"日食廢祭, 實是人君敬天懼災之意",solar_eclipse_v2_coded_sjw_1
 SJW-D11110010-00400,sjw,ritual,ritual,,,,,,당일 일식 재계로 간원 전계를 정지,"院前啓, 日食齋戒, 今日姑停",solar_eclipse_v2_coded_sjw_1
-SJW-D12090270-00400,sjw,forecast,forecast,,,,,,초하루 윤대일이 일식 재계와 겹쳐 품의,"日食齋戒相値, 頉稟",solar_eclipse_v2_coded_sjw_1
-SJW-D12090300-00400,sjw,forecast,forecast,,,,,,다음 날 일식 재계로 시사를 품의,"明日日食齋戒相値, 視事, 頉稟",solar_eclipse_v2_coded_sjw_1
+SJW-D12090270-00400,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,초하루 윤대일이 일식 재계와 겹쳐 품의,"日食齋戒相値, 頉稟",solar_eclipse_v2_coded_sjw_1
+SJW-D12090300-00400,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,다음 날 일식 재계로 시사를 품의,"明日日食齋戒相値, 視事, 頉稟",solar_eclipse_v2_coded_sjw_1
 SJW-D12110250-01800,sjw,discussion,discussion,,,,,,소대에서 『강목』 한대 일식 기사를 진강,"是月晦, 日食。萬吉曰",solar_eclipse_v2_coded_sjw_1
 SJW-D13010110-00600,sjw,discussion,discussion,,,,,,백홍관일 변에 일식 등 재이를 열거해 수성 청함,"日食地震之變, 疊臻荐仍",solar_eclipse_v2_coded_sjw_1
 SJW-D13110270-02600,sjw,discussion,discussion,,,,,,『강목』 진 목제기 일식 기사를 진강,仍讀自三月日食至王猛,solar_eclipse_v2_coded_sjw_1
 SJW-D13120160-01200,sjw,discussion,discussion,,,,,,『강목』 진 간문제기 일식 기사를 진강,至冬十月朔日食,solar_eclipse_v2_coded_sjw_1
-SJW-D14030260-01100,sjw,forecast,forecast,,,,,,국기·일식 재계 뒤에 주강하라는 전교,"過國忌及日食齋戒後, 晝講爲之",solar_eclipse_v2_coded_sjw_1
+SJW-D14030260-01100,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,국기·일식 재계 뒤에 주강하라는 전교,"過國忌及日食齋戒後, 晝講爲之",solar_eclipse_v2_coded_sjw_1
 SJW-D14030270-00300,sjw,forecast,forecast,,,,,,4월 초하루 윤대일이 일식 재계와 겹쳐 품의,來四月初一日輪對日次,solar_eclipse_v2_coded_sjw_1
-SJW-D15030280-00800,sjw,forecast,forecast,,,,,,초하루 일식 재계로 대신 패초를 미룰지 품의,來初一日日食齋戒相値,solar_eclipse_v2_coded_sjw_1
-SJW-D15031010-00900,sjw,forecast,forecast,,below_horizon,,,below_horizon,지하 일식 재계로 삼공 차자를 승정원에 머물러 둠,"以地下日食齋戒, 留院之意",solar_eclipse_v2_coded_sjw_1
+SJW-D15030280-00800,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,,,,초하루 일식 재계로 대신 패초를 미룰지 품의,來初一日日食齋戒相値,solar_eclipse_v2_coded_sjw_1
+SJW-D15031010-00900,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,지하 일식 재계로 삼공 차자를 승정원에 머물러 둠,"以地下日食齋戒, 留院之意",solar_eclipse_v2_coded_sjw_1
 SJW-D15070270-02000,sjw,forecast,forecast,,below_horizon,,,below_horizon,초하루 지하 일식과 겹쳐 윤대를 품의,"而地下日食相値, 頉稟",solar_eclipse_v2_coded_sjw_1
-SJW-D15070280-00400,sjw,forecast,forecast,,below_horizon,,,below_horizon,초하루 지하 일식 재계로 행형을 미룸,"初一日, 地下日食齋戒",solar_eclipse_v2_coded_sjw_1
+SJW-D15070280-00400,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,초하루 지하 일식 재계로 행형을 미룸,"初一日, 地下日食齋戒",solar_eclipse_v2_coded_sjw_1
 SJW-D15080010-00500,sjw,ritual,ritual,,,,,,당일 일식 재계로 양사 전계를 정지,"府院前啓, 日食齋戒, 今日姑停",solar_eclipse_v2_coded_sjw_1
 SJW-D16080010-00200,sjw,observed,observed,,,辰時巳時,,,진시·사시에 일식이 있었다는 관측 기록,"辰時巳時, 日食。",solar_eclipse_v2_coded_sjw_2
 SJW-D17020010-00200,sjw,observed,observed,,,自午時至申時,,,오시부터 신시까지 일식·햇무리 관측 기록,"自午時至申時, 日食日暈",solar_eclipse_v2_coded_sjw_2
 SJW-D17020120-00800,sjw,discussion,discussion,,,,,,지난 일식 행관 미전달한 사령의 처벌 요청 (판단 유보),"日食行關, 正月初三日本曹成貼",solar_eclipse_v2_coded_sjw_2
 SJW-D18050060-00300,sjw,other,other,,,,,,「今日食後」는 식사 후라는 뜻으로 일식 아님,"今日食後, 往于南山蠶頭近處",solar_eclipse_v2_coded_sjw_2
 SJW-D19050290-00600,sjw,ritual,ritual,,ritual_prep,,,,"다음날 일식 재계가 있다는 언급(준비), 본건은 사직 계",明日乃日食齋戒,solar_eclipse_v2_coded_sjw_2
-SJW-D20050270-00400,sjw,forecast,forecast,,below_horizon,,,below_horizon,윤5월 1일 지하일식 재계로 윤대 정지 계,地下日食齋戒相値,solar_eclipse_v2_coded_sjw_2
+SJW-D20050270-00400,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,윤5월 1일 지하일식 재계로 윤대 정지 계,地下日食齋戒相値,solar_eclipse_v2_coded_sjw_2
 SJW-D20100270-01200,sjw,forecast,forecast,,below_horizon,,,below_horizon,11월 1일 지하일식과 겹쳐 방방일 변경 청함,"與地下日食相値, 勢難行禮",solar_eclipse_v2_coded_sjw_2
 SJW-D22030030-01600,sjw,discussion,discussion,,,,,,「日食修德」 옛말을 형정 논의 근거로 인용,"日食修德, 月食修刑之道",solar_eclipse_v2_coded_sjw_2
 SJW-D23030100-00900,sjw,discussion,discussion,,,,,,주강에서 한대 일식·지진 빈도를 강론,"漢時, 連歲日食, 其率三倍春秋",solar_eclipse_v2_coded_sjw_2
@@ -744,8 +744,8 @@ SJW-E03010280-03000,sjw,discussion,discussion,,,,,,『강목』의 북위대 일
 SJW-E03050010-02000,sjw,observed,observed,,,,,,당일 일식 뒤에야 관상감이 보고했다며 처벌 청함,"及今日蝕之後, 始乃來告",solar_eclipse_v2_coded_sjw_2
 SJW-E03050130-02100,sjw,forecast,forecast,,,,,,소결에서 일식 오산 죄인 조태정을 방송함,讀趙泰鼎日蝕誤算罪,solar_eclipse_v2_coded_sjw_2
 SJW-E03050190-01900,sjw,discussion,discussion,,,,,,상소에서 지난 일식을 미리 보고 못한 책임을 자책(사후),"太陽薄蝕, 而臨食始覺",solar_eclipse_v2_coded_sjw_2
-SJW-E03100270-00500,sjw,forecast,forecast,,below_horizon,,,below_horizon,초1일 지하일식 재계로 윤대 정지 계,"而地下日食, 齋戒相値",solar_eclipse_v2_coded_sjw_2
-SJW-E03100290-00600,sjw,forecast,forecast,,below_horizon,,,below_horizon,초1일 지하일식 재계 등으로 시사 정지 계,初一日地下日食齋戒,solar_eclipse_v2_coded_sjw_2
+SJW-E03100270-00500,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,초1일 지하일식 재계로 윤대 정지 계,"而地下日食, 齋戒相値",solar_eclipse_v2_coded_sjw_2
+SJW-E03100290-00600,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,초1일 지하일식 재계 등으로 시사 정지 계,初一日地下日食齋戒,solar_eclipse_v2_coded_sjw_2
 SJW-F00100230-00800,sjw,other,other,,,,,,「今日食前」은 식사 전이라는 뜻으로 일식 아님,"今日食前, 以外梓宮加漆奉審事",solar_eclipse_v2_coded_sjw_2
 SJW-F00110060-02500,sjw,discussion,discussion,,,,,,청대에서 한대 일식을 빌미로 한 참소 고사 인용,"以日食之變, 歸之蕭望之",solar_eclipse_v2_coded_sjw_2
 SJW-F00110160-04200,sjw,discussion,discussion,,,,,,상소에서 한대 일식을 빌미로 한 정변 고사 인용,"漢元帝時日食, 而恭·顯, 殺蕭望之",solar_eclipse_v2_coded_sjw_2
@@ -886,7 +886,7 @@ SJW-F18060030-01700,sjw,discussion,discussion,,,,,,통감 강론에서 일식 �
 SJW-F19010210-01600,sjw,other,other,,,,,,「食堂儒生」으로 일식 아님,"今日食堂儒生, 前日食堂儒生",solar_eclipse_v2_coded_sjw_3
 SJW-F19030050-02800,sjw,discussion,discussion,,,,,,동궁 시일 눈병을 두고 일식 때 쳐다봄을 경계,"日蝕時, 尤戒仰視矣",solar_eclipse_v2_coded_sjw_3
 SJW-F19040270-00400,sjw,ritual,ritual,,ritual_prep,,,,초하루 일식 재계로 윤대를 물림(준비),"日食齋戒相値, 頉稟",solar_eclipse_v2_coded_sjw_3
-SJW-F19040300-00200,sjw,forecast,forecast,,below_horizon,,,below_horizon,초하루 지하 일식 재계로 상참을 물림,"而地下日食齋戒, 頉稟",solar_eclipse_v2_coded_sjw_3
+SJW-F19040300-00200,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,초하루 지하 일식 재계로 상참을 물림,"而地下日食齋戒, 頉稟",solar_eclipse_v2_coded_sjw_3
 SJW-F19041080-01400,sjw,other,other,,,,,,「明日食堂後」는 식당 뒤라는 뜻,明日食堂後來會事,solar_eclipse_v2_coded_sjw_3
 SJW-F19090100-02400,sjw,forecast,forecast,,below_horizon,,,below_horizon,17일이 지하 일식 날이라 외연 날짜를 옮김,"十七日, 乃地下日食日也",solar_eclipse_v2_coded_sjw_3
 SJW-F19110230-00900,sjw,ritual,ritual,,ritual_prep,,,,오례의 수정 때 구일식 의주에 주를 닮(준비),"至於救日食, 亦遵聖敎",solar_eclipse_v2_coded_sjw_3
@@ -1090,7 +1090,7 @@ SJW-F44070270-01800,sjw,other,other,,,,,,「明日食後」(내일 식사 후) �
 SJW-F44090060-02300,sjw,other,other,,,,,,"「食傷」은 음식 탈, 일식 아님",昨日食傷鰱魚,solar_eclipse_v2_coded_sjw_5
 SJW-F44090240-02000,sjw,discussion,discussion,,undated_method,,,foreign,자문이 온 일식이 조선에서 안 보이는 이유를 문답,"日食咨文來, 而日不食, 何也",solar_eclipse_v2_coded_sjw_5
 SJW-F44110150-01400,sjw,discussion,discussion,,,,,,월식 구식 중 일식·월식 때의 보고 관행을 언급,前者月食或日食,solar_eclipse_v2_coded_sjw_5
-SJW-F44110170-00500,sjw,forecast,forecast,,,,,,청 일월식 자문에 대한 회자 여부를 묻는 전교,"日月食咨文, 皆出來",solar_eclipse_v2_coded_sjw_6
+SJW-F44110170-00500,sjw,discussion,forecast,hoeja_discussion_2026-11-02,,,,,청 일월식 자문에 대한 회자 여부를 묻는 전교,"日月食咨文, 皆出來",solar_eclipse_v2_coded_sjw_6
 SJW-F44120010-02300,sjw,discussion,discussion,,,,,,일식이 지났으니 회자를 써서 보내자는 영의정 건의(판단 유보),"日蝕已過, 撰出回咨",solar_eclipse_v2_coded_sjw_6
 SJW-F44120190-02300,sjw,other,other,,,,,,「日食」은 매일 건공탕을 복용한다는 뜻으로 일식 아님,"日食建功, 何益之有哉",solar_eclipse_v2_coded_sjw_6
 SJW-F45020170-00900,sjw,forecast,forecast,,,,,,청 일식 자문이 왔는데 관상감이 정단하지 않음을 질책,彼中日食咨文已來,solar_eclipse_v2_coded_sjw_6
@@ -1336,7 +1336,7 @@ SJW-H11050140-03010,sjw,discussion,discussion,,,,,,시경 강의 중 일식 이�
 SJW-H12050110-01800,sjw,other,other,,,,,,"「平日食祿」은 녹을 먹음, 일식 아님",又非平日食祿之臣,solar_eclipse_v2_coded_sjw_8
 SJW-H12110110-02000,sjw,discussion,discussion,,,,,,상소에서 춘추 재이로 일식 인용,自日蝕雨雹隕星震雷,solar_eclipse_v2_coded_sjw_8
 SJW-H12110220-02300,sjw,other,other,,,,,,"「日食萬錢」은 사치 비유, 일식 아님","何曾之日食萬錢, 李德裕之一羹三萬",solar_eclipse_v2_coded_sjw_8
-SJW-H12120240-01400,sjw,forecast,forecast,,below_horizon,,,below_horizon,내년 정월 초하루 일식이 지하라 재계만 하고 하례 퇴정,"日有食之, 而食在地下, 只爲齋戒",solar_eclipse_v2_coded_sjw_8
+SJW-H12120240-01400,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,,,below_horizon,내년 정월 초하루 일식이 지하라 재계만 하고 하례 퇴정,"日有食之, 而食在地下, 只爲齋戒",solar_eclipse_v2_coded_sjw_8
 SJW-H13120140-08400,sjw,discussion,discussion,,,,,,시경 강의 중 일식을 양미의 재이로 논함,"至若日蝕, 則乃陽微之義",solar_eclipse_v2_coded_sjw_8
 SJW-H14060010-00200,sjw,observed,observed,,,申時,,,신시 일식 보고,"申時, 日食",solar_eclipse_v2_coded_sjw_8
 SJW-H14060030-01200,sjw,discussion,discussion,,,,,,지난 일식에 대한 예부 회자 발송 청(기사 날짜와 다름),"日食已過, 禮部回咨",solar_eclipse_v2_coded_sjw_8
@@ -1360,7 +1360,7 @@ SJW-H22020220-03600,sjw,discussion,discussion,,,,,,대신 사직 상소에서 �
 SJW-H23050240-01500,sjw,forecast,forecast,,,,"食分甚少, 不過十九秒之微",,내달 초하루 일식 식분 미소로 구식 불거론 계,"六月初一日戊戌朔日食, 雖在天中, 食分甚少",solar_eclipse_v2_coded_sjw_8
 SJW-H23090260-01600,sjw,forecast,forecast,,,,食分爲十分十三秒,,내년 6월 초하루 일식 추보 식분 과대로 질문 청,"來甲申年六月朔日食, 如例推步",solar_eclipse_v2_coded_sjw_8
 SJW-H24060010-00200,sjw,observed,observed,,,卯時辰時,,,묘시·진시 일식 보고,"卯時辰時, 日食",solar_eclipse_v2_coded_sjw_8
-SJW-H24060010-01300,sjw,observed,observed,,,,,,당일 일식이 지났다며 예부 회자 발송 청,"日食已過, 禮部回資",solar_eclipse_v2_coded_sjw_8
+SJW-H24060010-01300,sjw,discussion,observed,hoeja_discussion_2026-11-02,,,,,당일 일식이 지났다며 예부 회자 발송 청,"日食已過, 禮部回資",solar_eclipse_v2_coded_sjw_8
 SJW-H24060270-00700,sjw,discussion,discussion,,,,,,일식 회자 장계의 오기 문책(지난 일식),"李德鉉日食回咨, 入送鳳城事狀啓",solar_eclipse_v2_coded_sjw_8
 SJW-H24060290-03700,sjw,discussion,discussion,,,,,,이달 초하루 일식으로 어두워 조운선 좌초 보고(다른 날),"時値日食, 忽然昏黑, 水路迷暗",solar_eclipse_v2_coded_sjw_8
 SJW-H24100160-01500,sjw,discussion,discussion,,,,,,상소에서 올해 재이로 일식 열거,"狂風日蝕, 陰霾雹雨",solar_eclipse_v2_coded_sjw_8
@@ -1436,8 +1436,8 @@ SJW-J12060010-02000,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_o
 SJW-J12060010-02300,sjw,ritual,ritual,,,,,,당일 일식과 겹쳐 중일 습사를 행하지 못한다는 계,"日食相値, 不得設行之意",solar_eclipse_v2_coded_sjw_9
 SJW-J12080220-01600,sjw,discussion,discussion,,,,,,소대에서 속강목의 「七月朔日食」 대목을 읽음,承五讀自七月朔日食,solar_eclipse_v2_coded_sjw_9
 SJW-J13110010-00800,sjw,ritual,ritual,,,,,,당일 일식과 겹쳐 중일 습사를 행하지 못한다는 계,"日食相値, 不得設行之意",solar_eclipse_v2_coded_sjw_9
-SJW-J13110130-01400,sjw,forecast,forecast,,report_order,,,,11월 초하루 일식 자문이 오지 않아 회자가 늦으니 탐문을 청함,"今十一月初一日日食咨文, 尙不出來",solar_eclipse_v2_coded_sjw_9
-SJW-J13110270-00400,sjw,forecast,forecast,,report_order,,,,이달 삭 일식 자문이 도착해 회자를 보내는 절차를 청함,"今月朔日食咨文, 今纔出來矣",solar_eclipse_v2_coded_sjw_9
+SJW-J13110130-01400,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,11월 초하루 일식 자문이 오지 않아 회자가 늦으니 탐문을 청함,"今十一月初一日日食咨文, 尙不出來",solar_eclipse_v2_coded_sjw_9
+SJW-J13110270-00400,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,이달 삭 일식 자문이 도착해 회자를 보내는 절차를 청함,"今月朔日食咨文, 今纔出來矣",solar_eclipse_v2_coded_sjw_9
 SJW-K01040010-01100,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,일식이 지난 뒤 예부 회자를 북경에 보내는 절차를 청함,"日食已過, 禮部回咨, 依例撰出",solar_eclipse_v2_coded_sjw_9
 SJW-K02030270-01300,sjw,other,other,,,,,,「今日食息」은 오늘 먹고 숨쉬는 생활로 일식과 무관,保有今日食息動作,solar_eclipse_v2_coded_sjw_9
 SJW-K05080170-01200,sjw,other,other,,,,,,「今日食兵」은 오늘의 식량·군사 정사로 일식과 무관,"今日食兵兩政, 卽還政軍政是也",solar_eclipse_v2_coded_sjw_9
@@ -1446,11 +1446,11 @@ SJW-K06060270-00800,sjw,ritual,ritual,,ritual_prep,,,,초하루 일식 구식에
 SJW-K06060280-01000,sjw,discussion,discussion,,,,,,월식 회자를 임술년 일식 때 예대로 보내자는 계(과거 선례),"依壬戌年日食時例, 撰出回咨",solar_eclipse_v2_coded_sjw_9
 SJW-K06060290-00500,sjw,ritual,ritual,,ritual_prep,,,,모레 일식 구식에 참석할 병조 당상 변통(준비),"再明日日食救食時, 本曹堂上一員",solar_eclipse_v2_coded_sjw_9
 SJW-K06060290-00800,sjw,ritual,ritual,,ritual_prep,,,,초하루 일식 구식에 참석할 선공감 제조 교체(준비),"來初一日日食救蝕時, 提調一員",solar_eclipse_v2_coded_sjw_9
-SJW-K06080120-00800,sjw,forecast,forecast,,report_order,,,,일식이 지난 뒤 도착한 구식 자문에 회자하는 절차를 청함,"日食已過, 救食咨文, 今纔出來",solar_eclipse_v2_coded_sjw_9
-SJW-K06080160-01200,sjw,forecast,forecast,,report_order,,,,일식이 지난 뒤 도착한 구식 자문에 회자하는 절차를 청함,"日食已過, 救食咨文, 今纔出來",solar_eclipse_v2_coded_sjw_9
+SJW-K06080120-00800,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,일식이 지난 뒤 도착한 구식 자문에 회자하는 절차를 청함,"日食已過, 救食咨文, 今纔出來",solar_eclipse_v2_coded_sjw_9
+SJW-K06080160-01200,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,일식이 지난 뒤 도착한 구식 자문에 회자하는 절차를 청함,"日食已過, 救食咨文, 今纔出來",solar_eclipse_v2_coded_sjw_9
 SJW-K07030180-01600,sjw,discussion,discussion,,,,,,소대에서 통감의 한 성제 때 일식·지진 대목을 논의,"日食之夜, 地又震, 上天之警告也",solar_eclipse_v2_coded_sjw_9
 SJW-K09040120-00700,sjw,discussion,discussion,,,,,,소대에서 광무제 때 그믐 일식과 정흥의 상소를 논의,"日食當在朔, 月食當在晦",solar_eclipse_v2_coded_sjw_9
-SJW-K09050060-02500,sjw,forecast,forecast,,report_order,,,,초하루 일식 자문이 오지 않아 회자가 늦으니 탐문을 청함,"今初一日日食咨文, 尙不出來",solar_eclipse_v2_coded_sjw_9
+SJW-K09050060-02500,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,초하루 일식 자문이 오지 않아 회자가 늦으니 탐문을 청함,"今初一日日食咨文, 尙不出來",solar_eclipse_v2_coded_sjw_9
 SJW-K09050140-01100,sjw,forecast,forecast,,report_order,,,,통제사 일식 구식 계본이 도화 없이 올라와 고쳐 올리게 함,統制使蔡東健日食救食啓本,solar_eclipse_v2_coded_sjw_9
 SJW-K11020080-03400,sjw,other,other,,,,,,「自今日食代」는 오늘부터의 식대 교대로 일식과 무관,"自今日食代, 何以爲之乎",solar_eclipse_v2_coded_sjw_9
 SJW-K12020290-00400,sjw,ritual,ritual,,ritual_prep,,,,내일 일식 구식과 겹쳐 시사를 미룬다는 계(준비),"明日日食救食相値, 視事頉稟之意",solar_eclipse_v2_coded_sjw_9

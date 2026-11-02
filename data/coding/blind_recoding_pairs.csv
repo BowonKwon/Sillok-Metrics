@@ -58,7 +58,7 @@ solar_v2,woa_10812021_002,discussion,discussion,discussion,discussion,solar_ecli
 solar_v2,SJW-A12030010-00400,ritual,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_1
 solar_v2,SJW-F50090210-02600,other,other,other,other,solar_eclipse_v2_coded_sjw_6
 solar_v2,SJW-F41020160-00600,discussion,ritual,discussion,ritual,solar_eclipse_v2_coded_sjw_5
-solar_v2,SJW-F44110170-00500,forecast,discussion,forecast,discussion,solar_eclipse_v2_coded_sjw_6
+solar_v2,SJW-F44110170-00500,forecast,discussion,discussion,discussion,solar_eclipse_v2_coded_sjw_6
 solar_v2,SJW-F20090010-00600,ritual,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_4
 solar_v2,wra_10706019_001,discussion,discussion,discussion,discussion,solar_eclipse_v2_coded_sillok_4
 solar_v2,kj_033_0010_0010_0050_0010,observed,observed,observed,observed,solar_eclipse_v2_coded_jeolyo
@@ -68,7 +68,7 @@ solar_v2,SJW-F51080040-02700,discussion,discussion,discussion,discussion,solar_e
 solar_v2,wva_11911006_002,discussion,discussion,discussion,discussion,solar_eclipse_v2_coded_sillok_4
 solar_v2,SJW-K31030020-01000,forecast,discussion,discussion,discussion,solar_eclipse_v2_coded_sjw_9
 solar_v2,kj_022_0010_0020_0070_0010,observed,observed,observed,observed,solar_eclipse_v2_coded_jeolyo
-solar_v2,SJW-D03100290-00600,forecast,ritual,forecast,ritual,solar_eclipse_v2_coded_sjw_1
+solar_v2,SJW-D03100290-00600,forecast,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_1
 solar_v2,SJW-F31070160-02500,other,other,other,other,solar_eclipse_v2_coded_sjw_4
 solar_v2,SJW-K07030180-01600,discussion,discussion,discussion,discussion,solar_eclipse_v2_coded_sjw_9
 solar_v2,wda_12411026_002,other,other,other,other,solar_eclipse_v2_coded_sillok_1
@@ -106,8 +106,8 @@ solar_v2,wsa_13806010_002,other,other,other,other,solar_eclipse_v2_coded_sillok_
 solar_v2,kr_047_0010_0020_0260_0680,observed,observed,observed,observed,solar_eclipse_v2_coded_goryeosa
 solar_v2,kr_047_0010_0020_0110_0170,observed,observed,observed,observed,solar_eclipse_v2_coded_goryeosa
 solar_v2,kr_047_0010_0020_0090_0130,observed,observed,observed,observed,solar_eclipse_v2_coded_goryeosa
-solar_v2,SJW-D15030280-00800,forecast,ritual,forecast,ritual,solar_eclipse_v2_coded_sjw_1
-solar_v2,SJW-K06080160-01200,forecast,discussion,forecast,discussion,solar_eclipse_v2_coded_sjw_9
+solar_v2,SJW-D15030280-00800,forecast,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_1
+solar_v2,SJW-K06080160-01200,forecast,discussion,discussion,discussion,solar_eclipse_v2_coded_sjw_9
 solar_v2,kr_047_0010_0020_0120_0030,observed,observed,observed,observed,solar_eclipse_v2_coded_goryeosa
 solar_v2,wwa_11212027_001,forecast,ritual,forecast,ritual,solar_eclipse_v2_coded_sillok_4
 solar_v2,SJW-K28010290-07600,other,other,other,other,solar_eclipse_v2_coded_sjw_9
@@ -127,7 +127,7 @@ solar_v2,SJW-H17040020-01800,discussion,discussion,discussion,discussion,solar_e
 solar_v2,SJW-F19041080-01400,other,other,other,other,solar_eclipse_v2_coded_sjw_3
 solar_v2,SJW-D34080010-00200,observed,observed,observed,observed,solar_eclipse_v2_coded_sjw_2
 solar_v2,SJW-J12060010-02300,ritual,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_9
-solar_v2,SJW-F19040300-00200,forecast,ritual,forecast,ritual,solar_eclipse_v2_coded_sjw_3
+solar_v2,SJW-F19040300-00200,forecast,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_3
 solar_v2,SJW-F47090030-01500,other,other,other,other,solar_eclipse_v2_coded_sjw_6
 solar_v2,SJW-F32030050-01300,other,other,other,other,solar_eclipse_v2_coded_sjw_5
 solar_v2,SJW-F21020270-01200,ritual,ritual,ritual,ritual,solar_eclipse_v2_coded_sjw_4
@@ -208,7 +208,7 @@ lunar,SJW-K35050160-00200,observed,observed,observed,observed,lunar_eclipse_code
 lunar,SJW-B06120120-00600,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_1
 lunar,wja_11101015_006,forecast,discussion,forecast,discussion,lunar_eclipse_coded_sillok_2
 lunar,SJW-C11021150-00600,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_2
-lunar,SJW-F11010240-00800,ritual,forecast,ritual,forecast,lunar_eclipse_coded_sjw_4
+lunar,SJW-F11010240-00800,ritual,forecast,ritual,ritual,lunar_eclipse_coded_sjw_4
 lunar,SJW-B01100110-01000,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_1
 lunar,SJW-K11030150-00900,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_9
 lunar,SJW-J09010140-01500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_8
@@ -228,7 +228,7 @@ lunar,SJW-F31080150-00300,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_5
 lunar,SJW-G17070260-04400,discussion,discussion,discussion,discussion,lunar_eclipse_coded_sjw_7
 lunar,SJW-A16050150-00500,forecast,forecast,forecast,forecast,lunar_eclipse_coded_sjw_1
 lunar,SJW-D03010120-02000,discussion,discussion,discussion,discussion,lunar_eclipse_coded_sjw_2
-lunar,SJW-K06120200-00700,forecast,discussion,forecast,discussion,lunar_eclipse_coded_sjw_9
+lunar,SJW-K06120200-00700,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9
 lunar,SJW-F05070090-01400,discussion,discussion,discussion,discussion,lunar_eclipse_coded_sjw_3
 lunar,wua_13406017_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_4
 lunar,SJW-B08110170-01000,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_1
@@ -239,7 +239,7 @@ lunar,SJW-F04010160-00300,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_3
 lunar,SJW-F49080150-01700,forecast,forecast,forecast,forecast,lunar_eclipse_coded_sjw_6
 lunar,kr_047_0010_0030_0120_1830,observed,observed,observed,observed,lunar_eclipse_coded_goryeosa_1
 lunar,SJW-D18120170-00500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_2
-lunar,SJW-K10100040-00400,forecast,discussion,forecast,discussion,lunar_eclipse_coded_sjw_9
+lunar,SJW-K10100040-00400,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9
 lunar,SJW-K04020150-01700,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9
 lunar,SJW-I08060160-02400,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_8
 lunar,SJW-D32030090-01200,forecast,forecast,forecast,forecast,lunar_eclipse_coded_sjw_3
@@ -257,7 +257,7 @@ lunar,wta_10106015_001,observed,observed,observed,observed,lunar_eclipse_coded_s
 lunar,SJW-K21030140-00500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_9
 lunar,SJW-F22070150-00500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_4
 lunar,SJW-H02080200-03000,discussion,discussion,discussion,discussion,lunar_eclipse_coded_sjw_7
-lunar,SJW-D44080070-01700,ritual,forecast,ritual,forecast,lunar_eclipse_coded_sjw_3
+lunar,SJW-D44080070-01700,ritual,forecast,ritual,ritual,lunar_eclipse_coded_sjw_3
 lunar,wua_10910015_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_3
 lunar,wxa_11010016_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_4
 lunar,wia_10210016_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_1

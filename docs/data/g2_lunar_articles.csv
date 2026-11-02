@@ -1027,7 +1027,7 @@ SJW-F20080260-01000,sjw,forecast,,seoul,1744-10-01,1744.0,영조,False,False,Fal
 SJW-F20090150-00400,sjw,ritual,ritual_prep,seoul,1744-10-20,1744.0,영조,True,False,True,,True
 SJW-F20090160-00200,sjw,observed,,seoul,1744-10-21,1744.0,영조,True,True,True,,True
 SJW-F20090160-01500,sjw,ritual,ritual_prep,seoul,1744-10-21,1744.0,영조,True,True,True,,True
-SJW-F20090230-01600,sjw,forecast,report_order,seoul,1744-10-28,1744.0,영조,False,False,False,,True
+SJW-F20090230-01600,sjw,discussion,report_order,seoul,1744-10-28,1744.0,영조,False,False,False,,True
 SJW-F21020050-00200,sjw,other,,seoul,1745-03-07,1745.0,영조,False,False,False,,True
 SJW-F21050100-00300,sjw,other,,seoul,1745-06-09,1745.0,영조,False,False,False,,True
 SJW-F22020160-00300,sjw,observed,after_midnight,seoul,1746-03-07,1746.0,영조,True,False,True,,True
@@ -1048,7 +1048,7 @@ SJW-F24050150-01000,sjw,forecast,report_order,seoul,1748-06-10,1748.0,영조,Fal
 SJW-F24060130-02600,sjw,discussion,,seoul,1748-07-08,1748.0,영조,False,False,False,,True
 SJW-F25050160-00400,sjw,ritual,ritual_prep,seoul,1749-06-30,1749.0,영조,False,False,True,,True
 SJW-F25110140-00200,sjw,observed,after_midnight,seoul,1749-12-23,1749.0,영조,True,False,True,,True
-SJW-F25110190-00700,sjw,forecast,report_order,seoul,1749-12-28,1749.0,영조,False,False,False,,True
+SJW-F25110190-00700,sjw,discussion,report_order,seoul,1749-12-28,1749.0,영조,False,False,False,,True
 SJW-F26020180-02100,sjw,forecast,report_order,seoul,1750-03-25,1750.0,영조,False,False,False,,True
 SJW-F26040220-03100,sjw,discussion,,seoul,1750-05-27,1750.0,영조,False,False,False,,True
 SJW-F26040250-02200,sjw,discussion,,seoul,1750-05-30,1750.0,영조,False,False,False,,True
@@ -1148,7 +1148,7 @@ SJW-F46050010-01600,sjw,other,,seoul,1770-05-25,1770.0,영조,False,False,False,
 SJW-F46050010-01700,sjw,discussion,,seoul,1770-05-25,1770.0,영조,False,False,False,,True
 SJW-F46110030-02000,sjw,discussion,,seoul,1770-12-19,1770.0,영조,False,False,False,,True
 SJW-F47030100-00500,sjw,discussion,,seoul,1771-04-24,1771.0,영조,False,False,False,,True
-SJW-F47030100-01100,sjw,forecast,below_horizon,seoul,1771-04-24,1771.0,영조,False,False,False,,True
+SJW-F47030100-01100,sjw,ritual,below_horizon,seoul,1771-04-24,1771.0,영조,False,False,False,,True
 SJW-F47090160-00200,sjw,observed,after_midnight,seoul,1771-10-23,1771.0,영조,True,False,True,,True
 SJW-F47090160-00800,sjw,ritual,after_midnight,seoul,1771-10-23,1771.0,영조,True,False,True,,True
 SJW-F47090190-02500,sjw,discussion,,seoul,1771-10-26,1771.0,영조,False,False,False,,True
@@ -1205,7 +1205,7 @@ SJW-G03100170-02300,sjw,ritual,,seoul,1779-11-24,1779.0,정조,True,True,True,,T
 SJW-G03100180-01900,sjw,discussion,,seoul,1779-11-25,1779.0,정조,True,False,True,,True
 SJW-G03100210-01900,sjw,ritual,,seoul,1779-11-28,1779.0,정조,False,False,False,,True
 SJW-G04040200-02700,sjw,discussion,,seoul,1780-05-23,1780.0,정조,False,False,False,,True
-SJW-G04100140-00300,sjw,forecast,below_horizon,seoul,1780-11-10,1780.0,정조,False,False,False,,True
+SJW-G04100140-00300,sjw,ritual,below_horizon,seoul,1780-11-10,1780.0,정조,False,False,False,,True
 SJW-G04100160-00500,sjw,ritual,,seoul,1780-11-12,1780.0,정조,False,False,True,,True
 SJW-G05100140-02300,sjw,forecast,below_horizon,seoul,1781-11-29,1781.0,정조,False,False,False,,True
 SJW-G06080180-03200,sjw,discussion,,seoul,1782-09-24,1782.0,정조,False,False,False,,True
@@ -1236,7 +1236,7 @@ SJW-G11110180-01100,sjw,discussion,,seoul,1787-12-26,1787.0,정조,False,False,F
 SJW-G12030300-02400,sjw,discussion,,seoul,1788-05-05,1788.0,정조,False,False,False,,True
 SJW-G12040240-01800,sjw,other,,seoul,1788-05-29,1788.0,정조,False,False,False,,True
 SJW-G13040070-02200,sjw,forecast,,seoul,1789-05-01,1789.0,정조,False,False,False,,True
-SJW-G13040070-02300,sjw,forecast,,seoul,1789-05-01,1789.0,정조,False,False,False,,True
+SJW-G13040070-02300,sjw,ritual,,seoul,1789-05-01,1789.0,정조,False,False,False,,True
 SJW-G13040170-02400,sjw,discussion,,seoul,1789-05-11,1789.0,정조,False,False,False,,True
 SJW-G13090190-01700,sjw,discussion,,seoul,1789-11-06,1789.0,정조,False,False,False,,True
 SJW-G14030260-02500,sjw,discussion,,seoul,1790-05-09,1790.0,정조,False,False,False,,True
@@ -1456,16 +1456,16 @@ SJW-K06060150-01500,sjw,ritual,ritual_prep,seoul,1869-07-23,1869.0,고종,True,T
 SJW-K06060150-01600,sjw,ritual,ritual_prep,seoul,1869-07-23,1869.0,고종,True,True,True,,True
 SJW-K06060150-02300,sjw,ritual,ritual_prep,seoul,1869-07-23,1869.0,고종,True,True,True,,True
 SJW-K06060160-00500,sjw,ritual,,seoul,1869-07-24,1869.0,고종,True,False,True,,True
-SJW-K06060190-00300,sjw,forecast,report_order,seoul,1869-07-27,1869.0,고종,False,False,False,,True
-SJW-K06060280-01000,sjw,forecast,report_order,seoul,1869-08-05,1869.0,고종,False,False,False,,True
+SJW-K06060190-00300,sjw,discussion,report_order,seoul,1869-07-27,1869.0,고종,False,False,False,,True
+SJW-K06060280-01000,sjw,discussion,report_order,seoul,1869-08-05,1869.0,고종,False,False,False,,True
 SJW-K06080120-00800,sjw,other,,seoul,1869-09-17,1869.0,고종,False,False,False,,True
 SJW-K06080160-01200,sjw,other,,seoul,1869-09-21,1869.0,고종,False,False,False,,True
 SJW-K06120140-01000,sjw,ritual,ritual_prep,seoul,1870-01-15,1869.0,고종,False,False,False,,True
 SJW-K06120140-01100,sjw,ritual,ritual_prep,seoul,1870-01-15,1869.0,고종,False,False,False,,True
 SJW-K06120150-00800,sjw,ritual,ritual_prep,seoul,1870-01-16,1869.0,고종,True,False,True,,True
 SJW-K06120160-00500,sjw,ritual,ritual_prep,seoul,1870-01-17,1869.0,고종,True,True,True,,True
-SJW-K06120190-00400,sjw,forecast,report_order,seoul,1870-01-20,1869.0,고종,False,False,False,,True
-SJW-K06120200-00700,sjw,forecast,report_order,seoul,1870-01-21,1869.0,고종,False,False,False,,True
+SJW-K06120190-00400,sjw,discussion,report_order,seoul,1870-01-20,1869.0,고종,False,False,False,,True
+SJW-K06120200-00700,sjw,discussion,report_order,seoul,1870-01-21,1869.0,고종,False,False,False,,True
 SJW-K07110150-00400,sjw,ritual,ritual_prep,seoul,1871-01-05,1870.0,고종,False,False,False,,True
 SJW-K07110160-00400,sjw,ritual,ritual_prep,seoul,1871-01-06,1870.0,고종,True,False,True,,True
 SJW-K07110160-00700,sjw,ritual,ritual_prep,seoul,1871-01-06,1870.0,고종,True,False,True,,True
@@ -1477,7 +1477,7 @@ SJW-K09050060-02500,sjw,other,,seoul,1872-06-11,1872.0,고종,False,False,False,
 SJW-K10040150-00700,sjw,ritual,ritual_prep,seoul,1873-05-11,1873.0,고종,True,False,True,,True
 SJW-K10040150-00800,sjw,ritual,ritual_prep,seoul,1873-05-11,1873.0,고종,True,False,True,,True
 SJW-K10040160-01100,sjw,ritual,ritual_prep,seoul,1873-05-12,1873.0,고종,True,True,True,,True
-SJW-K10100040-00400,sjw,forecast,report_order,seoul,1873-11-23,1873.0,고종,False,False,False,,True
+SJW-K10100040-00400,sjw,discussion,report_order,seoul,1873-11-23,1873.0,고종,False,False,False,,True
 SJW-K10100280-01100,sjw,discussion,report_order,seoul,1873-12-17,1873.0,고종,False,False,False,,True
 SJW-K11030150-00900,sjw,ritual,ritual_prep,seoul,1874-04-30,1874.0,고종,False,False,False,,True
 SJW-K11030150-01100,sjw,ritual,ritual_prep,seoul,1874-04-30,1874.0,고종,False,False,False,,True

@@ -163,29 +163,37 @@ def main():
     # Lee's gauge column is filled only on days with a measurement; a blank is a day without measured rain. Both blank and 0
     # count as "no gauge rain" here, so the second rate is the share of gauge-dry days on which the cell still says rain.
     g = lm[lm.kind == "weather"].copy()
-    g["half"] = (g.year_ce.astype(int) // 50) * 50
+    # 1.2.2: one row per calendar date. A date with two weather nodes (duplicates, see F4) counts as rain if any node says rain
+    # (any policy; a few duplicated dates disagree, e.g. 1802-11-03 雨/陰). 1.2.1 counted rows (8,364 instead of 8,320 dates).
+    lee_rain_total = int((lee.gauge_mm > 0).sum()); lee_zero_total = int((lee.gauge_mm == 0).sum()); lee_na_total = int(lee.gauge_mm.isna().sum())
+    g["lee_rain_text"] = g.lee_text.astype(str).str.contains("雨")
+    n_rows = len(g)
+    agg = g.groupby("solar_date").agg(year_ce=("year_ce", "first"), gauge_mm=("gauge_mm", "first"), rain_any=("rain_any", lambda s: bool(s.fillna(False).any())),
+                                     precip_any=("precip_any", lambda s: bool(s.fillna(False).any())), lee_rain_text=("lee_rain_text", "first"), n_nodes=("rain_any", "size"),
+                                     rain_conflict=("rain_any", lambda s: s.fillna(False).nunique() > 1)).reset_index()
+    g = agg; g["half"] = (g.year_ce.astype(int) // 50) * 50
     def gauge_block(period, gg):
-        """1.2.1: the 1.2 'false rain' (rain token on days with no gauge amount or 0) mixed two very different sets — days whose
-        gauge entry is 0 (flag e: precipitation without measurable depth, almost all with a rain/snow token) and days with no
-        gauge entry at all. They are now reported separately, together with any-precipitation recall and the share of Lee's own
-        weather string carrying 雨 on measured-rain days (the same gap, so it is a property of the record, not of the token rule)."""
+        """1.2.1: the 1.2 'false rain' (rain token on days with no gauge amount or 0) mixed two very different sets - days whose
+        gauge amount is written as 0 (Lee et al. 2024 describe a 0 mm Ilgi entry as a trace) and days with no gauge entry at all.
+        They are reported separately, with any-precipitation recall and the share of Lee's own weather string carrying 雨 on
+        measured-rain days (the same gap, so it is a property of the record, not of the token rule). 1.2.2: distinct dates."""
         rainy = gg[gg.gauge_mm > 0]; n = len(rainy)
-        k = int(rainy.rain_any.fillna(False).sum()); lo, hi = wilson(k, n)
-        kp = int(rainy.precip_any.fillna(False).sum())
-        klee = int(rainy.lee_text.astype(str).str.contains("雨").sum())
-        dry = gg[~(gg.gauge_mm > 0)]; k2 = int(dry.rain_any.fillna(False).sum()); n2 = len(dry); lo2, hi2 = wilson(k2, n2)
+        k = int(rainy.rain_any.sum()); lo, hi = wilson(k, n)
+        kp = int(rainy.precip_any.sum())
+        klee = int(rainy.lee_rain_text.sum())
         zero = gg[gg.gauge_mm == 0]; na = gg[gg.gauge_mm.isna()]
-        return dict(period=period, gauge_days=len(gg), gauge_rain_days=n, cell_rain_on_gauge_rain=k, recall=k / n if n else np.nan, recall_lo=lo, recall_hi=hi,
+        return dict(period=period, gauge_days=len(gg), gauge_rows=int(gg.n_nodes.sum()), duplicate_dates=int((gg.n_nodes > 1).sum()), rain_conflict_dates=int(gg.rain_conflict.sum()),
+                    gauge_rain_days=n, cell_rain_on_gauge_rain=k, recall=k / n if n else np.nan, recall_lo=lo, recall_hi=hi,
                     cell_precip_on_gauge_rain=kp, recall_precip=kp / n if n else np.nan, lee_text_rain_on_gauge_rain=klee, lee_text_rain_share=klee / n if n else np.nan,
-                    gauge_dry_days=n2, cell_rain_on_gauge_dry=k2, false_rain=k2 / n2 if n2 else np.nan, false_lo=lo2, false_hi=hi2,
-                    gauge_zero_days=len(zero), cell_precip_on_gauge_zero=int(zero.precip_any.fillna(False).sum()), cell_rain_on_gauge_zero=int(zero.rain_any.fillna(False).sum()),
-                    gauge_na_days=len(na), cell_rain_on_gauge_na=int(na.rain_any.fillna(False).sum()), cell_precip_on_gauge_na=int(na.precip_any.fillna(False).sum()))
+                    gauge_zero_days=len(zero), cell_precip_on_gauge_zero=int(zero.precip_any.sum()), cell_rain_on_gauge_zero=int(zero.rain_any.sum()),
+                    gauge_na_days=len(na), cell_rain_on_gauge_na=int(na.rain_any.sum()), cell_precip_on_gauge_na=int(na.precip_any.sum()))
     rg = []
     for h, gg in g.groupby("half"):
         rg.append(gauge_block(f"{h}–{h+49}", gg))
     rg.append(gauge_block("1778–1907", g))
+    rg[-1].update(lee_rain_days_total=lee_rain_total, lee_zero_days_total=lee_zero_total, lee_na_days_total=lee_na_total)   # Lee's own counts; the difference to gauge_*_days = days without a weather node in the diary
     pd.DataFrame(rg).to_csv(D / "f_rain_gauge.csv", index=False)
-    print("rain gauge days", len(g))
+    print("rain gauge dates", len(g), "rows", n_rows, "Lee rain days", lee_rain_total, "matched", int((g.gauge_mm > 0).sum()))
 
     # ---------------- F3 ASOS overlap
     asos = pd.concat([pd.read_csv(f) for f in sorted(glob.glob(str(X / "kma-asos108" / "*.csv")))])

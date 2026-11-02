@@ -2,7 +2,7 @@
  "profile": "data-package",
  "name": "sillok-metrics",
  "title": "Sillok Metrics — derived data",
- "version": "1.2.1",
+ "version": "1.2.2",
  "created": "2026-11-02",
  "homepage": "https://bowonkwon.github.io/Sillok-Metrics/",
  "contributors": [
@@ -1390,7 +1390,7 @@
    "path": "g4_comet_articles.csv",
    "format": "csv",
    "encoding": "utf-8",
-   "rows": 3446,
+   "rows": 3451,
    "licenses": [
     {
      "name": "KOGL-1-derivative + CC-BY-4.0",

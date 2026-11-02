@@ -1027,7 +1027,7 @@ SJW-F20080260-01000,sjw,forecast,forecast,,,,不過一分,,"관상감: 내달 �
 SJW-F20090150-00400,sjw,ritual,ritual,,ritual_prep,,,,내일 시사를 월식 재계로 頉稟,"明日月食齋戒相値, 視事, 頉稟",lunar_eclipse_coded_sjw_4
 SJW-F20090160-00200,sjw,observed,observed,,,夜一更二更,,,일경·이경 월식 관측(안개),"夜一更二更, 月食, 有霧氣",lunar_eclipse_coded_sjw_4
 SJW-F20090160-01500,sjw,ritual,ritual,,ritual_prep,,,,오늘 저녁 월식 구식 배설 장소 품의,"今夕月食, 救食, 當於崇政殿前庭",lunar_eclipse_coded_sjw_4
-SJW-F20090230-01600,sjw,forecast,forecast,,report_order,,,,월식이 지난 뒤 자문을 금군 편에 보냄,"月蝕已過, 咨文依前例",lunar_eclipse_coded_sjw_4
+SJW-F20090230-01600,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,월식이 지난 뒤 자문을 금군 편에 보냄,"月蝕已過, 咨文依前例",lunar_eclipse_coded_sjw_4
 SJW-F21020050-00200,sjw,other,other,,,一更,,,"2월 5일, 달이 금성을 가린 엄폐(月食金星), 월식 아님","一更, 月食金星",lunar_eclipse_coded_sjw_4
 SJW-F21050100-00300,sjw,other,other,,,夜三更,,,"5월 10일, 달이 좌각성을 가린 엄폐(月食左角星), 월식 아님","夜三更, 月食左角星",lunar_eclipse_coded_sjw_4
 SJW-F22020160-00300,sjw,observed,observed,,after_midnight,三更四更,,,삼경·사경 월식 관측(달무리),"三更四更, 月食月暈",lunar_eclipse_coded_sjw_4
@@ -1048,7 +1048,7 @@ SJW-F24050150-01000,sjw,forecast,forecast,,report_order,,,,예부 일월식 3분
 SJW-F24060130-02600,sjw,discussion,discussion,,,,,,주례 강독 중 일월식 언급,"日月食大傀以上, 敬天之事",lunar_eclipse_coded_sjw_5
 SJW-F25050160-00400,sjw,ritual,ritual,,ritual_prep,,,,오늘 월식 재계와 개정 상치 품의(준비),今日月食齋戒相値,lunar_eclipse_coded_sjw_5
 SJW-F25110140-00200,sjw,observed,observed,,after_midnight,夜五更,,,밤 5경 월식,"夜五更, 月食",lunar_eclipse_coded_sjw_5
-SJW-F25110190-00700,sjw,forecast,forecast,,report_order,,,,월식 지난 뒤 자문 회송 절차,"月食已過, 咨文依前例",lunar_eclipse_coded_sjw_5
+SJW-F25110190-00700,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,월식 지난 뒤 자문 회송 절차,"月食已過, 咨文依前例",lunar_eclipse_coded_sjw_5
 SJW-F26020180-02100,sjw,forecast,forecast,,report_order,,,,일월식 1분 이상 구식 자문에 답자,"日月食一分以上, 救食事, 咨文出來矣",lunar_eclipse_coded_sjw_5
 SJW-F26040220-03100,sjw,discussion,discussion,,,,,,지난해 11월 15일 월식 분초 추산 착오 논의,"上年十一月十五日月食分秒時刻, 與禮部所頒不符",lunar_eclipse_coded_sjw_5
 SJW-F26040250-02200,sjw,discussion,discussion,,,,,,지난 월식 분수 착오 회자·추산관 논죄 보고,"以分數之差誤, 回答咨文出來",lunar_eclipse_coded_sjw_5
@@ -1148,7 +1148,7 @@ SJW-F46050010-01600,sjw,other,other,,,辰正初刻,,,"일식 친림 구식 기�
 SJW-F46050010-01700,sjw,discussion,discussion,,,,,,일월식 연월이 서로 부합하는지 물음,"日月蝕年月, 果相符乎",lunar_eclipse_coded_sjw_6
 SJW-F46110030-02000,sjw,discussion,discussion,,,,,,왕이 이달 월식이 있는지 묻고 올해는 없다는 문답,"今月, 常爲月蝕矣。今年則不爲乎",lunar_eclipse_coded_sjw_6
 SJW-F47030100-00500,sjw,discussion,discussion,,,,,,비망기에서 6·8월 월식을 언급하며 심회를 토로함,"六月·八月, 其有月食",lunar_eclipse_coded_sjw_6
-SJW-F47030100-01100,sjw,forecast,forecast,,below_horizon,十五日,,below_horizon,방방일이 지하 월식 재계와 겹쳐 날짜 변경을 품함,其日與地下月食齋戒相値,lunar_eclipse_coded_sjw_6
+SJW-F47030100-01100,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,十五日,,below_horizon,방방일이 지하 월식 재계와 겹쳐 날짜 변경을 품함,其日與地下月食齋戒相値,lunar_eclipse_coded_sjw_6
 SJW-F47090160-00200,sjw,observed,observed,,after_midnight,夜三更四更,,,밤 3경·4경에 월식과 달무리,"夜三更四更, 月食月暈",lunar_eclipse_coded_sjw_6
 SJW-F47090160-00800,sjw,ritual,ritual,,after_midnight,三更二點,,,구식 시각 지연을 들어 관상감·중관을 문책하는 비망기,"三更二點, 有將食之形",lunar_eclipse_coded_sjw_6
 SJW-F47090190-02500,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자를 북경에 전송하자는 아룀,"月食已過, 禮部回咨, 依例選出",lunar_eclipse_coded_sjw_6
@@ -1205,7 +1205,7 @@ SJW-G03100170-02300,sjw,ritual,ritual,,,,,,어젯밤 월식 때 각사 구식 �
 SJW-G03100180-01900,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자를 동지사 편에 부치자는 계,"月食已過, 禮部回咨",lunar_eclipse_coded_sjw_6
 SJW-G03100210-01900,sjw,ritual,ritual,,,,,,월식 구식 때 기계 미비 관원을 의금부가 조율,"月蝕時各司之捄蝕, 其爲事體, 何等重大",lunar_eclipse_coded_sjw_6
 SJW-G04040200-02700,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자 전송을 아룀,"月蝕已過, 禮部回咨",lunar_eclipse_coded_sjw_6
-SJW-G04100140-00300,sjw,forecast,forecast,,below_horizon,再明日,,below_horizon,모레 지하 월식 재계로 시사를 탈품함,再明日地下月食齋戒,lunar_eclipse_coded_sjw_6
+SJW-G04100140-00300,sjw,ritual,forecast,jaegye_ritual_2026-11-02,below_horizon,再明日,,below_horizon,모레 지하 월식 재계로 시사를 탈품함,再明日地下月食齋戒,lunar_eclipse_coded_sjw_6
 SJW-G04100160-00500,sjw,ritual,ritual,,,,,,월식 재계와 겹쳐 중일 습사를 못 한다는 초기,"月蝕齋戒相値, 不得爲之之意",lunar_eclipse_coded_sjw_6
 SJW-G05100140-02300,sjw,forecast,forecast,,below_horizon,"復圓時刻, 與日入時刻相當",,below_horizon,임인년 2월 망 월식 복원이 일몰 무렵이라 구식을 하지 말자는 아룀,"二月望月食, 自當依例救食",lunar_eclipse_coded_sjw_6
 SJW-G06080180-03200,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자 전송을 아룀,"月食已過, 禮部回咨",lunar_eclipse_coded_sjw_6
@@ -1236,7 +1236,7 @@ SJW-G11110180-01100,sjw,discussion,discussion,,,,,,지난 월식에 대한 예�
 SJW-G12030300-02400,sjw,discussion,discussion,,,,,,몇 해 전 월식 때의 처신을 나무람,"年前月蝕時往出之擧, 又何妄也",lunar_eclipse_coded_sjw_6
 SJW-G12040240-01800,sjw,other,other,,,,,,"5월 1일 일식 구식 처소를 옮긴다는 초기, 월식은 선례 언급","日食時救食處所, 依上年十一月月食救食時例",lunar_eclipse_coded_sjw_6
 SJW-G13040070-02200,sjw,forecast,forecast,,,今四月十五日,不及一分,,15일 망 월식이 1분 미만이라 재계만 하고 구식하지 말자는 계,"朝鮮月食, 不及一分, 亦無庸救護云云",lunar_eclipse_coded_sjw_6
-SJW-G13040070-02300,sjw,forecast,forecast,,,今四月十五日,不及一分,,1분 미만 월식이라 재계만 하고 구식하지 않음을 경외에 알리자는 예조 계,"其日依地下食例, 只齋戒, 勿爲救食事",lunar_eclipse_coded_sjw_6
+SJW-G13040070-02300,sjw,ritual,forecast,jaegye_ritual_2026-11-02,,今四月十五日,不及一分,,1분 미만 월식이라 재계만 하고 구식하지 않음을 경외에 알리자는 예조 계,"其日依地下食例, 只齋戒, 勿爲救食事",lunar_eclipse_coded_sjw_6
 SJW-G13040170-02400,sjw,discussion,discussion,,,,,,지난 월식 뒤 예부 회자 발송 승인(사후 행정),"月食已過, 禮部回啓",lunar_eclipse_coded_sjw_7
 SJW-G13090190-01700,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자 발송(사후 행정),"月食已過, 禮部回咨",lunar_eclipse_coded_sjw_7
 SJW-G14030260-02500,sjw,discussion,discussion,,,,,,지난 월식에 대한 예부 회자 발송(사후 행정),"月食已過, 禮部回咨",lunar_eclipse_coded_sjw_7
@@ -1456,16 +1456,16 @@ SJW-K06060150-01500,sjw,ritual,ritual,,ritual_prep,,,,월식 때 근정전 계�
 SJW-K06060150-01600,sjw,ritual,ritual,,ritual_prep,,,,대신 차자로 월식 친행 구식을 거두고 각 아문 근신을 신칙하는 전교,"月食時親行救蝕, 特令還寢",lunar_eclipse_coded_sjw_9
 SJW-K06060150-02300,sjw,ritual,ritual,,ritual_prep,,,,도총부가 월식이 겹쳐 중일 습사를 못 한다고 아룀,"月食相値, 不得設行之意",lunar_eclipse_coded_sjw_9
 SJW-K06060160-00500,sjw,ritual,ritual,,,,,,의정부가 월식 구식 때 복원 전에 먼저 물러간 교서관 판교의 처벌을 청함(구식 거행 사후),"校書館官員, 不待復圓, 經先罷歸",lunar_eclipse_coded_sjw_9
-SJW-K06060190-00300,sjw,forecast,forecast,,report_order,,,,승문원이 15일 월식 자문이 오지 않아 회자가 늦어진다며 탐문을 청함,"今十五日月食咨文, 尙不出來",lunar_eclipse_coded_sjw_9
-SJW-K06060280-01000,sjw,forecast,forecast,,report_order,,,,승문원이 월식 자문이 이제야 와 회자를 보내자고 아룀,"月食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
+SJW-K06060190-00300,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 15일 월식 자문이 오지 않아 회자가 늦어진다며 탐문을 청함,"今十五日月食咨文, 尙不出來",lunar_eclipse_coded_sjw_9
+SJW-K06060280-01000,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 월식 자문이 이제야 와 회자를 보내자고 아룀,"月食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
 SJW-K06080120-00800,sjw,other,other,,,,,,일식 구식 자문 회자에 관한 계. 월식은 선례(6월 월식)로만 언급,"日食已過, 救食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
 SJW-K06080160-01200,sjw,other,other,,,,,,일식 구식 자문 회자에 관한 계. 월식은 선례(6월 월식)로만 언급,"日食已過, 救食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
 SJW-K06120140-01000,sjw,ritual,ritual,,ritual_prep,,,,정원이 모레 월식 구식 때 장악원 제조 불참으로 패초를 청함,"再明日月食救食時, 提調一員, 當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K06120140-01100,sjw,ritual,ritual,,ritual_prep,,,,모레 월식 구식 때 전생서 제조 불참으로 패초를 청함,"再明日月食救食時, 提調當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K06120150-00800,sjw,ritual,ritual,,ritual_prep,,,,내일 월식 구식 때 내자시 제조가 이조 구식에 가 불참한다고 아룀,"明日月食救食時, 提調當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K06120160-00500,sjw,ritual,ritual,,ritual_prep,,,,오늘 월식 구식 때 이조 차당 거행을 위해 참판·참의 패초를 청함,今日月食救食時次堂擧行事,lunar_eclipse_coded_sjw_9
-SJW-K06120190-00400,sjw,forecast,forecast,,report_order,,,,승문원이 일월식 자문이 근래 늦게 온다며 탐문을 청함(보고 체계),"日月食咨文之前期三朔出來, 卽是已例",lunar_eclipse_coded_sjw_9
-SJW-K06120200-00700,sjw,forecast,forecast,,report_order,,,,승문원이 월식 자문이 이제야 와 회자를 보내자고 아룀,"月食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
+SJW-K06120190-00400,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 일월식 자문이 근래 늦게 온다며 탐문을 청함(보고 체계),"日月食咨文之前期三朔出來, 卽是已例",lunar_eclipse_coded_sjw_9
+SJW-K06120200-00700,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 월식 자문이 이제야 와 회자를 보내자고 아룀,"月食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
 SJW-K07110150-00400,sjw,ritual,ritual,,ritual_prep,,,,모레 사재감 월식 구식 때 제조가 외방에 있어 불참한다고 아룀,再明日司宰監月食救食時,lunar_eclipse_coded_sjw_9
 SJW-K07110160-00400,sjw,ritual,ritual,,ritual_prep,,,,내일 월식 구식 때 승문원 유사당상 교체를 청함,"明日月食救食時, 本院堂郞, 當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K07110160-00700,sjw,ritual,ritual,,ritual_prep,,,,병조가 11월 17일 무신당상 삭시사가 월식과 겹쳐 못 한다고 아룀,"而月食相値, 不得爲之之意",lunar_eclipse_coded_sjw_9
@@ -1477,7 +1477,7 @@ SJW-K09050060-02500,sjw,other,other,,,,,,초1일 일식 자문 지연에 관한 
 SJW-K10040150-00700,sjw,ritual,ritual,,ritual_prep,,,,내일 월식 구식 때 내자시 제조 불참으로 패초를 청함,"明日月食救食時, 提調當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K10040150-00800,sjw,ritual,ritual,,ritual_prep,,,,내일 월식 구식 때 사역원 제조 불참으로 패초를 청함,"明日月食救食時, 提調一員, 當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K10040160-01100,sjw,ritual,ritual,,ritual_prep,,,,오늘 월식 구식 때 돈녕부 당상 불참으로 패초를 청함,"今日月食救食時, 堂上一員當爲進參",lunar_eclipse_coded_sjw_9
-SJW-K10100040-00400,sjw,forecast,forecast,,report_order,,,,승문원이 4월 16일 월식 구식 자문이 이제야 와 회자를 보내자고 아룀,"今四月十六日月食之都京救食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
+SJW-K10100040-00400,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 4월 16일 월식 구식 자문이 이제야 와 회자를 보내자고 아룀,"今四月十六日月食之都京救食咨文, 今纔出來",lunar_eclipse_coded_sjw_9
 SJW-K10100280-01100,sjw,discussion,forecast,hoeja_discussion_2026-11-02,report_order,,,,승문원이 9월 망 월식 자문 등 두 건의 회자를 보내자고 아룀,今九月望月食事二道回咨,lunar_eclipse_coded_sjw_9
 SJW-K11030150-00900,sjw,ritual,ritual,,ritual_prep,,,,모레 월식 구식 때 사역원 제조 불참을 아룀,"再明日月食, 救食時, 提調一員當爲進參",lunar_eclipse_coded_sjw_9
 SJW-K11030150-01100,sjw,ritual,ritual,,ritual_prep,,,,모레 월식 때 의금부 당상 구식 불참으로 패초를 청함,"再明日月食時, 堂上一員, 當爲救食",lunar_eclipse_coded_sjw_9

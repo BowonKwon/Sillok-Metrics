@@ -35,11 +35,22 @@ def main():
     global CURRENT
     CURRENT = {b: set(hits[hits.pattern.isin(ps)].article_id) for b, ps in pats.items()}
     out = {}
+    # 1.2: the slaves bundle was re-coded with the v2 rule (precision_codebook.md); v2 replaces v1 when present
+    import glob
+    v2 = sorted(glob.glob(str(C / "slaves_v2_coded_[0-9].jsonl")))
     for b in BUNDLES:
         p = C / f"{b}_coded.jsonl"
         if not p.exists():
             continue
         coded = read(p)
+        if b == "slaves" and v2:
+            v1 = {r["article_id"]: r["relevant"] for r in coded}
+            coded = [r for f in v2 for r in read(f)]
+            blind = {r["article_id"]: r["relevant"] for r in read(C / "slaves_v2_coded_blind30.jsonl")} if (C / "slaves_v2_coded_blind30.jsonl").exists() else {}
+            a = {r["article_id"]: r["relevant"] for r in coded}
+            same = sum(a[i] == blind[i] for i in blind if i in a)
+            out["slaves_v2_meta"] = dict(version="v2", v1_v2_same=sum(v1.get(r["article_id"]) == r["relevant"] for r in coded), n=len(coded),
+                                        blind_n=len(blind), blind_agreement=same / len(blind) if blind else None)
         # precision is measured for the *current* keyword rule: sample articles that the current rule no
         # longer selects (e.g. after excluding 雪冤-type compounds) are dropped from the denominator
         cur = CURRENT.get(b)
@@ -58,6 +69,17 @@ def main():
         lo, hi = wilson(yes, n)
         out[b] = dict(n=n, yes=yes, precision=yes / n, ci_lo=lo, ci_hi=hi, reserved=sum(1 for r in coded if "판단 유보" in (r.get("reason") or "")))
         print(b, out[b])
+    # 1.2: Ilgi stratified samples (comet, appulse, meteor) — precision of the keyword rule in the Seungjeongwon Ilgi
+    for b in ("comet", "appulse", "meteor"):
+        p = C / f"{b}_coded_sjw.jsonl"
+        if not p.exists():
+            continue
+        coded = read(p); src = {r["article_id"]: r["text"].replace("\n", "") for r in read(C / f"{b}_input_sjw.jsonl")}
+        bad = [r["article_id"] for r in coded if r.get("quote") and r["quote"].replace("\n", "") not in src[r["article_id"]]]
+        assert not bad, (b, bad)
+        yes = sum(1 for r in coded if r["relevant"] == "yes"); n = len(coded); lo, hi = wilson(yes, n)
+        out[f"{b}_sjw"] = dict(n=n, yes=yes, precision=yes / n, ci_lo=lo, ci_hi=hi, reserved=sum(1 for r in coded if "판단 유보" in (r.get("reason") or "")))
+        print(b + "_sjw", out[f"{b}_sjw"])
     json.dump(out, open(ROOT / "data" / "derived" / "reliability.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 

@@ -162,23 +162,23 @@ def main():
     def share_by_reign(key, name, extra_cls=None):
         ids = set(hits[hits.pattern == key].article_id)
         g = main_.groupby(["king_no", "king_ko", "king_en", "edition"])
-        out = g.size().rename("n_articles").to_frame()
+        out = g.size().rename("n_dated_articles").to_frame()
         out["n_keyword"] = g.apply(lambda x: x.article_id.isin(ids).sum())
-        out["keyword_share"] = out.n_keyword / out.n_articles
+        out["keyword_share"] = out.n_keyword / out.n_dated_articles
         if extra_cls:
             out["n_classified"] = g.apply(lambda x: x.subjects.str.contains(extra_cls, na=False).sum())
-            out["classified_share"] = out.n_classified / out.n_articles
+            out["classified_share"] = out.n_classified / out.n_dated_articles
         out.to_csv(D / name, encoding="utf-8")
         return out
     share_by_reign("royal_lecture", "d_lecture.csv")
     share_by_reign("memorial", "d_memorial.csv", extra_cls="정론-간쟁")
     just = main_.subjects.str.contains("사법", na=False)
     g = main_.assign(just=just).groupby(["king_no", "king_ko", "king_en", "edition"])
-    dj = g.size().rename("n_articles").to_frame(); dj["n_justice"] = g.just.sum(); dj["justice_share"] = dj.n_justice / dj.n_articles
+    dj = g.size().rename("n_dated_articles").to_frame(); dj["n_justice"] = g.just.sum(); dj["justice_share"] = dj.n_justice / dj.n_dated_articles
     dj.to_csv(D / "d_justice.csv", encoding="utf-8")
     main_["decade"] = (main_.year_ce // 10 * 10).astype(int)
     g = main_.assign(just=just).groupby("decade")
-    dd = g.size().rename("n_articles").to_frame(); dd["n_justice"] = g.just.sum(); dd["justice_share"] = dd.n_justice / dd.n_articles
+    dd = g.size().rename("n_dated_articles").to_frame(); dd["n_justice"] = g.just.sum(); dd["justice_share"] = dd.n_justice / dd.n_dated_articles
     for cls in ("사법-탄핵", "사법-행형", "사법-재판", "사법-치안", "사법-법제", "사법-사법"):
         dd[cls] = g.apply(lambda x: x.subjects.str.contains(cls, na=False).sum())
     dd.to_csv(D / "d_justice_decade.csv", encoding="utf-8")

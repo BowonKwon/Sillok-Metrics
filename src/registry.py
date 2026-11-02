@@ -19,7 +19,7 @@ Fields
 SITE = {
     "ko": {"title": "실록 메트릭스", "subtitle": "조선왕조실록을 기사 단위로 센 수치와, 그 수치를 얼마나 믿어도 되는지"},
     "en": {"title": "Sillok Metrics", "subtitle": "The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number"},
-    "version": "1.1.1",
+    "version": "1.2",
 }
 
 SERIES = {
@@ -321,6 +321,11 @@ METRICS = [
 ]
 
 from takeaways import TAKEAWAYS  # noqa: E402
+from site_ext import SERIES_EXT, SOURCES_EXT, METRICS_EXT, TAKEAWAYS_EXT  # noqa: E402  (1.2 series G and F)
+SERIES.update(SERIES_EXT)
+SOURCES.update(SOURCES_EXT)
+METRICS.extend(METRICS_EXT)
+TAKEAWAYS.update(TAKEAWAYS_EXT)
 for _m in METRICS:
     _m["takeaway"] = TAKEAWAYS[_m["id"]]
-assert len({m["id"] for m in METRICS}) == len(METRICS) == 24 == len(TAKEAWAYS)
+assert len({m["id"] for m in METRICS}) == len(METRICS) == 34 == len(TAKEAWAYS)

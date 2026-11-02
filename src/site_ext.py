@@ -1,0 +1,417 @@
+# -*- coding: utf-8 -*-
+"""1.2 site extension — series G (record and sky, three sources) and series F (the Ilgi weather cell).
+
+Imported by registry.py (definitions, sources, takeaways) and build_site.py (data loading, headline, reliability card,
+figures, method-page sections). Kept in one file so the 1.0/1.1 builder is touched only at hook points.
+"""
+import json
+from pathlib import Path
+
+import pandas as pd
+
+SERIES_EXT = {
+    "G": {"ko": "기록과 하늘 — 사료 셋", "en": "Record and sky — three sources"},
+    "F": {"ko": "승정원일기 날씨 칸", "en": "The weather cell of the Seungjeongwon Ilgi"},
+}
+
+SERIES_INTRO = {
+    "G": {"ko": "고려사 천문지(918~1392)·고려사절요·승정원일기(1623~1910)의 천문 기사를 실록과 같은 코드북으로 유형 분류하고, 같은 DE406 계산과 맞춰 본다. 관측지는 고려 개경, 조선 서울. 이 장의 일식·월식 수치는 1.0 의 계열 C(실록만, 코드북 v1)를 코드북 v2 로 다시 코딩한 것이라 C1 의 값과 다르다 — 어느 쪽이 바뀌었는지는 방법 면의 「판」에 적었다.",
+          "en": "Astronomical articles of the Goryeosa Treatise on Astronomy (918–1392), the Goryeosa-jeolyo and the Seungjeongwon Ilgi (1623–1910), typed with the same codebook as the Sillok and compared with the same DE406 computation. Observing sites: Gaeseong for Goryeo, Seoul for Joseon. The eclipse figures here come from a v2 re-coding of the 1.0 series C (Sillok only, codebook v1), so they differ from C1; the Versions section of the Method page records what changed."},
+    "F": {"ko": "승정원일기의 날 단위 날씨 칸 102,397일을 토큰 규칙으로 분해한다. 이 칸의 전수 디지털화는 Lyu 외(2024, Geoscience Data Journal, Zenodo CC BY 4.0)가 1623~1910 전 기간에 대해 먼저 했고, Lee·Shin·Hong(2024, Scientific Data, Zenodo CC BY 4.0)도 1778~1907 의 날씨 범주를 측우기 강우량과 함께 공개했다. 이 장은 그 두 데이터셋과 같은 날을 맞춰 본 일치율과 차이 목록, 「晴」 한 글자가 관행적으로 적힌 정도, 측우기·근대 관측과의 겹침, 결측 구조를 보탠다.",
+          "en": "The 102,397 day-level weather cells of the Seungjeongwon Ilgi, decomposed with a token rule. The cell was first digitised in full by Lyu et al. (2024, Geoscience Data Journal, Zenodo CC BY 4.0) for 1623–1910, and Lee, Shin & Hong (2024, Scientific Data, Zenodo CC BY 4.0) published its categories for 1778–1907 together with the rain-gauge series. This chapter adds the day-by-day agreement with those two datasets and the list of differences, the degree to which a bare '晴' was entered as routine, the overlap with the rain gauge and with modern observations, and the structure of the gaps."},
+}
+
+SOURCES_EXT = {
+    "nikh_goryeosa": {"ko": "국사편찬위원회, 「한국사데이터베이스 정보_고려사 원문」(공공데이터포털 15053637, 이용허락범위 제한 없음). 천문지(志 권1~3, kr_047~049) 기사 4,568건을 전부 썼다. 국편이 붙인 음력·양력(율리우스력)·일간지를 그대로 쓰고 간지로 검증했다.",
+                      "en": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction). All 4,568 entries of the Treatise on Astronomy (fascicles 47–49). NIKH's lunar date, Julian solar date and day ganji are used as given and cross-checked.",
+                      "license": "no restriction (attribution)", "url": "https://www.data.go.kr/data/15053637/fileData.do"},
+    "nikh_jeolyo": {"ko": "국사편찬위원회, 「한국사데이터베이스 정보_고려사절요 원문」(공공데이터포털, 공공누리 제1유형). 천문 키워드에 걸린 기사 249건. 날짜는 월 단위이고 본문 첫 구절의 일진으로 일을 복원한 것은 `date_flag` 에 표시했다.",
+                    "en": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1). 249 entries hit by the astronomy keywords; dates are monthly, and days restored from the ganji in the first clause are flagged in `date_flag`.",
+                    "license": "KOGL Type 1 (attribution)", "url": "https://www.data.go.kr/"},
+    "nikh_sjw": {"ko": "국사편찬위원회, 「승정원일기 정보」(공공데이터포털 15064218, 공공누리 제1유형). XML 297책, 날 노드 104,074, 기사 1,792,433건. 날씨 칸 전부와 천문 키워드 기사 8,520건을 썼다.",
+                 "en": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles. Every weather cell and the 8,520 astronomy-keyword articles are used.",
+                 "license": "KOGL Type 1 (attribution)", "url": "https://www.data.go.kr/data/15064218/fileData.do"},
+    "lyu2024": {"ko": "Lyu 외 (2024), 「Digitisation of Weather Records of Seungjeongwon Ilgi」, Geoscience Data Journal; 데이터 Zenodo doi:10.5281/zenodo.8382243 (CC BY 4.0). 1623~1910 날 단위 날씨 문자열과 Sunny·Cloudy·Rainy·Snow·Hail·Wind 더미.",
+                "en": "Lyu et al. (2024), 'Digitisation of Weather Records of Seungjeongwon Ilgi', Geoscience Data Journal; data: Zenodo doi:10.5281/zenodo.8382243 (CC BY 4.0). Daily weather strings 1623–1910 with Sunny/Cloudy/Rainy/Snow/Hail/Wind dummies.",
+                "license": "CC BY 4.0", "url": "https://doi.org/10.5281/zenodo.8382243"},
+    "lee2024": {"ko": "Lee J.-W., Shin H.-J., Hong J. (2024), 「Precipitation data in Seoul, Korea during 1778–1907」, Scientific Data 11:566; 데이터 Zenodo doi:10.5281/zenodo.11076768 (CC BY 4.0). 승정원일기 날씨 범주와 측우기 강우량(일별).",
+                "en": "Lee J.-W., Shin H.-J., Hong J. (2024), 'Precipitation data in Seoul, Korea during 1778–1907', Scientific Data 11:566; data: Zenodo doi:10.5281/zenodo.11076768 (CC BY 4.0). Ilgi weather category and rain-gauge depth by day.",
+                "license": "CC BY 4.0", "url": "https://doi.org/10.5281/zenodo.11076768"},
+    "kma_asos": {"ko": "기상청, 지상(종관, ASOS) 일자료 조회서비스(공공데이터포털, 공공누리 제1유형). 서울(108) 1907-10-01~1910-12-31 일강수량·평균 운량·현상.",
+                 "en": "Korea Meteorological Administration, ASOS daily data service (data.go.kr, KOGL Type 1): Seoul (108), 1907-10-01 to 1910-12-31 — daily precipitation, mean cloud cover, phenomena.",
+                 "license": "KOGL Type 1 (attribution)", "url": "https://www.data.go.kr/data/15059093/openapi.do"},
+    "nasa_5mkle": {"ko": "Espenak F., Meeus J., Five Millennium Catalog of Lunar Eclipses (NASA/TP-2009-214173). 918~1910 본영 월식 1,538건을 교차 확인에만 썼다(목록은 재배포하지 않음).",
+                   "en": "Espenak F., Meeus J., Five Millennium Catalog of Lunar Eclipses (NASA/TP-2009-214173). Its 1,538 umbral eclipses of 918–1910 are used for cross-checking only (the catalogue itself is not redistributed).",
+                   "license": "free with acknowledgment", "url": "https://eclipse.gsfc.nasa.gov/LEcat5/LEcatalog.html"},
+    "jpl_sbdb": {"ko": "NASA/JPL Small-Body Database — 1911년 이전 근일점을 가진 혜성 376개의 근일점 시각(2026-11-02 조회). 동정에 쓴 혜성의 이름과 근일점일만 싣는다.",
+                 "en": "NASA/JPL Small-Body Database — perihelion times of the 376 comets with perihelion before 1911 (queried 2026-11-02). Only the names and perihelion dates used for identification are shown.",
+                 "license": "public (NASA)", "url": "https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html"},
+}
+
+TAKEAWAYS_EXT = {
+    "g1_solar_match": dict(ko="세 사료의 일식 「관측 보고」는 같은 잣대에서 열에 일곱에서 아홉이 그 관측지에서 보이는 계산 일식과 맞는다. 고려사가 실록보다 높다 — 천문지는 관측 장부이고 실록은 정치 기록이기 때문이다. 유형을 가리지 않은 「日食」 전체의 일치율을 인용해서는 안 된다.",
+                           en="Across the three sources, seven to nine in ten eclipse observation reports match a computed eclipse visible at the observing site. Goryeosa scores above the Sillok: a treatise is an observation ledger, the Sillok a political record. Do not quote a match rate for all '日食' articles without typing."),
+    "g2_lunar_match": dict(ko="월식 관측 보고의 일치율은 세 사료에서 71~79%로 일식보다 조금 낮다. 밤 기록이라 날짜가 하루 어긋나기 쉽고(자정 넘김), 고려사의 「月食+별 이름」은 월식이 아니라 달이 별을 가린 기사다.",
+                           en="Lunar-eclipse observation reports match at 71–79% in all three sources, a little below solar. Night events slip a day easily (after midnight), and Goryeosa's '月食 + star name' entries are occultations, not eclipses."),
+    "g3_planets": dict(ko="「태백주현」 기록일의 금성 이각 중앙값은 세 사료 모두 43° 안팎으로 무작위 날짜의 31° 와 뚜렷이 갈리고, 「月犯X」 기사의 달–별 각거리 중앙값은 2.6°(±1일 창)로 무작위의 91° 와 갈린다. 다만 1.5° 안쪽은 셋에 하나뿐이라 犯 을 현대적 「접근」으로 바꿔 읽으면 안 된다.",
+                      en="On 'Venus seen by day' dates the planet's elongation has a median near 43° in all three sources against 31° on random dates, and on '月犯X' dates the Moon–star separation has a median of 2.6° (±1-day window) against 91° at random. Only a third fall within 1.5°, so 犯 should not be read as a modern close approach."),
+    "g4_comet_ident": dict(ko="혜성·객성 기사일을 알려진 혜성 근일점 ±90일에 맞추면 실록 관측 보고의 78%, 고려사 천문지의 33%가 들어가고, 같은 수의 무작위 날짜는 17%·3%다. 승정원일기는 모집단이 커서 우연 일치도 33%에 이르므로 표본 정밀도(0.39)와 함께 읽는다.",
+                           en="Matching comet and guest-star report dates to known perihelia within ±90 days captures 78% of Sillok observation reports and 33% of Goryeosa entries, against 17% and 3% for the same number of random dates. The Ilgi's chance rate reaches 33% because of its size, so read it with the sample precision (0.39)."),
+    "g5_sunspot": dict(ko="맨눈 흑점 기사는 세 사료를 합쳐 120건이고 50년 구간당 한 자릿수라 연표로만 싣는다. 태양 활동 대리지표와의 상관은 이 수로는 기록 관행과 가려지지 않아 내지 않았다.",
+                       en="Naked-eye sunspot articles total 120 across the three sources, single digits per 50-year period, so they are given as a chronology only. No correlation with solar-activity proxies is offered: at these counts it cannot be separated from recording practice."),
+    "g6_overlap": dict(ko="고려사 천문지의 일식 관측일 91%는 절요에도 있지만, 1623~1863년 실록의 일식 관측일 중 승정원일기에도 있는 것은 32%뿐이다. 두 조선 사료는 서로를 베낀 것이 아니라 다른 것을 적었다.",
+                       en="91% of Goryeosa eclipse observation days recur in the Jeolyo, but only 32% of Sillok eclipse observation days of 1623–1863 recur in the Ilgi. The two Joseon sources did not copy each other; they recorded different things."),
+    "f1_weather_tokens": dict(ko="날씨 칸의 75%는 「晴」 한 글자다. 우리 규칙 분해는 Lyu 외 2024 의 더미와 같은 날 99.5~99.99% 일치하고 Lee 외 2024 의 범주와 97~99.9% 일치한다 — 남는 차이 776건·1,258건은 목록으로 공개한다. 이 수치는 서울의 날씨가 아니라 승정원 서식의 기재다.",
+                              en="Three quarters of the cells are the single character '晴'. Our rule-based decomposition agrees with the Lyu et al. 2024 dummies on 99.5–99.99% of days and with the Lee et al. 2024 category on 97–99.9%; the remaining 776 and 1,258 differences are published as lists. These are entries in a secretariat form, not Seoul's weather."),
+    "f2_routine": dict(ko="측우기가 비를 잰 날의 72%에만 날씨 칸에 雨 가 있고, 재지 않은 날에 雨 가 적힌 것은 1.7%다. 비는 빠뜨려도 없는 비를 적지는 않았다 — 칸은 「맑음 기본값」 서식이었다.",
+                       en="Only 72% of days with measured rain carry 雨 in the cell, while 雨 appears on 1.7% of days without a measurement. Rain was omitted but not invented — the cell was a form with 'clear' as its default."),
+    "f3_asos": dict(ko="기상청 관측과 겹치는 1907~1910년 1,052일에서 관측된 강수일의 21%만 날씨 칸에 雨 가 있고, 칸이 「晴」 뿐인 날의 24%만 운량 2.5 이하다. 마지막 시기의 날씨 칸은 관측 기록으로 읽을 수 없다.",
+                    en="On the 1,052 days overlapping KMA observations (1907–1910) only 21% of observed rain days carry 雨, and only 24% of '晴'-only days have mean cloud cover ≤ 2.5 tenths. In its last years the cell cannot be read as an observation record."),
+    "f4_missing": dict(ko="달력 일수 104,963일 중 날 노드가 없는 날 889일, 칸이 빈 날 2,256일. 인조 초와 영조·고종 연간에 몰려 있어 시계열에서 그 달의 0 은 결측이다.",
+                       en="Of 104,963 calendar days, 889 have no day node and 2,256 an empty cell, clustered in early Injo and in the Yeongjo and Gojong years; zeros there are gaps, not quiet days."),
+}
+
+
+def _m(mid, series, table, unit, fmt, rel, ko, en, external=None):
+    d = dict(id=mid, series=series, table=table, unit=unit, fmt=fmt, reliability=rel, ko=ko, en=en)
+    if external:
+        d["external"] = external
+    return d
+
+
+METRICS_EXT = [
+    _m("g1_solar_match", "G", "g1_solar", "share", ".1%", "external-match",
+       ko=dict(name="사료별 일식 관측 보고의 계산 일식 일치율", definition="고려사 천문지·고려사절요·실록·승정원일기의 「日食」 기사를 코드북 v2 로 유형 분류한 뒤, 관측 보고 기사일 ±1일 안에 그 사료의 관측지(개경/서울)에서 보이는 계산 일식이 있는 비율.",
+               formula="유형별: 일치 기사 / 그 유형의 날짜 있는 기사. 일식은 DE406 으로 918~1910 합삭 12,282회마다 개경·서울 두 지점에서 태양·달 원반이 지평선 위에서 겹치는지 계산. 창 ±1일, ±0일 값 병기. 승정원일기는 같은 날 여러 기사를 날 단위로도 묶는다.",
+               reading="관측 보고 유형의 값이 대표 수치다. 예보·구식례·논의 유형은 보이지 않는 일식(지하식·외국 일식·앞날의 일식)을 포함하므로 낮은 것이 정상이고, 「일식이 아닌 뜻」(other)은 0 에 가까워야 한다 — 코더 검증의 역할을 한다.",
+               caveat="실록 332건은 v1(1.0)에서 v2 로 다시 코딩했고 관측 보고가 84→77건이 됐다(지하 불견 8건이 forecast 로). 1392년 이전은 ΔT 모형 불확실성이 수 분~십수 분이라 경계 사례의 가시 판정이 흔들릴 수 있다. 천문연 고천문 DB 와의 수작업 대조는 이 판에 넣지 못했다."),
+       en=dict(name="Solar-eclipse observation reports matched by computation, by source", definition="'日食' articles of the Goryeosa treatise, the Jeolyo, the Sillok and the Ilgi typed with codebook v2; the metric is the share of observation reports whose date lies within ±1 day of a computed eclipse visible at that source's site (Gaeseong or Seoul).",
+               formula="per type: matched / dated articles of the type. Eclipses computed from DE406 at the 12,282 new moons of 918–1910 for both sites, testing disc overlap above the horizon. Window ±1 day, ±0 shown too. Ilgi articles of the same day are also pooled to day level.",
+               reading="The observation-report value is the headline. Forecast, ritual and discussion types include eclipses that were never visible (below the horizon, abroad, in the future), so lower rates there are expected; 'other' (not an eclipse at all) should sit near zero — it serves as a check on the coders.",
+               caveat="The 332 Sillok articles were re-coded from v1 (1.0) to v2; observation reports went from 84 to 77 (eight below-horizon computations moved to forecast). Before 1392 the ΔT model carries minutes to a quarter-hour of uncertainty, enough to move borderline visibility calls. A manual check against the KASI historical-astronomy database did not make it into this version."),
+       external=dict(ko="이기원 외 2016 은 고려사 월식 228건 중 222건을 식 계산과 맞췄다(일식은 안영숙·이용삼 2004 가 실록 231건을 사건 단위로 셈). 우리는 기사 단위다.",
+                     en="Lee et al. 2016 matched 222 of 228 Goryeosa lunar-eclipse records to computation; Ahn & Lee 2004 counted 231 Sillok solar records by event. We count articles.")),
+    _m("g2_lunar_match", "G", "g2_lunar", "share", ".1%", "external-match",
+       ko=dict(name="사료별 월식 기사의 유형과 일치율", definition="「月食」 기사를 유형(관측·예보·구식례·불식·논의·월식 아님)으로 나눈 뒤, 관측 보고 기사일 ±1일 안에 관측지에서 보이는 계산 월식(본영식)이 있는 비율. 1.1 까지는 유형 없이 하한만 냈다.",
+               formula="유형별: 일치 기사 / 날짜 있는 기사. 월식은 skyfield eclipselib 로 918~1910 본영식 1,535회(NASA 목록 1,538회와 ±1일 1,535회 일치), 가시 여부는 식 최대 때 달 고도. 창 ±1일.",
+               reading="관측 보고 값이 대표 수치다. 구식례 기사의 일치율이 일식보다 높은 것은 월식 구식례가 당일 밤에 열렸기 때문이다.",
+               caveat="고려사 「月食畢大星」류 41건은 달이 별을 가린 기사라 「월식 아님」으로 분류했다. 자정을 넘긴 식은 전날 날짜로 적히는 일이 많아 ±1일 창이 필요하다(after_midnight 표지)."),
+       en=dict(name="Lunar-eclipse articles: types and match rate, by source", definition="'月食' articles typed (observation, forecast, ritual, non-occurrence, discussion, not an eclipse); the metric is the share of observation reports within ±1 day of a computed umbral eclipse visible at the site. Up to 1.1 only an untyped lower bound was given.",
+               formula="per type: matched / dated articles. Lunar eclipses from skyfield's eclipselib, 1,535 umbral eclipses in 918–1910 (1,535 of the NASA catalogue's 1,538 match within ±1 day); visibility is the Moon's altitude at maximum. Window ±1 day.",
+               reading="The observation-report value is the headline. Ritual articles match better than for solar eclipses because the lunar rescue rite was held on the night itself.",
+               caveat="41 Goryeosa entries of the form '月食畢大星' are occultations of a star by the Moon and were typed 'not an eclipse'. Eclipses after midnight are often dated to the previous day, hence the ±1-day window (after_midnight flag).")),
+    _m("g3_planets", "G", "g3_venus", "degrees", ".1f", "external-match",
+       ko=dict(name="행성 기사의 위치 정합도 — 태백주현 이각과 능범 각거리", definition="① 「太白晝見·太白經天」 기록일의 금성 이각(태양과의 각거리) 분포를 사료별로 무작위 날짜와 비교. ② 「月犯X·X犯Y」 기사에서 두 천체 이름이 사전에 있는 쌍의 그날 밤 최소 각거리.",
+               formula="① 기록일 정오(지방평균시)의 금성 이각 중앙값과 ≥30°·≥40° 비율; 대조군은 같은 기간 무작위 2,000일. ② 쌍의 밤(18~06시, 30분 간격) 최소 각거리의 중앙값과 ≤1.5°·≤5° 비율, 전후 하루를 더한 ±1일 창 값 병기; 대조군은 같은 쌍을 무작위 날짜에 둔 400회.",
+               reading="두 분포가 무작위와 갈리면 기록일이 실제 하늘을 반영한다는 뜻이다. 각거리의 절대값은 별 이름 사전(밝은 별 16개·행성 5개)이 가리키는 별의 식별에 달려 있어 참고값이다.",
+               caveat="능범 기사 가운데 사전으로 풀린 쌍만 계산했다(고려사 454·승정원일기 156; 실록은 1.0 키워드 문맥이 짧아 0). 별자리 이름(宿)은 대표별 하나로 놓았다. 이기원 2023 의 춘방일기 犯 평균 1.2° 는 정밀한 날짜의 사료라 직접 비교는 어렵다."),
+       en=dict(name="Planet articles against the computed sky — Venus elongation and 犯 separations", definition="(1) Distribution of Venus's elongation on 'Venus seen by day' dates per source against random dates. (2) For '月犯X / X犯Y' articles whose two bodies are in the name dictionary, the minimum angular separation that night.",
+               formula="(1) median elongation at local noon and shares ≥30°/≥40°; control: 2,000 random days of the same span. (2) minimum separation during the night (18–06 h, 30-min steps), median and shares ≤1.5°/≤5°, also with a ±1-day window; control: the same pairs on 400 random dates.",
+               reading="Distributions that separate from random mean the dates reflect the real sky. Absolute separations depend on which star a Chinese name denotes (dictionary of 16 bright stars and 5 planets) and are indicative.",
+               caveat="Only pairs resolved by the dictionary were computed (Goryeosa 454, Ilgi 156; none for the Sillok, whose 1.0 keyword contexts are too short). Asterism names are represented by one star. Lee 2023's mean of 1.2° for 犯 in the Chunbang Ilgi comes from a precisely dated source and is not directly comparable."),
+       external=dict(ko="이기원 외 2023: 춘방일기(1,443일) 犯 평균 각거리 1.2°, 食 1.0°.", en="Lee et al. 2023: Chunbang Ilgi (1,443 days), mean separation 1.2° for 犯 and 1.0° for 食.")),
+    _m("g4_comet_ident", "G", "g4_comet", "share", ".1%", "sampled-precision",
+       ko=dict(name="혜성·객성 기사의 동정률", definition="혜성 키워드 기사일이 알려진 혜성(JPL 소천체 DB, 1911년 이전 근일점 376개)의 근일점 ±90일 안에 드는 비율과, 같은 개수의 무작위 날짜가 드는 비율(1,000회).",
+               formula="동정률 = 창 안 기사 / 날짜 있는 기사. 창 ±90일은 계산 전에 고정했고 결과를 보고 바꾸지 않았다. 대조군은 사료의 기간에서 무작위 날짜를 기사 수만큼 1,000번 뽑은 분포(seed 20261102).",
+               reading="동정률과 우연 일치율의 차이(excess)가 정보량이다. 실록 관측 보고(1.0 표본의 yes)와 전체 키워드 기사, 고려사 천문지, 승정원일기를 나란히 둔다.",
+               caveat="JPL 목록의 역사 혜성 궤도는 대부분 중국 기록으로 계산된 것이라 완전히 독립된 대조는 아니다. 승정원일기 혜성 키워드의 정밀도는 표본 107건에서 0.39 — 妖星·彗孛 이 재이 수사로 쓰인 기사가 많다."),
+       en=dict(name="Identification rate of comet and guest-star articles", definition="Share of comet-keyword article dates that fall within ±90 days of a known comet's perihelion (JPL Small-Body Database, 376 comets with perihelion before 1911), against the share for the same number of random dates (1,000 draws).",
+               formula="rate = articles inside the window / dated articles. The ±90-day window was fixed before computing and not adjusted. Control: random dates drawn from the source's span, as many as articles, 1,000 times (seed 20261102).",
+               reading="The excess over the chance rate is the information. Sillok observation reports (the 'yes' of the 1.0 sample), all keyword articles, the Goryeosa treatise and the Ilgi are shown side by side.",
+               caveat="Most historical orbits in the JPL list were themselves computed from Chinese records, so the check is not fully independent. Ilgi comet-keyword precision is 0.39 on a 107-article sample — 妖星 and 彗孛 are often omen rhetoric."),
+       external=dict(ko="Yeomans & Kiang 1981 의 핼리 회귀, 1604 초신성(선조 37년 객성 기사 322건).", en="Halley apparitions of Yeomans & Kiang 1981; the 1604 supernova (322 guest-star articles in Seonjo 37).")),
+    _m("g5_sunspot", "G", "g5_sunspot", "articles", ",.0f", "exact",
+       ko=dict(name="맨눈 흑점 기사 연표", definition="「黑子·日中有黑·日有黑氣」 류 기사의 사료별·50년 구간별 건수.",
+               formula="키워드 건수(사전 등록 패턴). 유형 코딩 없음.",
+               reading="건수가 작아 분포만 본다. 고려사 32·절요 18·승정원일기 70 건이고 실록은 1.0 키워드로 42건.",
+               caveat="赤氣·白氣·火光 등 오로라 후보 기사는 지표로 두지 않고 건수만 각주에 적었다 — 구름·노을과 가려지지 않는다."),
+       en=dict(name="Chronology of naked-eye sunspot articles", definition="Counts of '黑子 / 日中有黑 / 日有黑氣' articles by source and 50-year period.",
+               formula="Keyword counts (pre-registered patterns); no type coding.",
+               reading="Counts are small, so only the distribution is shown: Goryeosa 32, Jeolyo 18, Ilgi 70, and 42 in the Sillok by the 1.0 keyword.",
+               caveat="Aurora candidates (赤氣, 白氣, 火光) are not a metric; their counts sit in a footnote — they cannot be separated from clouds and twilight."),
+       external=dict(ko="Lee E.H. 외 2004(Sol. Phys. 224): 고려 43·조선 13건. Yang 외 2019: 고려 42·조선 13.", en="Lee E.H. et al. 2004 (Sol. Phys. 224): 43 Goryeo and 13 Joseon records; Yang et al. 2019: 42 and 13.")),
+    _m("g6_overlap", "G", "g6_overlap", "share", ".1%", "exact",
+       ko=dict(name="사료 사이 중복 보고율", definition="같은 현상(일식·월식 관측 보고일, 혜성 키워드일)을 ① 고려사 천문지와 절요, ② 실록과 승정원일기(1623~1863)가 함께 적은 비율, 양방향.",
+               formula="한 사료의 날짜 집합 중 다른 사료에 ±1일 안에 있는 날짜의 비율. 일식·월식은 유형 코딩을 거친 관측 보고일, 혜성은 키워드일.",
+               reading="절요는 고려사를 줄인 책이라 일식은 거의 겹친다. 실록과 승정원일기는 겹침이 낮다 — 실록 편찬이 승정원일기를 그대로 옮기지 않았다는 수치다.",
+               caveat="승정원일기는 인조 이후만 남아 1623~1863 으로 잘랐고, 실록 쪽 날짜는 1.0 변환, 승정원일기 쪽은 간지 보정 날짜를 썼다."),
+       en=dict(name="Same-event reporting between sources", definition="Share of the same events (solar and lunar observation days, comet keyword days) recorded in both (1) the Goryeosa treatise and the Jeolyo, (2) the Sillok and the Ilgi (1623–1863), in both directions.",
+               formula="Of one source's dates, the share found in the other within ±1 day. Eclipses use typed observation days; comets use keyword days.",
+               reading="The Jeolyo abridges the Goryeosa, so eclipses nearly all recur. Sillok and Ilgi overlap little — a number behind the claim that the Sillok compilers did not simply copy the Ilgi.",
+               caveat="The Ilgi survives only from Injo, hence the 1623–1863 cut; Sillok dates use the 1.0 conversion, Ilgi dates the ganji-corrected conversion.")),
+    _m("f1_weather_tokens", "F", "f_tokens_reign", "share", ".1%", "external-match",
+       ko=dict(name="날씨 칸의 토큰 비율과 세 데이터셋 일치율", definition="날씨 문자열을 사전 등록한 토큰 규칙 R1 으로 분해해 날마다 맑음만·흐림·비·눈·혼합 여부를 판정한 비율(왕대별·음력 월별)과, 같은 날의 Lyu 외 2024 더미·Lee 외 2024 범주와의 일치율.",
+               formula="부류 토큰(晴·陰·雨·雪·雹·霧·雷·風·霜)과 시간·정도 수식으로 896종 문자열을 잔여 0 으로 분해. rain_any 등은 하루 중 어디든 있으면 참. 일치율 = 같은 판정 날 / 양쪽에 있는 날(Lyu 는 국편 날 ID 로, Lee 는 양력 날짜로 맞춤).",
+               reading="비율 자체는 기재 관행이다. 세 데이터셋의 일치율이 99% 대라는 것은 분해가 안정적이라는 뜻이지 날씨가 맞았다는 뜻이 아니다. 차이 목록(f_compare_*_diff)에는 원문 문자열을 함께 두었고 어느 쪽이 맞는지는 판정하지 않았다.",
+               caveat="Lyu 외 2024 가 같은 칸을 먼저 전수 디지털화했다. 이 지표의 새로움은 규칙 공개와 삼자 대조뿐이다. 규칙은 결과를 보고 고치지 않았다."),
+       en=dict(name="Token shares of the weather cell and agreement with two datasets", definition="Each cell decomposed with the pre-registered token rule R1 into day-level flags (clear-only, cloudy, rain, snow, mixed), by reign and lunar month, and the same-day agreement with the Lyu et al. 2024 dummies and the Lee et al. 2024 category.",
+               formula="Class tokens (晴 陰 雨 雪 雹 霧 雷 風 霜) plus time and degree modifiers decompose all 896 distinct strings with zero residue; rain_any etc. are true if present anywhere in the day. Agreement = days with the same flag / days in both (Lyu joined on the NIKH day ID, Lee on the Gregorian date).",
+               reading="The shares describe entry practice. Agreement in the 99% range means the decomposition is stable, not that the weather was right. The difference lists (f_compare_*_diff) carry the original strings and take no side.",
+               caveat="Lyu et al. 2024 digitised the same cell first. What is new here is the published rule and the three-way check; the rule was not adjusted after seeing the results."),
+       external=dict(ko="Lyu 외 2024 (Zenodo, CC BY 4.0) 102,689일; Lee 외 2024 (Zenodo, CC BY 4.0) 47,480일.", en="Lyu et al. 2024 (Zenodo, CC BY 4.0), 102,689 days; Lee et al. 2024 (Zenodo, CC BY 4.0), 47,480 days.")),
+    _m("f2_routine", "F", "f_routine", "share", ".1%", "external-match",
+       ko=dict(name="관행적 기재 지수 — 晴 단독 비율과 측우기 대조", definition="왕대별 「晴」 단독 날 비율, 연속 晴 일수의 최대·평균, 양력 7월(장마) 비 기록일 비율, 그리고 측우기가 비를 잰 날(Lee 외 2024) 중 날씨 칸에 雨 가 있는 비율.",
+               formula="측우기 재현율 = 측우기 강우량 > 0 인 날 중 rain_any 인 날. 거짓 비 = 측우기 기록이 없거나 0 인 날 중 rain_any 인 날. 50년 구간별 윌슨 95% 구간.",
+               reading="재현율이 1 에서 멀고 거짓 비가 0 에 가까우면 「빠뜨리되 지어내지 않는」 서식이다. 晴 연속 일수가 길고 7월 비 기록이 적은 왕대일수록 칸이 관측에서 멀다.",
+               caveat="측우기 기록 자체도 공백이 있고(Lee 외 2024 의 flag 열) 측정 단위가 날과 완전히 같지 않다. 비교는 1778~1907 에 한정된다."),
+       en=dict(name="Routine-entry index — the bare 晴 and the rain gauge", definition="By reign: share of days with '晴' alone, longest and mean run of such days, share of solar-July (monsoon) days with rain recorded; and the share of rain-gauge days (Lee et al. 2024) on which the cell says 雨.",
+               formula="Gauge recall = rain_any days among days with gauge depth > 0. False rain = rain_any days among days with no or zero gauge record. Wilson 95% intervals by 50-year period.",
+               reading="Recall well below 1 with false rain near 0 is a form that omits but does not invent. Long 晴 runs and few July rain days mark reigns whose cell is furthest from observation.",
+               caveat="The gauge record has its own gaps (Lee et al. 2024 flag columns) and its measurement day does not coincide exactly with the diary day. The comparison is limited to 1778–1907."),
+       external=dict(ko="Lee·Shin·Hong 2024: 서울 측우기 일강우 1778~1907.", en="Lee, Shin & Hong 2024: Seoul rain-gauge daily series 1778–1907.")),
+    _m("f3_asos", "F", "f_asos", "share", ".1%", "external-match",
+       ko=dict(name="근대 관측과의 겹침 — 1907~1910", definition="기상청 서울(108) 일자료가 시작된 1907-10-01 부터 일기 마지막 날 1910-08-29 까지 1,052일에서, 관측 강수일·강설일·운량과 날씨 칸 판정의 일치율.",
+               formula="강수일 = 일강수량 > 0 또는 현상란에 「비」; 강설일 = 현상란에 「눈」(이 시기 적설 열은 비어 있다); 맑음 = 평균 운량 ≤ 2.5, 흐림 ≥ 7.5(10분위). 일치율·재현율·정밀도와 윌슨 95% 구간.",
+               reading="일치율이 낮은 것은 관측소가 틀렸다는 뜻이 아니라 대한제국 말기의 날씨 칸이 더는 관측이 아니었다는 뜻이다. 이 구간의 날씨 칸을 기후 자료로 쓰면 안 된다.",
+               caveat="1,052일은 한 시기의 표본이라 앞 시기로 일반화할 수 없다. 관측소(연화방)와 승정원(덕수궁 인근)의 거리는 수 km 다."),
+       en=dict(name="Overlap with modern observations, 1907–1910", definition="On the 1,052 days from the start of KMA Seoul (108) daily data (1907-10-01) to the diary's last day (1910-08-29): agreement between observed rain, snow and cloud cover and the cell's flags.",
+               formula="Observed rain = daily precipitation > 0 or '비' in the phenomena field; snow = '눈' in phenomena (snow-depth columns are empty in these years); clear = mean cloud cover ≤ 2.5 tenths, cloudy ≥ 7.5. Agreement, recall and precision with Wilson 95% intervals.",
+               reading="Low agreement does not mean the station was wrong; it means the cell had stopped being an observation by the last years of the Korean Empire. Do not use the cell of this period as climate data.",
+               caveat="1,052 days from one period cannot be generalised backwards. The station (Yeonhwabang) and the secretariat (near Deoksugung) are a few kilometres apart."),
+       external=dict(ko="기상청 ASOS 서울 108 일자료(공공누리 1유형).", en="KMA ASOS Seoul 108 daily data (KOGL Type 1).")),
+    _m("f4_missing", "F", "f_missing_reign", "days", ",.0f", "exact",
+       ko=dict(name="기록 결측 — 없는 날, 빈 칸, 주기만 있는 칸", definition="달력 일수 대비 날 노드가 없는 날, 날씨 칸이 비었거나 「-」인 날, 날씨 대신 「燼餘·謄書」 같은 필사 주기만 있는 날의 왕대별·연도별 수.",
+               formula="달력 일수 = 왕대 첫 날과 마지막 날의 JDN 차 + 1. 결측 = 달력 일수 − 날 노드 수. 빈 칸·주기만은 토큰 규칙의 kind 열.",
+               reading="결측은 전쟁과 화재(인조 초·영조·고종)에 몰려 있다. 시계열에서 그 달의 0 은 결측으로 다룬다.",
+               caveat="날 노드가 없는 날과 책 자체가 없는 기간(1623 이전, 소실 책)은 다르다. 전자만 센다."),
+       en=dict(name="Gaps — missing days, empty cells, note-only cells", definition="By reign and year: calendar days without a day node, days whose cell is empty or '-', and days whose cell holds only a copyist's note (燼餘, 謄書) instead of weather.",
+               formula="Calendar days = JDN span from the reign's first to last day + 1. Missing = calendar days − day nodes. Empty and note-only come from the token rule's kind column.",
+               reading="Gaps cluster around wars and fires (early Injo, Yeongjo, Gojong). Treat those zeros as missing in any time series.",
+               caveat="Days without a node differ from periods without a volume (before 1623, lost volumes); only the former are counted.")),
+]
+
+DATA_FILES_EXT = ["articles_ext.csv", "keyword_hits_ext.csv", "sjw_days.csv", "solar_eclipses_sites.csv", "lunar_eclipses_sites.csv", "venus_inferior_conjunctions_918_1910.csv",
+                  "g1_solar.csv", "g1_solar_articles.csv", "g2_lunar.csv", "g2_lunar_articles.csv", "g3_venus.csv", "g3_appulse.csv", "g3_appulse_articles.csv",
+                  "g4_comet.csv", "g4_comet_articles.csv", "g5_sunspot.csv", "g5_sunspot_articles.csv", "g6_overlap.csv",
+                  "f_tokens_reign.csv", "f_tokens_month.csv", "f_compare_lyu.csv", "f_compare_lyu_diff.csv", "f_compare_lee.csv", "f_compare_lee_diff.csv",
+                  "f_routine.csv", "f_rain_gauge.csv", "f_asos.csv", "f_missing_reign.csv", "f_missing_yearly.csv"]
+GZIP_FILES_EXT = {"sjw_days.csv", "articles_ext.csv", "keyword_hits_ext.csv"}
+CODING_FILES_EXT = ["solar_eclipse_codebook_v2.md", "lunar_eclipse_codebook.md", "weather_tokens.md", "astro_patterns.md",
+                    "solar_eclipse_types_v2.csv", "lunar_eclipse_types.csv", "precision_sjw_samples.csv", "slaves_v2_judgements.csv"]
+SOURCE_MAP_EXT = {"articles_ext.csv": ["nikh_goryeosa", "nikh_jeolyo", "nikh_sjw"], "keyword_hits_ext.csv": ["nikh_goryeosa", "nikh_jeolyo", "nikh_sjw"], "sjw_days.csv": ["nikh_sjw"],
+                  "solar_eclipses_sites.csv": ["de406"], "lunar_eclipses_sites.csv": ["de406", "nasa_5mkle"], "venus_inferior_conjunctions_918_1910.csv": ["de406"],
+                  "g4_comet.csv": ["jpl_sbdb"], "g4_comet_articles.csv": ["jpl_sbdb"], "f_compare_lyu.csv": ["nikh_sjw", "lyu2024"], "f_compare_lyu_diff.csv": ["nikh_sjw", "lyu2024"],
+                  "f_compare_lee.csv": ["nikh_sjw", "lee2024"], "f_compare_lee_diff.csv": ["nikh_sjw", "lee2024"], "f_rain_gauge.csv": ["nikh_sjw", "lee2024"], "f_asos.csv": ["nikh_sjw", "kma_asos"]}
+
+
+def load_ext(D, d: Path):
+    """Attach the 1.2 tables to the Data object (missing files leave the attribute None)."""
+    def rd(name):
+        p = d / name
+        return pd.read_csv(p) if p.exists() else None
+    for name in ("g1_solar", "g1_solar_articles", "g2_lunar", "g3_venus", "g3_appulse", "g4_comet", "g5_sunspot", "g5_sunspot_articles", "g6_overlap",
+                 "f_tokens_reign", "f_tokens_month", "f_compare_lyu", "f_compare_lee", "f_routine", "f_rain_gauge", "f_asos", "f_missing_reign", "f_missing_yearly"):
+        setattr(D, name, rd(name + ".csv"))
+    p = d / "g_coding_agreement.json"
+    D.g_agreement = json.load(open(p, encoding="utf-8")) if p.exists() else {}
+
+
+SRC_KO = {"goryeosa": "고려사 천문지", "goryeosa_jeolyo": "고려사절요", "sillok": "실록", "sjw": "승정원일기"}
+SRC_EN = {"goryeosa": "Goryeosa treatise", "goryeosa_jeolyo": "Jeolyo", "sillok": "Sillok", "sjw": "Ilgi"}
+TYPE_KO = {"observed": "관측 보고", "forecast": "예보·추산", "ritual": "구식례", "not_occurred": "불식·불견", "discussion": "논의", "other": "일식/월식 아님", "observed (day level)": "관측 보고(날 단위)"}
+TYPE_EN = {"observed": "observation", "forecast": "forecast", "ritual": "ritual", "not_occurred": "not occurred", "discussion": "discussion", "other": "not an eclipse", "observed (day level)": "observation (day level)"}
+ORDER = ["goryeosa", "goryeosa_jeolyo", "sillok", "sjw"]
+
+
+def _obs(tbl, src):
+    r = tbl[(tbl.source == src) & (tbl.type == "observed")]
+    return r.iloc[0] if len(r) else None
+
+
+def headline_ext(m, D, lang):
+    ko = lang == "ko"; mid = m["id"]
+    if mid == "g1_solar_match" and D.g1_solar is not None:
+        parts = []
+        for s in ORDER:
+            r = _obs(D.g1_solar, s)
+            if r is not None and r.n_dated:
+                parts.append(f"{(SRC_KO if ko else SRC_EN)[s]} {r.rate_pm1:.0%}")
+        r = _obs(D.g1_solar, "goryeosa")
+        return f"{r.rate_pm1:.1%}", (("고려사 관측 보고 " + f"{int(r.n_dated)}건 중 개경 가시 일식 · " if ko else f"of {int(r.n_dated)} Goryeosa reports · ") + " · ".join(parts[1:]))
+    if mid == "g2_lunar_match" and D.g2_lunar is not None:
+        parts = [f"{(SRC_KO if ko else SRC_EN)[s]} {_obs(D.g2_lunar, s).rate_pm1:.0%}" for s in ("goryeosa", "sillok", "sjw") if _obs(D.g2_lunar, s) is not None]
+        return _obs(D.g2_lunar, "sillok").rate_pm1.__format__(".1%"), (("실록 관측 보고 일치 · " if ko else "Sillok reports · ") + " · ".join(parts))
+    if mid == "g3_planets" and D.g3_venus is not None:
+        v = D.g3_venus.set_index("source")
+        return f"{v.loc['goryeosa', 'median_elongation']:.0f}°", (f"고려사 태백주현일의 금성 이각 중앙값(무작위 {v.loc['goryeosa', 'control_median_elongation']:.0f}°)" if ko else f"median Venus elongation, Goryeosa (random: {v.loc['goryeosa', 'control_median_elongation']:.0f}°)")
+    if mid == "g4_comet_ident" and D.g4_comet is not None:
+        r = D.g4_comet[D.g4_comet.set.str.startswith("sillok: precision")]
+        r = r.iloc[0] if len(r) else D.g4_comet.iloc[0]
+        return f"{r.rate:.0%}", (f"실록 관측 보고 {int(r.n)}건 중 근일점 ±90일(우연 {r.control_mean:.0%})" if ko else f"of {int(r.n)} Sillok reports within ±90 d of a perihelion (chance {r.control_mean:.0%})")
+    if mid == "g5_sunspot" and D.g5_sunspot_articles is not None:
+        return f"{len(D.g5_sunspot_articles):,}", ("기사 · 고려사·절요·승정원일기(실록 42 별도)" if ko else "articles · Goryeosa, Jeolyo, Ilgi (Sillok: 42)")
+    if mid == "g6_overlap" and D.g6_overlap is not None:
+        g = D.g6_overlap; r = g[(g.phenomenon == "solar_eclipse") & g.direction.str.startswith("sillok")].iloc[0]
+        return f"{r.share:.0%}", (f"실록 일식 관측일 {int(r.n_days)}일 중 승정원일기에도 있는 비율(1623~1863)" if ko else f"of {int(r.n_days)} Sillok eclipse days also in the Ilgi, 1623–1863")
+    if mid == "f1_weather_tokens" and D.f_tokens_reign is not None:
+        t = D.f_tokens_reign; share = (t.clear_only * t.n_days_weather).sum() / t.n_days_weather.sum()
+        return f"{share:.1%}", ("날씨 있는 날 중 「晴」 한 글자뿐인 날" if ko else "of weather days carry only '晴'")
+    if mid == "f2_routine" and D.f_rain_gauge is not None:
+        r = D.f_rain_gauge[D.f_rain_gauge.period == "1778–1907"].iloc[0]
+        return f"{r.recall:.0%}", (f"측우기 강우일 {int(r.gauge_rain_days):,}일 중 날씨 칸에 雨 (거짓 비 {r.false_rain:.1%})" if ko else f"of {int(r.gauge_rain_days):,} gauge rain days carry 雨 (false rain {r.false_rain:.1%})")
+    if mid == "f3_asos" and D.f_asos is not None:
+        a = D.f_asos.set_index("item")
+        return f"{a.loc['rain_any_vs_asos_rain', 'recall']:.0%}", (f"관측 강수일 {int(a.loc['rain_any_vs_asos_rain', 'obs_positive'])}일 중 날씨 칸에 雨, 1907~1910" if ko else f"of {int(a.loc['rain_any_vs_asos_rain', 'obs_positive'])} observed rain days carry 雨, 1907–1910")
+    if mid == "f4_missing" and D.f_missing_reign is not None:
+        f = D.f_missing_reign
+        return f"{int(f.missing_day_nodes.sum()):,}", (f"날 노드 없는 날 · 빈 칸 {int(f.blank_cells.sum()):,}일" if ko else f"days without a node · {int(f.blank_cells.sum()):,} empty cells")
+    return "", ""
+
+
+def reliability_ext(m, D, lang):
+    ko = lang == "ko"; mid = m["id"]; body = []
+    ag = getattr(D, "g_agreement", {})
+    if mid == "g1_solar_match" and D.g1_solar is not None:
+        for s in ORDER:
+            r = _obs(D.g1_solar, s)
+            if r is None or not r.n_dated:
+                continue
+            body.append(f"<p>{(SRC_KO if ko else SRC_EN)[s]}: " + (f"관측 보고 {int(r.n_dated)}건 중 ±1일 일치 {int(r.match_pm1)}건 = {r.rate_pm1:.1%} (윌슨 95% {r.ci_lo:.1%}–{r.ci_hi:.1%}), 같은 날 {r.rate_pm0:.1%}." if ko else
+                                                                      f"{int(r.match_pm1)} of {int(r.n_dated)} observation reports within ±1 day = {r.rate_pm1:.1%} (Wilson 95% {r.ci_lo:.1%}–{r.ci_hi:.1%}); same day {r.rate_pm0:.1%}.") + "</p>")
+        b = ag.get("solar_v2_blind")
+        if b:
+            body.append("<p>" + (f"유형 분류: 네 사료 1,483건을 코더 15명이 나눠 코딩, 150건을 다른 코더가 블라인드 재코딩 — 일치 {b['agreement']:.1%}, κ = {b['kappa']:.2f} (관측/비관측/일식 아님 셋으로 묶으면 κ = {b['kappa_pooled']:.2f}). 실록 332건의 v1→v2 일치 {ag.get('solar_sillok_v1_v2_same', 0):.1%}." if ko else
+                                 f"Typing: 1,483 articles of the four sources coded by 15 coders; 150 blind re-coded — agreement {b['agreement']:.1%}, κ = {b['kappa']:.2f} (κ = {b['kappa_pooled']:.2f} pooled into observation / not observation / not an eclipse). Sillok v1→v2 agreement {ag.get('solar_sillok_v1_v2_same', 0):.1%}.") + "</p>")
+    elif mid == "g2_lunar_match" and D.g2_lunar is not None:
+        for s in ("goryeosa", "sillok", "sjw"):
+            r = _obs(D.g2_lunar, s)
+            if r is None:
+                continue
+            body.append(f"<p>{(SRC_KO if ko else SRC_EN)[s]}: " + (f"관측 보고 {int(r.n_dated)}건 중 ±1일 일치 {int(r.match_pm1)}건 = {r.rate_pm1:.1%} (95% {r.ci_lo:.1%}–{r.ci_hi:.1%})." if ko else
+                                                                      f"{int(r.match_pm1)} of {int(r.n_dated)} observation reports within ±1 day = {r.rate_pm1:.1%} (95% {r.ci_lo:.1%}–{r.ci_hi:.1%}).") + "</p>")
+        b = ag.get("lunar_blind")
+        if b:
+            body.append("<p>" + (f"유형 분류 1,534건, 블라인드 재코딩 150건 — 일치 {b['agreement']:.1%}, κ = {b['kappa']:.2f} (묶음 κ = {b['kappa_pooled']:.2f})." if ko else
+                                 f"1,534 articles typed; 150 blind re-coded — agreement {b['agreement']:.1%}, κ = {b['kappa']:.2f} (pooled κ = {b['kappa_pooled']:.2f}).") + "</p>")
+    elif mid == "g3_planets" and D.g3_appulse is not None:
+        a = D.g3_appulse; c = a[a.source.str.startswith("control")]
+        g = a[a.source == "goryeosa"]
+        if len(g) and len(c):
+            g = g.iloc[0]; c = c.iloc[0]
+            body.append("<p>" + (f"고려사 능범 쌍 {int(g.n_pairs)}건: 그날 밤 각거리 중앙값 {g.median_sep:.1f}°, ±1일 창 {g.median_sep_pm1:.1f}°, ≤1.5° 비율 {g.share_le1_5_pm1:.0%}; 같은 쌍을 무작위 날짜에 두면 중앙값 {c.median_sep:.0f}°, ≤5° {c.share_le5:.1%}." if ko else
+                                 f"{int(g.n_pairs)} Goryeosa pairs: median separation that night {g.median_sep:.1f}°, with ±1 day {g.median_sep_pm1:.1f}°, ≤1.5° in {g.share_le1_5_pm1:.0%}; the same pairs on random dates give a median of {c.median_sep:.0f}° and ≤5° in {c.share_le5:.1%}.") + "</p>")
+        pa = ag.get("appulse_pairs_parsed")
+        if pa:
+            body.append("<p>" + (f"사전으로 풀린 쌍 {pa['parsed']:,} / 능범 키워드 기사 {pa['of_articles']:,}." if ko else f"{pa['parsed']:,} pairs resolved by the dictionary out of {pa['of_articles']:,} appulse-keyword articles.") + "</p>")
+    elif mid == "g4_comet_ident":
+        p = D.precision.get("comet_sjw"); q = D.precision.get("comet")
+        if p and q:
+            body.append("<p>" + (f"키워드 정밀도: 실록 {q['precision']:.2f} (n={q['n']}), 승정원일기 층화 표본 {p['n']}건에서 {p['precision']:.2f} (윌슨 95% {p['ci_lo']:.2f}–{p['ci_hi']:.2f}). 동정률 표의 「관측 보고」 행은 이 표본의 yes 기사만 쓴다." if ko else
+                                 f"Keyword precision: Sillok {q['precision']:.2f} (n={q['n']}); Ilgi stratified sample of {p['n']}: {p['precision']:.2f} (Wilson 95% {p['ci_lo']:.2f}–{p['ci_hi']:.2f}). The 'observation reports' rows use only the sample's yes articles.") + "</p>")
+    elif mid == "g5_sunspot":
+        au = ag.get("aurora_candidate_articles", {})
+        body.append("<p>" + ("키워드 건수를 그대로 센 값이다(유형 코딩 없음). 오로라 후보(赤氣·白氣·火光·紫氣) 기사: " if ko else "Keyword counts, no type coding. Aurora-candidate articles (赤氣 白氣 火光 紫氣): ") + ", ".join(f"{(SRC_KO if ko else SRC_EN).get(k, k)} {v}" for k, v in au.items()) + ".</p>")
+    elif mid == "g6_overlap":
+        body.append("<p>" + ("일식·월식은 코드북 v2 유형 코딩을 거친 관측 보고일, 혜성은 키워드일 기준이다. 날짜 창 ±1일." if ko else "Eclipses use typed observation days (codebook v2), comets keyword days; window ±1 day.") + "</p>")
+    elif mid == "f1_weather_tokens" and D.f_compare_lyu is not None:
+        l = D.f_compare_lyu.set_index("item"); e = D.f_compare_lee.set_index("item")
+        body.append("<p>" + (f"Lyu 외 2024 와 같은 날 ID {int(l.loc['days_in_both','n']):,}일: 맑음 {l.loc['agree_clear_any_vs_Sunny','rate']:.2%}, 흐림 {l.loc['agree_cloudy_any_vs_Cloudy','rate']:.2%}, 비 {l.loc['agree_rain_any_vs_Rainy','rate']:.2%}, 눈 {l.loc['agree_snow_any_vs_Snow','rate']:.2%} 일치; 문자열 자체가 같은 날 {l.loc['same_weather_string','rate']:.1%}, 양력 날짜 일치 {l.loc['same_gregorian_date','rate']:.2%}." if ko else
+                             f"Same NIKH day ID as Lyu et al. 2024 on {int(l.loc['days_in_both','n']):,} days: clear {l.loc['agree_clear_any_vs_Sunny','rate']:.2%}, cloudy {l.loc['agree_cloudy_any_vs_Cloudy','rate']:.2%}, rain {l.loc['agree_rain_any_vs_Rainy','rate']:.2%}, snow {l.loc['agree_snow_any_vs_Snow','rate']:.2%} agreement; identical strings on {l.loc['same_weather_string','rate']:.1%}, identical Gregorian date {l.loc['same_gregorian_date','rate']:.2%}.") + "</p>")
+        body.append("<p>" + (f"Lee 외 2024 와 양력 날짜로 맞춘 {int(e.loc['days_matched_1778_1907','n']):,}일(1778~1907): 맑음 {e.loc['agree_clear_any_vs_lee_cat','rate']:.1%}, 비 {e.loc['agree_rain_any_vs_lee_cat','rate']:.2%}, 눈 {e.loc['agree_snow_any_vs_lee_cat','rate']:.2%} 일치. Lee 의 범주는 하루에 하나라 혼합 날은 구조적으로 어긋난다." if ko else
+                             f"Lee et al. 2024, joined on the Gregorian date, {int(e.loc['days_matched_1778_1907','n']):,} days (1778–1907): clear {e.loc['agree_clear_any_vs_lee_cat','rate']:.1%}, rain {e.loc['agree_rain_any_vs_lee_cat','rate']:.2%}, snow {e.loc['agree_snow_any_vs_lee_cat','rate']:.2%}. Lee's single category per day disagrees on mixed days by construction.") + "</p>")
+    elif mid == "f2_routine" and D.f_rain_gauge is not None:
+        r = D.f_rain_gauge[D.f_rain_gauge.period == "1778–1907"].iloc[0]
+        body.append("<p>" + (f"측우기 기록과 맞춘 {int(r.gauge_days):,}일: 강우 측정일 {int(r.gauge_rain_days):,}일 중 雨 {int(r.cell_rain_on_gauge_rain):,}일 = {r.recall:.1%} (95% {r.recall_lo:.1%}–{r.recall_hi:.1%}); 측정 없는 날 {int(r.gauge_dry_days):,}일 중 雨 {int(r.cell_rain_on_gauge_dry):,}일 = {r.false_rain:.1%}." if ko else
+                             f"{int(r.gauge_days):,} days matched to the gauge: 雨 on {int(r.cell_rain_on_gauge_rain):,} of {int(r.gauge_rain_days):,} measured-rain days = {r.recall:.1%} (95% {r.recall_lo:.1%}–{r.recall_hi:.1%}); 雨 on {int(r.cell_rain_on_gauge_dry):,} of {int(r.gauge_dry_days):,} days without a measurement = {r.false_rain:.1%}.") + "</p>")
+    elif mid == "f3_asos" and D.f_asos is not None:
+        a = D.f_asos.set_index("item"); r = a.loc["rain_any_vs_asos_rain"]; c = a.loc["clear_only_vs_asos_cloud_le2.5"]
+        body.append("<p>" + (f"겹치는 {int(r.n):,}일. 비: 일치 {r.rate:.1%} (95% {r.ci_lo:.1%}–{r.ci_hi:.1%}), 관측 강수일 재현율 {r.recall:.1%}, 칸의 雨 정밀도 {r.precision:.0%}. 맑음: 「晴」 뿐인 {int(c.cell_positive):,}일 중 운량 ≤2.5 인 날 {c.precision:.1%}." if ko else
+                             f"{int(r.n):,} overlapping days. Rain: agreement {r.rate:.1%} (95% {r.ci_lo:.1%}–{r.ci_hi:.1%}), recall of observed rain days {r.recall:.1%}, precision of the cell's 雨 {r.precision:.0%}. Clear: of {int(c.cell_positive):,} '晴'-only days, {c.precision:.1%} had cloud cover ≤ 2.5.") + "</p>")
+    elif mid == "f4_missing":
+        body.append("<p>" + ("국편 XML 의 날 노드와 날씨 요소를 그대로 센 값이다. 달력 일수는 변환된 양력 JDN 으로 쟀다." if ko else "Counted directly from the NIKH XML day nodes and weather elements; calendar days from converted JDNs.") + "</p>")
+    return body
+
+
+def figure_ext(m, D, lang, table_html, fig, svg_bars, T):
+    ko = lang == "ko"; t = T[lang]; mid = m["id"]; out = []
+    kc = "king_ko" if ko else "king_en"
+    S = SRC_KO if ko else SRC_EN; TY = TYPE_KO if ko else TYPE_EN
+    def typed_table(tbl, tid):
+        x = tbl.copy(); x["source_l"] = x.source.map(S); x["type_l"] = x.type.map(TY).fillna(x.type)
+        x["src_order"] = x.source.map({s: i for i, s in enumerate(ORDER)})
+        x = x.sort_values(["src_order", "type"])
+        return table_html(x, [("source_l", ("사료" if ko else "source"), None), ("type_l", ("유형" if ko else "type"), None), ("n_articles", ("기사" if ko else "articles"), ",.0f"), ("n_dated", t["dated"], ",.0f"),
+                              ("match_pm1", ("±1일 일치" if ko else "match ±1 d"), ",.0f"), ("rate_pm1", t["share"], ".1%"), ("ci_lo", "95% lo", ".1%"), ("ci_hi", "95% hi", ".1%"), ("rate_pm0", ("같은 날" if ko else "same day"), ".1%")], tid, lang, filt=False)
+    if mid == "g1_solar_match" and D.g1_solar is not None:
+        items = [(f"{S[s]}", float(_obs(D.g1_solar, s).rate_pm1), 0) for s in ORDER if _obs(D.g1_solar, s) is not None and _obs(D.g1_solar, s).n_dated]
+        out.append(fig(svg_bars(items, ".0%", row_h=24, label_w=200), ("사료별 관측 보고 일치율(±1일, 관측지 가시)." if ko else "Observation-report match rate by source (±1 day, visible at the site).")))
+        out.append(typed_table(D.g1_solar, "t_g1"))
+    elif mid == "g2_lunar_match" and D.g2_lunar is not None:
+        items = [(f"{S[s]}", float(_obs(D.g2_lunar, s).rate_pm1), 0) for s in ("goryeosa", "sillok", "sjw") if _obs(D.g2_lunar, s) is not None]
+        out.append(fig(svg_bars(items, ".0%", row_h=24, label_w=200), ("사료별 월식 관측 보고 일치율(±1일)." if ko else "Lunar observation-report match rate by source (±1 day).")))
+        out.append(typed_table(D.g2_lunar, "t_g2"))
+    elif mid == "g3_planets" and D.g3_venus is not None:
+        v = D.g3_venus.copy(); v["source_l"] = v.source.map(S)
+        out.append(table_html(v, [("source_l", ("사료" if ko else "source"), None), ("n_dated", ("기록일" if ko else "dated"), ",.0f"), ("median_elongation", ("이각 중앙값°" if ko else "median elongation°"), ".1f"), ("share_elong_ge30", "≥30°", ".1%"), ("share_elong_ge40", "≥40°", ".1%"),
+                                  ("share_evening", ("저녁별 비율" if ko else "evening share"), ".1%"), ("control_median_elongation", ("무작위 중앙값°" if ko else "random median°"), ".1f"), ("control_share_ge30", ("무작위 ≥30°" if ko else "random ≥30°"), ".1%")], "t_g3v", lang, filt=False))
+        if D.g3_appulse is not None and len(D.g3_appulse):
+            a = D.g3_appulse.copy(); a["source_l"] = a.source.map(S).fillna(a.source)
+            out.append(table_html(a, [("source_l", ("사료" if ko else "source"), None), ("n_pairs", ("쌍" if ko else "pairs"), ",.0f"), ("median_sep", ("그날 밤 중앙값°" if ko else "median that night°"), ".2f"), ("share_le1_5", "≤1.5°", ".1%"), ("share_le5", "≤5°", ".1%"),
+                                      ("median_sep_pm1", ("±1일 중앙값°" if ko else "median ±1 d°"), ".2f"), ("share_le1_5_pm1", ("≤1.5° (±1일)" if ko else "≤1.5° (±1 d)"), ".1%"), ("share_le5_pm1", ("≤5° (±1일)" if ko else "≤5° (±1 d)"), ".1%")], "t_g3a", lang, filt=False))
+    elif mid == "g4_comet_ident" and D.g4_comet is not None:
+        g = D.g4_comet
+        out.append(table_html(g, [("set", ("집합" if ko else "set"), None), ("n", ("기사" if ko else "articles"), ",.0f"), ("identified_pm90", ("±90일 안" if ko else "within ±90 d"), ",.0f"), ("rate", ("동정률" if ko else "rate"), ".1%"), ("ci_lo", "95% lo", ".1%"), ("ci_hi", "95% hi", ".1%"),
+                                  ("control_mean", ("우연 평균" if ko else "chance mean"), ".1%"), ("control_p975", ("우연 97.5%" if ko else "chance 97.5%"), ".1%"), ("excess", ("초과" if ko else "excess"), ".1%")], "t_g4", lang, filt=False))
+    elif mid == "g5_sunspot" and D.g5_sunspot is not None:
+        g = D.g5_sunspot
+        cols = [("period", t["period"], None)] + [(c, S.get(c, c), ",.0f") for c in g.columns if c in S]
+        out.append(table_html(g, cols, "t_g5", lang, filt=False))
+    elif mid == "g6_overlap" and D.g6_overlap is not None:
+        g = D.g6_overlap.copy(); g["ph"] = g.phenomenon.map({"solar_eclipse": ("일식" if ko else "solar"), "lunar_eclipse": ("월식" if ko else "lunar"), "comet": ("혜성" if ko else "comet")})
+        out.append(table_html(g, [("ph", ("현상" if ko else "phenomenon"), None), ("direction", ("방향" if ko else "direction"), None), ("basis", ("기준" if ko else "basis"), None), ("n_days", ("날짜" if ko else "days"), ",.0f"), ("also_in_other", ("상대에도 있음" if ko else "also in other"), ",.0f"), ("share", t["share"], ".1%")], "t_g6", lang, filt=False))
+    elif mid == "f1_weather_tokens" and D.f_tokens_reign is not None:
+        r = D.f_tokens_reign
+        out.append(fig(svg_bars([(x[kc], float(x.clear_only), 0) for _, x in r.iterrows()], ".0%", row_h=20, label_w=160), ("왕대별 「晴」 단독 날 비율." if ko else "Share of '晴'-only days by reign.")))
+        out.append(table_html(r, [(kc, t["reign"], None), ("n_days", ("날" if ko else "days"), ",.0f"), ("n_days_weather", ("날씨 있음" if ko else "with weather"), ",.0f"), ("clear_only", ("晴 단독" if ko else "晴 only"), ".1%"), ("cloudy_any", ("흐림" if ko else "cloudy"), ".1%"), ("rain_any", ("비" if ko else "rain"), ".1%"), ("snow_any", ("눈" if ko else "snow"), ".1%"), ("mixed", ("혼합" if ko else "mixed"), ".1%"), ("n_blank", ("빈 칸" if ko else "blank"), ",.0f")], "t_f1", lang, filt=False))
+        mth = D.f_tokens_month
+        out.append(table_html(mth, [("lunar_month", ("음력 월" if ko else "lunar month"), None), ("n_days_weather", ("날" if ko else "days"), ",.0f"), ("clear_only", ("晴 단독" if ko else "晴 only"), ".1%"), ("rain_any", ("비" if ko else "rain"), ".1%"), ("snow_any", ("눈" if ko else "snow"), ".1%"), ("thunder_any", ("천둥" if ko else "thunder"), ".2%"), ("fog_any", ("안개" if ko else "fog"), ".2%")], "t_f1m", lang, filt=False))
+    elif mid == "f2_routine" and D.f_routine is not None:
+        r = D.f_routine
+        out.append(table_html(r, [(kc, t["reign"], None), ("n_days_weather", ("날" if ko else "days"), ",.0f"), ("clear_only_share", ("晴 단독" if ko else "晴 only"), ".1%"), ("longest_clear_run", ("최장 연속 晴" if ko else "longest 晴 run"), ",.0f"), ("mean_clear_run", ("평균 연속" if ko else "mean run"), ".1f"), ("july_days", ("7월 날" if ko else "July days"), ",.0f"), ("july_rain_share", ("7월 비 기록" if ko else "July rain"), ".1%")], "t_f2", lang, filt=False))
+        g = D.f_rain_gauge
+        out.append(table_html(g, [("period", t["period"], None), ("gauge_days", ("맞춘 날" if ko else "matched days"), ",.0f"), ("gauge_rain_days", ("측우기 강우일" if ko else "gauge rain days"), ",.0f"), ("cell_rain_on_gauge_rain", ("그중 雨" if ko else "with 雨"), ",.0f"), ("recall", ("재현율" if ko else "recall"), ".1%"), ("recall_lo", "95% lo", ".1%"), ("recall_hi", "95% hi", ".1%"), ("gauge_dry_days", ("측정 없는 날" if ko else "no measurement"), ",.0f"), ("false_rain", ("거짓 비" if ko else "false rain"), ".1%")], "t_f2g", lang, filt=False))
+    elif mid == "f3_asos" and D.f_asos is not None:
+        a = D.f_asos[D.f_asos.item.str.contains("_vs_")].copy()
+        a["lab"] = a.item.map({"rain_any_vs_asos_rain": ("비 ↔ 관측 강수·현상 비" if ko else "rain ↔ observed rain"), "snow_any_vs_asos_snow": ("눈 ↔ 현상 눈" if ko else "snow ↔ observed snow"), "clear_only_vs_asos_cloud_le2.5": ("晴 단독 ↔ 운량 ≤2.5" if ko else "晴 only ↔ cloud ≤2.5"), "cloudy_any_vs_asos_cloud_ge7.5": ("흐림 ↔ 운량 ≥7.5" if ko else "cloudy ↔ cloud ≥7.5")})
+        out.append(table_html(a, [("lab", ("비교" if ko else "comparison"), None), ("n", ("날" if ko else "days"), ",.0f"), ("rate", ("일치" if ko else "agreement"), ".1%"), ("ci_lo", "95% lo", ".1%"), ("ci_hi", "95% hi", ".1%"), ("obs_positive", ("관측 양성" if ko else "observed +"), ",.0f"), ("cell_positive", ("칸 양성" if ko else "cell +"), ",.0f"), ("recall", ("재현율" if ko else "recall"), ".1%"), ("precision", ("정밀도" if ko else "precision"), ".1%")], "t_f3", lang, filt=False))
+    elif mid == "f4_missing" and D.f_missing_reign is not None:
+        r = D.f_missing_reign
+        out.append(fig(svg_bars([(x[kc], float(x.missing_day_nodes + x.blank_cells), 0) for _, x in r.iterrows()], ",.0f", row_h=20, label_w=160), ("왕대별 결측(없는 날 + 빈 칸)." if ko else "Gaps by reign (missing days + empty cells).")))
+        out.append(table_html(r, [(kc, t["reign"], None), ("calendar_days", ("달력 일수" if ko else "calendar days"), ",.0f"), ("day_nodes", ("날 노드" if ko else "day nodes"), ",.0f"), ("missing_day_nodes", ("없는 날" if ko else "missing"), ",.0f"), ("blank_cells", ("빈 칸" if ko else "blank"), ",.0f"), ("dash_cells", "「-」", ",.0f"), ("note_only", ("주기만" if ko else "note only"), ",.0f"), ("missing_share", ("결측 비율" if ko else "missing share"), ".2%")], "t_f4", lang, filt=False))
+        y = D.f_missing_yearly; y = y[(y.missing_day_nodes > 0) | (y.blank_cells > 30)]
+        out.append(table_html(y, [("year_ce", t["year"], None), ("day_nodes", ("날 노드" if ko else "nodes"), ",.0f"), ("missing_day_nodes", ("없는 날" if ko else "missing"), ",.0f"), ("blank_cells", ("빈 칸" if ko else "blank"), ",.0f"), ("note_only", ("주기만" if ko else "note only"), ",.0f")], "t_f4y", lang))
+    return out
+
+
+def method_ext(D, lang, esc):
+    """HTML sections inserted before the Versions block of the method page."""
+    ag = getattr(D, "g_agreement", {})
+    if lang == "ko":
+        return f"""
+<h2>1.2 — 사료 셋과 하늘</h2>
+<p>{esc(SOURCES_EXT['nikh_goryeosa']['ko'])} {esc(SOURCES_EXT['nikh_jeolyo']['ko'])} {esc(SOURCES_EXT['nikh_sjw']['ko'])} 새 기사는 실록 테이블에 섞지 않고 별도 테이블(articles_ext)에 두어 1.1 의 실록 집계가 바뀌지 않게 했다.</p>
+<p><b>관측지와 날짜.</b> 고려 사료는 개경(37.97°N 126.55°E), 조선 사료는 서울. 고려사 천문지의 국편 양력은 율리우스력이며, 1000년 이후 4,436건을 달력 라이브러리로 다시 변환하면 4,435건이 같고 1건(고종 36년 4월 朔 일식)은 국편 양력의 연도 오기(1246→1249)로 보정했다. 승정원일기는 끝까지 음력이고 1896년 이후 「陽曆」 주기 2,747건 중 2,743건이 변환일과 같다. 날 간지와 변환일의 간지를 비교하면 103,870일이 같고, 1699년 2월·1709년 11월·1751년 11월 세 달은 통째로 하루 밀려 있어(당시 역서와 현대 연력표의 월초 차이) 그 달은 간지를 따르는 날짜(solar_date_ganji)를 썼다. 1392년 이전의 ΔT 는 모형값이라 분 단위 불확실성이 있고, 일식 가시 경계의 판정이 그만큼 흔들릴 수 있다.</p>
+<p><b>코딩.</b> 일식 코드북 v2 는 1.0 검증에서 갈렸던 경계 사례 넷(지하 불견→예보, 보고 지시→예보, 의례 준비→구식례, 무날짜 산법→논의)을 재코딩 전에 고정했다. 월식 코드북은 같은 틀에 자정 넘김 표지를 더했다. 노비 키워드의 정밀도 코딩은 형벌·추국·양도·신역 넷을 yes 로 명시한 v2 규칙으로 102건을 다시 코딩해 블라인드 30건에서 κ 0.86(v1 0.44), 정밀도 0.68(v1 0.54)이 됐다. 천문 키워드와 날씨 토큰 규칙은 계산 전에 등록했고 결과를 보고 고치지 않았다. 코더는 복수의 언어모델이고 인용문은 전부 원문과 문자열로 대조했다.</p>
+<h2>승정원일기 날씨 칸</h2>
+<p>{esc(SOURCES_EXT['lyu2024']['ko'])} {esc(SOURCES_EXT['lee2024']['ko'])} 두 데이터셋이 이 칸을 먼저 디지털화했다. 이 사이트는 같은 날을 맞춰 본 일치율과 차이 목록, 관행 지수, 결측 구조를 더한다. 날씨 칸의 비율은 서울의 날씨가 아니라 승정원 서식의 기재로 읽어야 한다 — 측우기와 근대 관측에 대한 대조가 그 이유를 보여 준다.</p>
+<p><b>미수행.</b> 천문연 고천문기록 DB 와의 화면 대조(사전 등록 절차: 자동 수집 없이 기사 번호와 일치 여부만)는 이 판에 넣지 못했다. 공개 수치가 바뀐 곳은 아래 「판」에 이전 값과 함께 적었다.</p>
+<h2>출처 표시 추가 (1.2)</h2>
+<p>고려사·고려사절요·승정원일기 원문은 국사편찬위원회가 공공데이터포털에 개방한 것이다(고려사: 이용허락범위 제한 없음; 절요·승정원일기: 공공누리 제1유형). {esc(SOURCES_EXT['nasa_5mkle']['ko'])} {esc(SOURCES_EXT['jpl_sbdb']['ko'])} {esc(SOURCES_EXT['kma_asos']['ko'])} 날씨 대조 자료는 Lyu 외 2024 와 Lee·Shin·Hong 2024 의 Zenodo 데이터(CC BY 4.0)이며 원 파일은 재배포하지 않고 일치율·차이 목록만 싣는다.</p>
+"""
+    return f"""
+<h2>1.2 — three sources and the sky</h2>
+<p>{esc(SOURCES_EXT['nikh_goryeosa']['en'])} {esc(SOURCES_EXT['nikh_jeolyo']['en'])} {esc(SOURCES_EXT['nikh_sjw']['en'])} The new articles sit in a separate table (articles_ext) so that the 1.1 Sillok counts are unchanged.</p>
+<p><b>Sites and dates.</b> Gaeseong (37.97° N 126.55° E) for the Goryeo sources, Seoul for Joseon. NIKH's Goryeosa solar dates are Julian; re-converting the 4,436 entries after 1000 with the calendar library reproduces 4,435, and the one exception (the eclipse of Gojong 36, 4th month, day 1) is a year typo in the NIKH solar date (1246→1249), corrected. The Ilgi stays lunar to the end; of its 2,747 '陽曆' notes after 1896, 2,743 agree with the conversion. Day ganji agree with the converted date on 103,870 days; three whole months (1699-2, 1709-11, 1751-11) are shifted by one day — the contemporary almanac started those months a day away from the modern table — and for them the ganji-following date (solar_date_ganji) is used. ΔT before 1392 is a model value with minutes of uncertainty, enough to move borderline visibility calls.</p>
+<p><b>Coding.</b> Solar codebook v2 fixed, before re-coding, the four boundary cases that split the 1.0 review (below-horizon computation → forecast; reporting orders → forecast; ritual preparation → ritual; undated calendrical method → discussion). The lunar codebook uses the same frame plus an after-midnight flag. The slaves keyword was re-coded with a v2 rule naming four contexts (punishment, interrogation, transfer, labour duty) as yes: κ 0.86 on 30 blind articles (v1 0.44), precision 0.68 (v1 0.54). Astronomy keywords and the weather token rule were registered before computing and not adjusted afterwards. Coders were several language models; every quotation was string-checked against the source.</p>
+<h2>The weather cell of the Ilgi</h2>
+<p>{esc(SOURCES_EXT['lyu2024']['en'])} {esc(SOURCES_EXT['lee2024']['en'])} Those two datasets digitised the cell first. This site adds the day-by-day agreement with them and the lists of differences, a routine-entry index and the structure of the gaps. Shares of the cell describe entries in a secretariat form, not Seoul's weather — the comparisons with the rain gauge and with modern observations show why.</p>
+<p><b>Not done.</b> The manual screen check against the KASI historical-astronomy database (registered procedure: no automated collection, only article number and match flag) did not make it into this version. Public numbers that changed are listed with their previous values under Versions.</p>
+<h2>Attribution added in 1.2</h2>
+<p>The Goryeosa, Goryeosa-jeolyo and Seungjeongwon Ilgi texts are released by the National Institute of Korean History on the Korean public data portal (Goryeosa: no restriction; Jeolyo and Ilgi: KOGL Type 1). {esc(SOURCES_EXT['nasa_5mkle']['en'])} {esc(SOURCES_EXT['jpl_sbdb']['en'])} {esc(SOURCES_EXT['kma_asos']['en'])} Weather comparison data are the Zenodo datasets of Lyu et al. 2024 and Lee, Shin & Hong 2024 (CC BY 4.0); the files are not redistributed, only agreement rates and difference lists.</p>
+"""
+
+
+VERSION_LINE = {
+    "ko": "1.2 ({BUILD_DATE}) — 계열 G 「기록과 하늘 — 사료 셋」 6개와 계열 F 「승정원일기 날씨 칸」 4개를 더해 지표 34개. 고려사 천문지·고려사절요·승정원일기 천문 기사 13,337건과 승정원일기 날 104,074건을 별도 테이블로 추가. 바뀐 공개 수치: ① 실록 일식 관측 보고가 코드북 v2 재코딩으로 84건·65.5%(1.0, C1 에 그대로 둠) → 77건·72.7%(G1); ② 월식 일치율은 1.0 의 유형 없는 하한 대신 유형별 값(G2); ③ 노비 키워드 정밀도 0.54 → 0.68(v2 규칙, E 계열 카드); ④ D·E 표의 열 이름 n_articles → n_dated_articles(값은 그대로). 승정원일기 날씨 칸의 선행 디지털화(Lyu 외 2024, Lee 외 2024)를 F 장 머리에 밝혔다.",
+    "en": "1.2 ({BUILD_DATE}) — adds series G 'Record and sky — three sources' (6 metrics) and series F 'The weather cell of the Seungjeongwon Ilgi' (4), 34 metrics in all; 13,337 astronomy articles of the Goryeosa treatise, the Jeolyo and the Ilgi and the Ilgi's 104,074 days join as separate tables. Public numbers that changed: (1) Sillok solar-eclipse observation reports, re-coded with codebook v2, go from 84 articles / 65.5% (1.0, kept on C1) to 77 / 72.7% (G1); (2) lunar match rates are now typed (G2) instead of the untyped 1.0 lower bound; (3) slaves keyword precision 0.54 → 0.68 (v2 rule, series E card); (4) column n_articles renamed n_dated_articles in the D and E tables (values unchanged). The prior digitisation of the weather cell (Lyu et al. 2024; Lee et al. 2024) is stated at the head of series F.",
+}

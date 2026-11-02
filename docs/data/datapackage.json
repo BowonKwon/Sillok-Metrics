@@ -2,7 +2,7 @@
  "profile": "data-package",
  "name": "sillok-metrics",
  "title": "Sillok Metrics — derived data",
- "version": "1.1.1",
+ "version": "1.2",
  "created": "2026-11-02",
  "homepage": "https://bowonkwon.github.io/Sillok-Metrics/",
  "contributors": [
@@ -609,7 +609,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_lecture",
    "path": "d_lecture.csv",
    "format": "csv",
@@ -630,7 +630,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_memorial",
    "path": "d_memorial.csv",
    "format": "csv",
@@ -651,7 +651,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "d_justice",
    "path": "d_justice.csv",
    "format": "csv",
@@ -712,7 +712,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_death_reign",
    "path": "e_death_reign.csv",
    "format": "csv",
@@ -753,7 +753,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_relief",
    "path": "e_relief.csv",
    "format": "csv",
@@ -794,7 +794,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_eonmun",
    "path": "e_eonmun.csv",
    "format": "csv",
@@ -815,7 +815,7 @@
    ]
   },
   {
-   "description": "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
+   "description": "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter.",
    "name": "e_slave",
    "path": "e_slave.csv",
    "format": "csv",
@@ -876,6 +876,841 @@
     {
      "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
      "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "articles_ext",
+   "path": "articles_ext.csv.gz",
+   "format": "csv (gzip)",
+   "encoding": "utf-8",
+   "rows": 13337,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "keyword_hits_ext",
+   "path": "keyword_hits_ext.csv.gz",
+   "format": "csv (gzip)",
+   "encoding": "utf-8",
+   "rows": 15484,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "sjw_days",
+   "path": "sjw_days.csv.gz",
+   "format": "csv (gzip)",
+   "encoding": "utf-8",
+   "rows": 104074,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "solar_eclipses_sites",
+   "path": "solar_eclipses_sites.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12282,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "lunar_eclipses_sites",
+   "path": "lunar_eclipses_sites.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1535,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    },
+    {
+     "title": "Espenak F., Meeus J., Five Millennium Catalog of Lunar Eclipses (NASA/TP-2009-214173)",
+     "path": "https://eclipse.gsfc.nasa.gov/LEcat5/LEcatalog.html",
+     "license": "free with acknowledgment"
+    }
+   ]
+  },
+  {
+   "name": "venus_inferior_conjunctions_918_1910",
+   "path": "venus_inferior_conjunctions_918_1910.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 621,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g1_solar",
+   "path": "g1_solar.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 23,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g1_solar_articles",
+   "path": "g1_solar_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1483,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g2_lunar",
+   "path": "g2_lunar.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 21,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g2_lunar_articles",
+   "path": "g2_lunar_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1534,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g3_venus",
+   "path": "g3_venus.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 4,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g3_appulse",
+   "path": "g3_appulse.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 4,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g3_appulse_articles",
+   "path": "g3_appulse_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 613,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g4_comet",
+   "path": "g4_comet.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 6,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "NASA/JPL Small-Body Database — perihelion times of the 376 comets with perihelion before 1911 (queried 2026-11-02)",
+     "path": "https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html",
+     "license": "public (NASA)"
+    }
+   ]
+  },
+  {
+   "name": "g4_comet_articles",
+   "path": "g4_comet_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 3446,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "NASA/JPL Small-Body Database — perihelion times of the 376 comets with perihelion before 1911 (queried 2026-11-02)",
+     "path": "https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html",
+     "license": "public (NASA)"
+    }
+   ]
+  },
+  {
+   "name": "g5_sunspot",
+   "path": "g5_sunspot.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 10,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g5_sunspot_articles",
+   "path": "g5_sunspot_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 120,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g6_overlap",
+   "path": "g6_overlap.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Korean History Database — Goryeosa original text' (data.go.kr 15053637, no restriction)",
+     "path": "https://www.data.go.kr/data/15053637/fileData.do",
+     "license": "no restriction (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Goryeosa-jeolyo original text' (data.go.kr, KOGL Type 1)",
+     "path": "https://www.data.go.kr/",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "f_tokens_reign",
+   "path": "f_tokens_reign.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "f_tokens_month",
+   "path": "f_tokens_month.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "f_compare_lyu",
+   "path": "f_compare_lyu.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 13,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Lyu et al",
+     "path": "https://doi.org/10.5281/zenodo.8382243",
+     "license": "CC BY 4.0"
+    }
+   ]
+  },
+  {
+   "name": "f_compare_lyu_diff",
+   "path": "f_compare_lyu_diff.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 776,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Lyu et al",
+     "path": "https://doi.org/10.5281/zenodo.8382243",
+     "license": "CC BY 4.0"
+    }
+   ]
+  },
+  {
+   "name": "f_compare_lee",
+   "path": "f_compare_lee.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 5,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Lee J.-W., Shin H.-J., Hong J",
+     "path": "https://doi.org/10.5281/zenodo.11076768",
+     "license": "CC BY 4.0"
+    }
+   ]
+  },
+  {
+   "name": "f_compare_lee_diff",
+   "path": "f_compare_lee_diff.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 1258,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Lee J.-W., Shin H.-J., Hong J",
+     "path": "https://doi.org/10.5281/zenodo.11076768",
+     "license": "CC BY 4.0"
+    }
+   ]
+  },
+  {
+   "name": "f_routine",
+   "path": "f_routine.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "f_rain_gauge",
+   "path": "f_rain_gauge.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 5,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Lee J.-W., Shin H.-J., Hong J",
+     "path": "https://doi.org/10.5281/zenodo.11076768",
+     "license": "CC BY 4.0"
+    }
+   ]
+  },
+  {
+   "name": "f_asos",
+   "path": "f_asos.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 6,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    },
+    {
+     "title": "Korea Meteorological Administration, ASOS daily data service (data.go.kr, KOGL Type 1): Seoul (108), 1907-10-01 to 1910-12-31 — daily precipitation, mean cloud ",
+     "path": "https://www.data.go.kr/data/15059093/openapi.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "f_missing_reign",
+   "path": "f_missing_reign.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 12,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "f_missing_yearly",
+   "path": "f_missing_yearly.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 286,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
+     "path": "https://www.data.go.kr/data/15064218/fileData.do",
      "license": "KOGL Type 1 (attribution)"
     }
    ]

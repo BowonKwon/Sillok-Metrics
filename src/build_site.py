@@ -17,6 +17,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from site_ext import load_ext, headline_ext, reliability_ext, figure_ext, method_ext, SERIES_INTRO, DATA_FILES_EXT, GZIP_FILES_EXT, CODING_FILES_EXT, SOURCE_MAP_EXT, VERSION_LINE  # noqa: E402
+EXT_IDS = {"g1_solar_match", "g2_lunar_match", "g3_planets", "g4_comet_ident", "g5_sunspot", "g6_overlap", "f1_weather_tokens", "f2_routine", "f3_asos", "f4_missing"}
 from registry import METRICS, PRIOR, SERIES, SITE, SOURCES
 
 VERSION = SITE["version"]
@@ -378,6 +380,7 @@ class Data:
         _ap = d / "articles.parquet"
         _a = pd.read_parquet(_ap, columns=["is_main", "n_han"]) if _ap.exists() else pd.read_csv(d / "articles.csv.gz", usecols=["is_main", "n_han"])
         self.articles_median = float(_a[_a.is_main].n_han.median())
+        load_ext(self, d)
 
     def main_ed(self):
         return self.ed[self.ed.is_main].sort_values("king_no")
@@ -400,9 +403,13 @@ def reliability_card(m, D: Data, lang) -> str:
     t = T[lang]
     kind = m["reliability"]
     head = {"exact": t["rel_exact"], "external-match": t["rel_ext"], "sampled-precision": t["rel_samp"]}[kind]
+    if m["id"].startswith("f") and kind == "external-match":
+        head = "외부 대조값 — 다른 데이터셋·관측과 맞춰 본 비율" if lang == "ko" else "External match — agreement with other datasets and observations"
     body = []
     mid = m["id"]
-    if kind == "exact":
+    if mid in EXT_IDS:
+        body = reliability_ext(m, D, lang)
+    elif kind == "exact":
         if "external" in m:
             body.append(f"<p>{esc(m['external'][lang])}</p>")
         if mid == "n_articles":
@@ -452,6 +459,8 @@ def metric_figure(m, D: Data, lang) -> str:
     t = T[lang]
     kc, ec = KING_COL[lang]
     mid = m["id"]
+    if mid in EXT_IDS:
+        return "".join(figure_ext(m, D, lang, table_html, fig, svg_bars, T))
     ed = D.ed.sort_values(["king_no", "edition"])
     main = D.main_ed()
     out = []
@@ -563,7 +572,7 @@ def metric_figure(m, D: Data, lang) -> str:
         col = "justice_share" if mid == "justice_share" else ("n_keyword" if mid == "eonmun_articles" else "keyword_share")
         items = [(r[kc], float(r[col]), 0) for _, r in R.sort_values("king_no").iterrows()]
         out.append(fig(svg_bars(items, m["fmt"], row_h=20, label_w=200), ("왕대별(본실록, 날짜 있는 기사)." if lang == "ko" else "By reign (principal editions, dated articles).")))
-        cols = [(kc, t["reign"], None), ("n_articles", t["articles"], ",.0f")]
+        cols = [(kc, t["reign"], None), ("n_dated_articles", t["dated"], ",.0f")]
         if mid == "justice_share":
             cols += [("n_justice", ("사법 분류" if lang == "ko" else "justice-classified"), ",.0f"), ("justice_share", t["share"], ".1%")]
         else:
@@ -576,7 +585,7 @@ def metric_figure(m, D: Data, lang) -> str:
         if mid == "justice_share":
             Jd = D.justice_dec
             out.append(fig(svg_lines([(t["share"], [(int(r.decade), float(r.justice_share)) for _, r in Jd.iterrows()], 0)], ".0%", xstep=50), ("10년 단위 사법 분류 기사 비율." if lang == "ko" else "Share of justice-classified articles by decade.")))
-            out.append(table_html(Jd, [("decade", t["decade"], None), ("n_articles", t["articles"], ",.0f"), ("n_justice", ("사법" if lang == "ko" else "justice"), ",.0f"), ("justice_share", t["share"], ".1%")] + [(c, c, ",.0f") for c in Jd.columns if c.startswith("사법-")], "t_jd", lang, filt=False))
+            out.append(table_html(Jd, [("decade", t["decade"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_justice", ("사법" if lang == "ko" else "justice"), ",.0f"), ("justice_share", t["share"], ".1%")] + [(c, c, ",.0f") for c in Jd.columns if c.startswith("사법-")], "t_jd", lang, filt=False))
         if mid == "relief_share":
             Yr = D.relief_y
             out.append(fig(svg_lines([(t["share"], [(int(r.year_ce), float(r.keyword_share)) for _, r in Yr.iterrows()], 0)], ".0%", bands=[(1670, 1671, "1670–71"), (1695, 1696, "1695–96")]), ("연도별 비율. 띠는 경신(1670~71)·을병(1695~96) 대기근." if lang == "ko" else "Share by year. Bands: the great famines of 1670–71 and 1695–96.")))
@@ -585,9 +594,9 @@ def metric_figure(m, D: Data, lang) -> str:
         out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "mentions per 1,000"), [(int(r.period[:4]) + 25, float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
                                   (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(int(r.period[:4]) + 25, float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50),
                        ("50년 구간(중앙 연도). 보정치는 언급 기사 비율 × 표본에서 잰 집행 확인율." if lang == "ko" else "50-year periods (mid-year). The corrected line multiplies the mention rate by the execution-confirmed rate from the sample.")))
-        out.append(table_html(E, [("period", t["period"], None), ("n_articles", t["articles"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "executed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
+        out.append(table_html(E, [("period", t["period"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "executed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
         Rg = D.death_reign
-        out.append(table_html(Rg, [(kc, t["reign"], None), ("n_articles", t["articles"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f")], "t_dr", lang, filt=False))
+        out.append(table_html(Rg, [(kc, t["reign"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f")], "t_dr", lang, filt=False))
     return "".join(out)
 
 
@@ -669,8 +678,10 @@ def headline(m, D, lang):
     """(value string, short label) shown as the key number of a metric."""
     t = T[lang]; mid = m["id"]; M = D.main_ed(); ko = lang == "ko"
     kc = KING_COL[lang][0]
+    if mid in EXT_IDS:
+        return headline_ext(m, D, lang)
     def share(tbl, col="keyword_share", num="n_keyword"):
-        return tbl[num].sum() / tbl.n_articles.sum()
+        return tbl[num].sum() / tbl.n_dated_articles.sum()
     if mid == "n_articles":
         return f"{int(D.ed.n_articles.sum()):,}", (f"판본 {len(D.ed)}종" if ko else f"{len(D.ed)} editions")
     if mid == "n_han":
@@ -721,7 +732,7 @@ def headline(m, D, lang):
     if mid == "memorial_share":
         return f"{share(D.memorial):.1%}", ("기사 중 상소·차자 키워드" if ko else "of articles mention a memorial")
     if mid == "justice_share":
-        return f"{D.justice.n_justice.sum() / D.justice.n_articles.sum():.1%}", ("본실록 기사 중 사법 분류" if ko else "of articles classified under justice")
+        return f"{D.justice.n_justice.sum() / D.justice.n_dated_articles.sum():.1%}", ("본실록 기사 중 사법 분류" if ko else "of articles classified under justice")
     if mid == "death_penalty_mention":
         r = D.death.loc[D.death.period == "1400–1449"].iloc[0]
         return f"{r.mentions_per_1000:.1f}", ("1400–1449년 언급 기사/1,000 — 정점" if ko else "mentions per 1,000 in 1400–1449, the peak")
@@ -787,7 +798,7 @@ def metrics_index(D, lang):
     t = T[lang]
     body = [f"<h1>{t['metric_list']}</h1>"]
     for s, sl in SERIES.items():
-        body.append(f"<h2>{esc(sl[lang])}</h2><div class='cards'>")
+        body.append(f"<h2>{esc(sl[lang])}</h2>" + (f"<p class='src' style='max-width:80ch'>{esc(SERIES_INTRO[s][lang])}</p>" if s in SERIES_INTRO else "") + "<div class='cards'>")
         for m in METRICS:
             if m["series"] == s:
                 hv, hl = headline(m, D, lang)
@@ -874,9 +885,9 @@ def home(D, lang):
             '<div class="note">' + ("숫자마다 <b>신뢰도 카드</b>가 붙어 있다. 원본에서 그대로 센 값인지, 천문 계산과 맞춰 본 비율인지, 손으로 코딩한 표본에서 잰 정밀도인지를 지표 면마다 적었다. 원문 전문은 싣지 않고 기사마다 국사편찬위원회 원문으로 연결한다."
                                    if lang == "ko" else
                                    "Every number carries a <b>reliability card</b>: whether it was counted straight from the source, compared with an astronomical computation, or measured on a hand-coded sample. The site carries no full text; each article links to the National Institute of Korean History.") + "</div>"]
-    NUM = {"A": "1", "B": "2", "C": "3", "D": "4", "E": "5"}
+    NUM = {"A": "1", "B": "2", "C": "3", "D": "4", "E": "5", "G": "6", "F": "7"}
     for s, sl in SERIES.items():
-        body.append(f"<h2 class='num' data-n='{NUM[s]}'>{esc(sl[lang])}</h2><div class='cards'>")
+        body.append(f"<h2 class='num' data-n='{NUM[s]}'>{esc(sl[lang])}</h2>" + (f"<p class='src' style='max-width:80ch'>{esc(SERIES_INTRO[s][lang])}</p>" if s in SERIES_INTRO else "") + "<div class='cards'>")
         for m in METRICS:
             if m["series"] == s:
                 hv, hl = headline(m, D, lang)
@@ -933,12 +944,13 @@ TAKE_METHOD_KO
 <ul><li>실록은 「일어난 일」이 아니라 「적은 일」의 기록이다. 빈도형 지표(재이·사형 언급·진휼)는 기록 관행의 영향을 받는다. 세종실록의 사형 언급 정점이 판결 재가 기록이었던 것이 그 예다.</li>
 <li>국편의 분류·사론 태그·인물 연결은 현대 편집진의 것이고 책마다 세밀함이 다르다. 인물별 등장 건수는 오연결 때문에 지표로 쓰지 않았다.</li>
 <li>성관 집중도의 방목 보충은 정확도 91%이고 1850년 이후는 결측 20%가 남는다.</li>
-<li>월식 기사는 유형 분류를 하지 않아 일치율이 하한이다.</li></ul>
+<li>계열 C 의 월식 일치율(C2)은 유형 분류 없는 하한이다 — 1.2 의 G2 가 유형별 값이다.</li></ul>
+METHOD_EXT_KO
 <h2>선행 연구</h2>
 <p>이 사이트가 새로 보태는 것은 기사 단위 메타 테이블, 키워드 지표의 정밀도, 일식 기사의 유형별 일치율, 판본 쌍의 같은 잣대 비교, 광해군일기 산삭의 글자 단위 계량이다. 왕별 기사 수(Bak & Oh 2015), 조선 일식 기록 집계(안영숙·이용삼 2004), 조선 전기 사론 수(차장섭), 실록의 형옥 기사 수(유승희 2007)는 이미 있는 수치이므로 「선행 결과」 면에서 재계산과 나란히 보인다.</p>
 <h2>출처 표시</h2>
 <p>본 저작물은 '교육부 국사편찬위원회'에서 2022년 작성하여 공공누리 제1유형으로 개방한 '조선왕조실록 정보_실록원문'·'조선왕조실록 정보_부가정보 인물 데이터'를 이용하였으며, 해당 저작물은 '공공데이터포털(https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do)'에서 무료로 다운받으실 수 있습니다. 성관 보충에는 '한국학중앙연구원'이 공공데이터포털(https://www.data.go.kr/data/15052752/fileData.do)에 개방한 '조선조문과급제자'를 이용하였습니다. 천문 계산은 NASA/JPL DE406, 일식 목록은 Espenak & Meeus (NASA/TP-2006-214141)를 썼다.</p>
-<h2>판</h2><p>1.0 (2026-11-02) — 첫 공개. 지표 24개, 판본 30종, 왕대 25.<br>1.1 ({BUILD_DATE}) — 고종·순종실록을 건수 집계에 포함(판본 33종, 왕대 27). 계열 C 와 표본 코딩은 태조~철종 그대로.<br>1.1.1 ({BUILD_DATE}) — 왕대 요약문의 동률 순위 표기 정정: 사론 비율이 0 인 왕대 10 을 각각 「18위」로 적던 것을 「10대가 같은 값」으로 바꿨다. 수치·표·데이터 파일은 그대로.</p>
+<h2>판</h2><p>1.0 (2026-11-02) — 첫 공개. 지표 24개, 판본 30종, 왕대 25.<br>1.1 ({BUILD_DATE}) — 고종·순종실록을 건수 집계에 포함(판본 33종, 왕대 27). 계열 C 와 표본 코딩은 태조~철종 그대로.<br>1.1.1 ({BUILD_DATE}) — 왕대 요약문의 동률 순위 표기 정정: 사론 비율이 0 인 왕대 10 을 각각 「18위」로 적던 것을 「10대가 같은 값」으로 바꿨다. 수치·표·데이터 파일은 그대로.<br>VERSION_KO</p>
 """
     en = f"""
 <h1>Method and limits</h1>
@@ -960,13 +972,16 @@ TAKE_METHOD_EN
 <ul><li>The Sillok records what was written down, not what happened. Frequency metrics (omens, death-penalty mentions, relief) reflect recording practice — the Sejong peak in death-penalty mentions turned out to be sentencing paperwork.</li>
 <li>NIKH's classification, comment tags and person links are modern editorial work of varying granularity. Person appearance counts are not used as metrics because of mislinks.</li>
 <li>The roster fill for clan concentration is 91% accurate, and 20% of seats remain unmatched after 1850.</li>
-<li>Lunar-eclipse articles are not typed, so their match rate is a lower bound.</li></ul>
+<li>The series C lunar match rate (C2) is an untyped lower bound; G2 in 1.2 gives the typed values.</li></ul>
+METHOD_EXT_EN
 <h2>Prior work</h2>
 <p>New here: the article-level table, precision for keyword metrics, eclipse match rates by article type, like-for-like comparison of edition pairs, and character-level deletion counts for the Gwanghaegun diary. Articles per reign (Bak & Oh 2015), Joseon eclipse records (Ahn & Lee 2004), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu 2007) already existed and are shown next to the recount on the Prior results page.</p>
 <h2>Attribution</h2>
 <p>This work uses the 'Veritable Records of the Joseon Dynasty — original text' and '— supplementary person data' created by the National Institute of Korean History (Ministry of Education) in 2022 and released under KOGL Type 1 at the Korean public data portal (https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do), and the 'Successful candidates of the civil service examination' released by the Academy of Korean Studies (https://www.data.go.kr/data/15052752/fileData.do). Astronomy: NASA/JPL DE406; eclipse canon: Espenak & Meeus (NASA/TP-2006-214141).</p>
-<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 ({BUILD_DATE}) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now read "10 editions share this value". No number, table or data file changed.</p>
+<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 ({BUILD_DATE}) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now read "10 editions share this value". No number, table or data file changed.<br>VERSION_EN</p>
 """
+    ko = ko.replace("METHOD_EXT_KO", method_ext(D, "ko", esc)).replace("VERSION_KO", VERSION_LINE["ko"].replace("{BUILD_DATE}", BUILD_DATE))
+    en = en.replace("METHOD_EXT_EN", method_ext(D, "en", esc)).replace("VERSION_EN", VERSION_LINE["en"].replace("{BUILD_DATE}", BUILD_DATE))
     ko = ko.replace("TAKE_METHOD_KO", take_block("세는 단위는 기사, 날짜는 음력 원문 그대로에 양력 환산을 더한 것, 천문은 DE406 직접 계산이다. 키워드 지표는 손으로 코딩한 표본의 정밀도를 곱해 읽는다. 실록은 「일어난 일」이 아니라 「적은 일」의 기록이라는 한계가 모든 빈도형 지표에 걸린다.", "ko", small=True))
     en = en.replace("TAKE_METHOD_EN", take_block("Articles are the unit; dates are the lunar originals plus a solar conversion; astronomy is computed directly from DE406. Keyword metrics are read multiplied by the precision of hand-coded samples. The Sillok records what was written, not what happened — a limit that applies to every frequency metric.", "en", small=True))
     return page(lang, t["nav_method"], f'<div class="prose">{ko if lang == "ko" else en}</div>', depth=1, active="method")
@@ -1023,9 +1038,10 @@ DATA_FILES = ["articles.csv", "a_editions.csv", "a_yearly.csv", "a_monthly.csv",
               "c_venus.csv", "c_venus_days.csv", "c_venus_periodogram.csv", "venus_inferior_conjunctions.csv", "c_comet.csv", "c_quake.csv", "c_quake_province.csv", "c_quake_articles.csv", "c_weather.csv",
               "d_clan.csv", "d_clan_munkwa.csv", "d_clan_fill.json", "a_yearly_by_edition.csv", "d_lecture.csv", "d_memorial.csv", "d_justice.csv", "d_justice_decade.csv",
               "e_death.csv", "e_death_reign.csv", "e_death_sample_summary.csv", "e_relief.csv", "e_relief_yearly.csv", "e_eonmun.csv", "e_slave.csv", "lunar_month_starts.csv", "keyword_hits.csv"]
+DATA_FILES += DATA_FILES_EXT
 MAX_ROWS = 60
-GZIP_FILES = {"articles.csv", "keyword_hits.csv"}
-CODING_FILES = ["solar_eclipse_codebook.md", "solar_eclipse_types.csv", "solar_eclipse_agreement.json", "precision_codebook.md", "death_penalty_codebook.md", "death_penalty_sample.csv"]
+GZIP_FILES = {"articles.csv", "keyword_hits.csv"} | GZIP_FILES_EXT
+CODING_FILES = ["solar_eclipse_codebook.md", "solar_eclipse_types.csv", "solar_eclipse_agreement.json", "precision_codebook.md", "death_penalty_codebook.md", "death_penalty_sample.csv"] + CODING_FILES_EXT
 
 
 def write_datapackage(data_dir: Path, files) -> None:
@@ -1044,9 +1060,15 @@ def write_datapackage(data_dir: Path, files) -> None:
             src = ["de406", "klc"] if f == "lunar_month_starts.csv" else ["de406"]
         if f == "espenak_1392_1863.csv":
             src = ["espenak"]
+        if f.replace(".gz", "") in SOURCE_MAP_EXT:
+            src = SOURCE_MAP_EXT[f.replace(".gz", "")]
+        elif f.startswith(("g1_", "g2_", "g3_", "g5_", "g6_")):
+            src = ["nikh_xml", "nikh_goryeosa", "nikh_jeolyo", "nikh_sjw", "de406"]
+        elif f.startswith("f_"):
+            src = ["nikh_sjw"]
         desc = None
         if f.startswith(("d_lecture", "d_memorial", "d_justice.csv", "e_relief.csv", "e_eonmun", "e_slave", "e_death_reign")):
-            desc = "n_articles here is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter."
+            desc = "n_dated_articles (named n_articles up to 1.1.1) is the number of dated articles of the principal edition (equals a_editions.n_dated), the denominator of the shares; a_editions.n_articles counts all articles including undated front matter."
         resources.append({**({"description": desc} if desc else {}), "name": f.split(".")[0].lower().replace("/", "-"), "path": f, "format": "csv" + (" (gzip)" if f.endswith(".gz") else "") if ".csv" in f else f.rsplit(".", 1)[1], "encoding": "utf-8",
                           "rows": int(len(df)) if df is not None else None,
                           "licenses": [{"name": "KOGL-1-derivative + CC-BY-4.0", "path": "https://www.kogl.or.kr/info/license.do"}],

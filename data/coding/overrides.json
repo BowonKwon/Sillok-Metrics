@@ -1,64 +1,110 @@
 {
- "_note": "Editor overrides applied on top of coder judgements (coder files untouched). comet: reports that a comet had disappeared are observation reports of the same object and count as yes; the codebook's wording ('appeared') was narrower than the metric. Applied 2026-11-01.",
- "overrides": {
-  "comet": {
-   "wca_10202016_001": "yes",
-   "wga_10411029_001": "yes",
-   "wwa_11112018_001": "yes",
-   "wwa_12102017_001": "yes",
-   "wxa_10109029_001": "yes",
-   "wya_10407018_001": "yes",
-   "wya_10503008_001": "yes",
-   "wya_11205025_001": "yes",
-   "wua_14605111_002": "yes"
-  }
- },
- "rules": [
-  {
-   "name": "hoeja_discussion_2026-11-02",
-   "bundles": [
-    "solar",
-    "lunar"
-   ],
-   "regex": "回[咨啓資]",
-   "set_type": "discussion",
-   "note": "1.2.1 editor rule. Articles whose quote is about the 回咨 — the reply dispatch sent to the Qing Board of Rites after an eclipse had passed (日食已過, 禮部回咨 …) — are administrative mentions of a past eclipse, i.e. discussion under both codebooks. Coder batches split on them (lunar sjw_4/5/8/9 → forecast/report_order, sjw_6/7 and the blind coder → discussion; solar sjw_9 → forecast, one sjw_8 row → observed). Found by the 1.2 blind verification (C-일식-18, C-월식-03, C-월식-08). The coder's type is kept in type_coder.",
-   "article_ids": {
-    "solar": [
-     "SJW-J13110130-01400",
-     "SJW-J13110270-00400",
-     "SJW-K06080120-00800",
-     "SJW-K06080160-01200",
-     "SJW-K09050060-02500",
-     "SJW-F44110170-00500"
-    ],
-    "lunar": [
-     "SJW-F20090230-01600",
-     "SJW-F25110190-00700",
-     "SJW-K06060190-00300",
-     "SJW-K06060280-01000",
-     "SJW-K06120190-00400",
-     "SJW-K06120200-00700",
-     "SJW-K10100040-00400"
-    ]
-   },
-   "note_1.2.2": "Round-2 blind verification (2026-11-02) found articles of the same kind that the regex misses because the quote/summary has no 回咨: the Qing notice arriving after the eclipse (日食已過, 救食咨文, 今纔出來), the reply being late (救食後登時回咨 ... 咨文, 尙不出來), 咨文依前例 after 月蝕已過, and one spelling 回資. The Ilgi itself states the rule (SJW-J13110130: 大國咨文, 前期出來, 救食後登時回咨) - the notice comes in advance, the reply goes after the rite - so a reply dispatch is by definition administration of a past eclipse. Articles about forwarding the advance notice itself before the eclipse (e.g. 月食不遠, 此等咨文; 來月月食咨文) stay forecast. article_ids lists the 13 rows read in the original and added by hand; 資 added to the regex (SJW-H24060010, coded observed). All ids were read in the NIKH XML."
+  "_note": "Editor overrides applied on top of coder judgments (coder files untouched). comet: reports that a comet had disappeared are observation reports of the same object and count as yes; the codebook's wording ('appeared') was narrower than the metric. Applied 2026-11-01.",
+  "overrides": {
+    "comet": {
+      "wca_10202016_001": "yes",
+      "wga_10411029_001": "yes",
+      "wwa_11112018_001": "yes",
+      "wwa_12102017_001": "yes",
+      "wxa_10109029_001": "yes",
+      "wya_10407018_001": "yes",
+      "wya_10503008_001": "yes",
+      "wya_11205025_001": "yes",
+      "wua_14605111_002": "yes"
+    }
   },
-  {
-   "name": "jaegye_ritual_2026-11-02",
-   "bundles": [
-    "solar",
-    "lunar"
-   ],
-   "regex": "齋戒",
-   "from_types": [
-    "forecast"
-   ],
-   "exclude_ids": [
-    "SJW-A16050070-00900"
-   ],
-   "set_type": "ritual",
-   "note": "1.2.2 editor rule. Articles whose quote is about 齋戒 (ritual abstinence on an eclipse day - a lecture, audience or rite postponed because 日食齋戒相値, including 地下日食齋戒 when the eclipse itself is below the horizon) were coded ritual by most batches (solar 72, lunar 226) but forecast by some (solar 21, lunar 4). Round-2 verification flagged the split (C-S01 vs C-L10). Under both codebooks the content is ritual observance, not a forecast, so forecast -> ritual. Excluded: SJW-A16050070 (lunar; the article is the below-horizon computation and the decision not to hold 救食 - forecast per the below_horizon boundary). Coder type kept in type_coder."
-  }
- ]
+  "rules": [
+    {
+      "name": "hoeja_discussion_2026-11-02",
+      "bundles": [
+        "solar",
+        "lunar"
+      ],
+      "regex": "回[咨啓資]",
+      "set_type": "discussion",
+      "note": "1.2.1 editor rule. Articles whose quote is about the 回咨 — the reply dispatch sent to the Qing Board of Rites after an eclipse had passed (日食已過, 禮部回咨 …) — are administrative mentions of a past eclipse, i.e. discussion under both codebooks. Coder batches split on them (lunar sjw_4/5/8/9 → forecast/report_order, sjw_6/7 and the blind coder → discussion; solar sjw_9 → forecast, one sjw_8 row → observed). Found in blind verification. The coder's type is kept in type_coder.",
+      "article_ids": {
+        "solar": [
+          "SJW-J13110130-01400",
+          "SJW-J13110270-00400",
+          "SJW-K06080120-00800",
+          "SJW-K06080160-01200",
+          "SJW-K09050060-02500",
+          "SJW-F44110170-00500"
+        ],
+        "lunar": [
+          "SJW-F20090230-01600",
+          "SJW-F25110190-00700",
+          "SJW-K06060190-00300",
+          "SJW-K06060280-01000",
+          "SJW-K06120190-00400",
+          "SJW-K06120200-00700",
+          "SJW-K10100040-00400",
+          "SJW-E03010060-01200",
+          "SJW-F01040100-04700",
+          "SJW-F01100060-01000",
+          "SJW-F02050130-02200",
+          "SJW-F05010260-01100",
+          "SJW-F07120210-00900",
+          "SJW-F08050160-01200",
+          "SJW-F09040170-01500",
+          "SJW-F13020200-01000",
+          "SJW-F14120250-02900",
+          "SJW-F19040190-01400",
+          "SJW-F24050150-01000",
+          "SJW-F26050170-01500",
+          "SJW-F27100300-01100",
+          "SJW-F29100250-01900",
+          "SJW-F31080250-02800",
+          "SJW-F33060200-01200",
+          "SJW-F36040160-01500",
+          "SJW-F40020160-01100",
+          "SJW-F44110170-00500"
+        ]
+      },
+      "note_1.2.2": "Round-2 blind verification (2026-11-02) found articles of the same kind that the regex misses because the quote/summary has no 回咨: the Qing notice arriving after the eclipse (日食已過, 救食咨文, 今纔出來), the reply being late (救食後登時回咨 ... 咨文, 尙不出來), 咨文依前例 after 月蝕已過, and one spelling 回資. The Ilgi itself states the rule (SJW-J13110130: 大國咨文, 前期出來, 救食後登時回咨) - the notice comes in advance, the reply goes after the rite - so a reply dispatch is by definition administration of a past eclipse. Articles about forwarding the advance notice itself before the eclipse (e.g. 月食不遠, 此等咨文; 來月月食咨文) stay forecast. article_ids lists the 13 rows read in the original and added by hand; 資 added to the regex (SJW-H24060010, coded observed). All ids were read in the NIKH XML.",
+      "note_1.2.3": "Round-3 blind verification (2026-11-02) read the originals of the remaining forecast-coded Ilgi articles and found reply dispatches that the quote/summary regex still misses (月食咨文, 旣自禮部移咨/出來, 回答咨文, 依例撰出 ...). The working session then scanned the full text of every forecast/other-coded Ilgi article in both bundles for 回咨/回答咨/回資 and read each hit: 20 lunar ids added (the 7 found by the verification, the same-article id SJW-F44110170 already listed for solar, 11 more of the same wording, and SJW-F24050150 - a reply to the Qing notice on the eclipses-under-three-digits rule, administration rather than a forecast). Two articles that only forward the diary's own dispatch to 鳳城 were dated against the eclipse table: SJW-F08050160 (the eclipse day itself) and SJW-F14120250 (10 days after) are replies and are listed; SJW-F04070070 (8 days before) stays forecast. Articles that only ask when the eclipse falls (月食在何間乎) or wait for a coming eclipse (月食不遠; 今望月食 in SJW-J03110020) stay forecast. No solar id was added: the two solar forecast/other hits concern a 犯越 reply, not an eclipse."
+    },
+    {
+      "name": "jaegye_ritual_2026-11-02",
+      "bundles": [
+        "solar",
+        "lunar"
+      ],
+      "regex": "齋戒",
+      "from_types": [
+        "forecast"
+      ],
+      "exclude_ids": [
+        "SJW-A16050070-00900",
+        "SJW-F19090110-01000",
+        "SJW-G13040070-02200"
+      ],
+      "set_type": "ritual",
+      "note": "1.2.2 editor rule. Articles whose quote is about 齋戒 (ritual abstinence on an eclipse day - a lecture, audience or rite postponed because 日食齋戒相値, including 地下日食齋戒 when the eclipse itself is below the horizon) were coded ritual by most batches (solar 72, lunar 226) but forecast by some (solar 21, lunar 4). Found in blind verification. Under both codebooks the content is ritual observance, not a forecast, so forecast -> ritual. Excluded: SJW-A16050070 (lunar; the article is the below-horizon computation and the decision not to hold 救食 - forecast per the below_horizon boundary). Coder type kept in type_coder.",
+      "article_ids": {
+        "solar": [
+          "SJW-A26040300-00500",
+          "SJW-D14030270-00300",
+          "SJW-D15070270-02000",
+          "SJW-D20100270-01200",
+          "SJW-F19090100-02400"
+        ],
+        "lunar": [
+          "SJW-A10030110-00300",
+          "SJW-A15110130-00300",
+          "SJW-A15110140-00200",
+          "SJW-A26040110-00300",
+          "SJW-D32030090-01200",
+          "SJW-F12080090-01900",
+          "SJW-F51120100-03600",
+          "SJW-G22100110-00300",
+          "SJW-G22100110-00400",
+          "SJW-H02080060-02600",
+          "SJW-H16100160-02000"
+        ]
+      },
+      "note_1.2.3": "Round-3 blind verification found schedule changes of the same kind without the word 齋戒 in the quote (a lecture, exam or audience not held because 日食/月食相値). The working session scanned the full text of all forecast-coded Ilgi articles for 齋戒 and 相値 and read each hit; the postponements and 'no business on the eclipse day' articles are listed in article_ids (5 solar, 11 lunar; coder batches put 相値 articles under ritual 74:5 solar and 145:8 lunar). Kept forecast and added to exclude_ids: SJW-F19090110 (a below-horizon eclipse reported late; the article punishes the computing official) and SJW-G13040070 (the decision to hold 齋戒 only, per the Qing notice that the eclipse is under one digit) - both sit on the below_horizon boundary like SJW-A16050070."
+    }
+  ]
 }

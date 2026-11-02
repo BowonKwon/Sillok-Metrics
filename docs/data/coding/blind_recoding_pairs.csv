@@ -221,7 +221,7 @@ lunar,wna_12903012_004,forecast,forecast,forecast,forecast,lunar_eclipse_coded_s
 lunar,SJW-F45050160-01400,forecast,forecast,forecast,forecast,lunar_eclipse_coded_sjw_6
 lunar,kr_049_0010_0010_0030_0240,observed,observed,observed,observed,lunar_eclipse_coded_goryeo_3
 lunar,wwa_11301015_001,observed,forecast,observed,forecast,lunar_eclipse_coded_sillok_4
-lunar,SJW-F24050150-01000,forecast,discussion,forecast,discussion,lunar_eclipse_coded_sjw_5
+lunar,SJW-F24050150-01000,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_5
 lunar,wva_11304015_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_4
 lunar,wua_13610015_001,observed,observed,observed,observed,lunar_eclipse_coded_sillok_4
 lunar,SJW-F31080150-00300,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_5
@@ -242,7 +242,7 @@ lunar,SJW-D18120170-00500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_2
 lunar,SJW-K10100040-00400,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9
 lunar,SJW-K04020150-01700,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9
 lunar,SJW-I08060160-02400,forecast,discussion,discussion,discussion,lunar_eclipse_coded_sjw_8
-lunar,SJW-D32030090-01200,forecast,forecast,forecast,forecast,lunar_eclipse_coded_sjw_3
+lunar,SJW-D32030090-01200,forecast,forecast,ritual,ritual,lunar_eclipse_coded_sjw_3
 lunar,SJW-E02050160-00500,ritual,ritual,ritual,ritual,lunar_eclipse_coded_sjw_3
 lunar,wrb_10109009_001,other,other,other,other,lunar_eclipse_coded_sillok_3
 lunar,SJW-J10110080-01200,discussion,discussion,discussion,discussion,lunar_eclipse_coded_sjw_9

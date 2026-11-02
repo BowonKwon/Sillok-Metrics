@@ -221,7 +221,7 @@ def main():
                   nikh_url=f"https://sillok.history.go.kr/id/k{aid[1:]}",
               ))
           print(fn, len(rows), flush=True)
-    df = pd.DataFrame(rows)
+    df = flag_days_sillok(pd.DataFrame(rows))
     OUT.mkdir(parents=True, exist_ok=True)
     df.to_parquet(OUT / "articles.parquet", index=False)
     df.to_csv(OUT / "articles.csv", index=False, encoding="utf-8")
@@ -229,6 +229,105 @@ def main():
     print(df.groupby("edition").size())
 
 
+# ---- 1.2.4: ganji-anchored solar date -------------------------------------------------------------------------
+STEMS, BRANCHES = "甲乙丙丁戊己庚辛壬癸", "子丑寅卯辰巳午未申酉戌亥"
+GANJI60 = [STEMS[i % 10] + BRANCHES[i % 12] for i in range(60)]
+GREG_SWITCH_JDN = 2299161
+
+
+def ganji_of_jdn(jdn):
+    return GANJI60[(int(jdn) - 2451545 + 54) % 60]
+
+
+def iso_from_jdn(j):
+    if j is None or j != j:
+        return None
+    j = int(j)
+    if j < GREG_SWITCH_JDN:
+        y, m, d = julian_from_jdn(j)
+        return f"{y:04d}-{m:02d}-{d:02d}"
+    return dt.date.fromordinal(j - 1721425).isoformat()
+
+
+def flag_days_sillok(df):
+    """Post-pass: compare each lunar-dated article's ganji (NIKH 간지) with the ganji of the converted day.
+    Where a whole lunar month is off by one day, the contemporaneous calendar started that month a day earlier or
+    later than the table behind korean_lunar_calendar (Ahn et al. 2000, JKAS 33, list such months); isolated cases are
+    typos. solar_date_ganji follows the ganji for month-shift days and for days the package refused (30th of a
+    29-day month, 31st, unknown day 99) when a matching ganji lies within two days of the expected position; it equals
+    solar_date otherwise. Metrics keep using solar_date; the method page reports the counts.
+    date_flag: '' | ganji_month_shift | ganji_typo | ganji_only (no solar_date, dated by ganji) | ganji_unresolved."""
+    df = df.copy()
+    lunar = (df.date_system == "lunar") & df.ganji.isin(GANJI60)
+    has = lunar & df.jdn.notna()
+    off = pd.Series(0, index=df.index, dtype="int64")
+    for i in df.index[has]:
+        o = (GANJI60.index(df.at[i, "ganji"]) - GANJI60.index(ganji_of_jdn(df.at[i, "jdn"]))) % 60
+        off.at[i] = o - 60 if o > 30 else o
+    df["ganji_offset"] = off
+    ym = df.year_ce.astype("Int64").astype(str) + "-" + df.lunar_month.astype("Int64").astype(str) + df.is_leap.map({True: "L", False: ""})
+    flag = pd.Series("", index=df.index, dtype=object)
+    nz = has & (off != 0)
+    for key, grp in df[nz].groupby(ym[nz]):
+        n_month = int((ym == key)[has].sum())
+        if len(grp) >= max(3, int(0.9 * n_month)) and grp.ganji_offset.abs().max() == 1 and grp.ganji_offset.nunique() == 1:
+            flag[grp.index] = "ganji_month_shift"
+        else:
+            flag[grp.index] = "ganji_typo"
+    jg = df.jdn.copy()
+    shift = flag == "ganji_month_shift"
+    jg[shift] = df.jdn[shift] + df.ganji_offset[shift]
+    # days the package refused: anchor on the 1st of the month and search the ganji nearby
+    miss = lunar & df.jdn.isna() & df.year_ce.notna() & df.lunar_month.notna()
+    for i in df.index[miss]:
+        y, m, lp = int(df.at[i, "year_ce"]), int(df.at[i, "lunar_month"]), bool(df.at[i, "is_leap"])
+        _, _, j1 = solar(y, m, 1, lp)
+        if j1 is None:
+            flag.at[i] = "ganji_unresolved"; continue
+        g = df.at[i, "ganji"]; d = df.at[i, "lunar_day"]
+        if d == d and d is not None and 1 <= int(d) <= 31:
+            cands = sorted(range(-2, 3), key=abs)
+            hit = next((j1 + int(d) - 1 + k for k in cands if ganji_of_jdn(j1 + int(d) - 1 + k) == g), None)
+        else:
+            hit = next((j1 + k for k in range(0, 30) if ganji_of_jdn(j1 + k) == g), None)
+        if hit is None:
+            flag.at[i] = "ganji_unresolved"
+        else:
+            jg.at[i] = hit; flag.at[i] = "ganji_only"
+    df["date_flag"] = flag
+    df["jdn_ganji"] = jg
+    df["solar_date_ganji"] = jg.map(iso_from_jdn)
+    return df
+
+
+def postpass():
+    import json
+    df = pd.read_parquet(OUT / "articles.parquet")
+    for c in ("ganji_offset", "date_flag", "jdn_ganji", "solar_date_ganji"):
+        if c in df.columns:
+            df = df.drop(columns=c)
+    df = flag_days_sillok(df)
+    df.to_parquet(OUT / "articles.parquet", index=False)
+    df.to_csv(OUT / "articles.csv", index=False, encoding="utf-8")
+    lunar = (df.date_system == "lunar") & df.ganji.isin(GANJI60)
+    ym = df.year_ce.astype("Int64").astype(str) + "-" + df.lunar_month.astype("Int64").astype(str) + df.is_leap.map({True: "L", False: ""})
+    sh = df.date_flag == "ganji_month_shift"
+    st = {"lunar_with_ganji": int(lunar.sum()), "lunar_with_solar": int((lunar & df.jdn.notna()).sum()),
+          "offset_nonzero": int(((df.ganji_offset != 0) & lunar & df.jdn.notna()).sum()),
+          "month_shift_articles": int(sh.sum()), "month_shift_months": int(ym[sh].nunique()),
+          "month_shift_plus1": int((sh & (df.ganji_offset == 1)).sum()), "month_shift_minus1": int((sh & (df.ganji_offset == -1)).sum()),
+          "typo_articles": int((df.date_flag == "ganji_typo").sum()),
+          "no_solar_lunar_dated": int((lunar & df.jdn.isna() & df.lunar_month.notna()).sum()),
+          "ganji_only": int((df.date_flag == "ganji_only").sum()), "ganji_unresolved": int((df.date_flag == "ganji_unresolved").sum()),
+          "no_solar_taejo_cheoljong": int((lunar & df.jdn.isna() & df.lunar_month.notna() & (df.king_no.astype(int) <= 25)).sum()),
+          "month_shift_months_list": sorted(ym[sh].unique().tolist())}
+    (OUT / "date_flags.json").write_text(json.dumps(st, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(json.dumps(st, ensure_ascii=False))
+    print(df[df.date_flag.isin(["ganji_only", "ganji_unresolved"])][["article_id", "year_ce", "lunar_month", "lunar_day", "ganji", "solar_date_ganji", "date_flag"]].to_string(index=False))
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--postpass":
+        postpass(); raise SystemExit
     sys.stdout.reconfigure(encoding="utf-8")
     main()

@@ -47,10 +47,10 @@ def main():
     ids = set(hits[hits.pattern == "death_penalty"].article_id)
     pun = main_[main_.subjects.str.contains("사법-행형", na=False)]
     dp = pun[pun.article_id.isin(ids)]
-    e = main_.groupby("period").size().rename("n_articles").to_frame()
+    e = main_.groupby("period").size().rename("n_dated_articles").to_frame()
     e["n_mentions"] = dp.groupby("period").size()
     e = e.fillna(0)
-    e["mentions_per_1000"] = e.n_mentions / e.n_articles * 1000
+    e["mentions_per_1000"] = e.n_mentions / e.n_dated_articles * 1000
     samp = C / "death_penalty_sample.csv"
     if samp.exists():
         s = pd.read_csv(samp, encoding="utf-8-sig")
@@ -73,25 +73,25 @@ def main():
         e["mentions_x_exec_hi_per_1000"] = e.mentions_per_1000 * e.exec_ci_hi
     e.to_csv(D / "e_death.csv", encoding="utf-8")
     # by reign too
-    r = main_.groupby(["king_no", "king_ko", "king_en", "edition"]).size().rename("n_articles").to_frame()
+    r = main_.groupby(["king_no", "king_ko", "king_en", "edition"]).size().rename("n_dated_articles").to_frame()
     r["n_mentions"] = dp.groupby(["king_no", "king_ko", "king_en", "edition"]).size()
-    r = r.fillna(0); r["mentions_per_1000"] = r.n_mentions / r.n_articles * 1000
+    r = r.fillna(0); r["mentions_per_1000"] = r.n_mentions / r.n_dated_articles * 1000
     r.to_csv(D / "e_death_reign.csv", encoding="utf-8")
 
     # ---- E2–E4
     def keyword_table(key, name, by_year=False):
         ids = set(hits[hits.pattern == key].article_id)
         g = main_.groupby(["king_no", "king_ko", "king_en", "edition"])
-        out = g.size().rename("n_articles").to_frame()
+        out = g.size().rename("n_dated_articles").to_frame()
         out["n_keyword"] = g.apply(lambda x: x.article_id.isin(ids).sum())
-        out["keyword_share"] = out.n_keyword / out.n_articles
+        out["keyword_share"] = out.n_keyword / out.n_dated_articles
         if key == "eonmun":
             out["n_keyword_justice"] = g.apply(lambda x: (x.article_id.isin(ids) & x.subjects.str.contains("사법", na=False)).sum())
         out.to_csv(D / name, encoding="utf-8")
         if by_year:
-            y = main_.groupby("year_ce").size().rename("n_articles").to_frame()
+            y = main_.groupby("year_ce").size().rename("n_dated_articles").to_frame()
             y["n_keyword"] = main_[main_.article_id.isin(ids)].groupby("year_ce").size()
-            y = y.fillna(0); y["keyword_share"] = y.n_keyword / y.n_articles
+            y = y.fillna(0); y["keyword_share"] = y.n_keyword / y.n_dated_articles
             y.to_csv(D / name.replace(".csv", "_yearly.csv"), encoding="utf-8")
         return out
     keyword_table("relief", "e_relief.csv", by_year=True)

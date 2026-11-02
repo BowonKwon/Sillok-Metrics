@@ -1,0 +1,777 @@
+day_id,variable,ours,lyu,weather,lyu_text
+SJW-A01040230,clear_any,False,1,-,晴
+SJW-A01040240,clear_any,False,1,-,晴
+SJW-A01040290,clear_any,False,1,-,晴
+SJW-A01040300,clear_any,False,1,-,晴
+SJW-A01050010,clear_any,False,1,-,晴
+SJW-A01050020,clear_any,False,1,-,晴
+SJW-A01050030,clear_any,False,1,-,晴
+SJW-A01050040,clear_any,False,1,-,晴
+SJW-A01050050,clear_any,False,1,-,晴
+SJW-A01050060,clear_any,False,1,-,晴
+SJW-A01050070,clear_any,False,1,-,晴
+SJW-A01050080,clear_any,False,1,-,晴
+SJW-A01050090,clear_any,False,1,-,晴
+SJW-A01050100,clear_any,False,1,-,晴
+SJW-A01050110,clear_any,False,1,-,晴
+SJW-A01050120,clear_any,False,1,-,晴
+SJW-A01050130,clear_any,False,1,-,晴
+SJW-A01050140,clear_any,False,1,-,晴
+SJW-A01050150,clear_any,False,1,-,晴
+SJW-A01050160,clear_any,False,1,-,晴
+SJW-A01050170,clear_any,False,1,-,晴
+SJW-A01050180,clear_any,False,1,-,晴
+SJW-A01050190,clear_any,False,1,-,晴
+SJW-A01050200,clear_any,False,1,-,晴
+SJW-A01050210,clear_any,False,1,-,晴
+SJW-A01050220,clear_any,False,1,-,晴
+SJW-A01050230,clear_any,False,1,-,晴
+SJW-A01050240,clear_any,False,1,-,晴
+SJW-A01050250,clear_any,False,1,-,晴
+SJW-A01050260,clear_any,False,1,-,晴
+SJW-A01050270,clear_any,False,1,-,晴
+SJW-A01050280,clear_any,False,1,-,晴
+SJW-A01050290,clear_any,False,1,-,晴
+SJW-A01060010,clear_any,False,1,-,晴
+SJW-A01060020,clear_any,False,1,-,晴
+SJW-A01060030,clear_any,False,1,-,晴
+SJW-A01060040,clear_any,False,1,-,晴
+SJW-A01060050,clear_any,False,1,-,晴
+SJW-A01060060,clear_any,False,1,-,晴
+SJW-A01060070,clear_any,False,1,-,晴
+SJW-A01060080,clear_any,False,1,-,晴
+SJW-A01060090,clear_any,False,1,-,晴
+SJW-A01060100,clear_any,False,1,-,晴
+SJW-A01060110,clear_any,False,1,-,晴
+SJW-A01060120,clear_any,False,1,-,晴
+SJW-A01060130,clear_any,False,1,-,晴
+SJW-A01060140,clear_any,False,1,-,晴
+SJW-A01070200,clear_any,True,0,夜雨雷電晝少霽,夜雨雷電晝少霽
+SJW-A01080060,clear_any,True,0,或雨或霽,或雨或霽
+SJW-A01080150,clear_any,False,1,-,晴
+SJW-A01090180,clear_any,False,1,-,晴
+SJW-A01090210,clear_any,False,1,-,晴
+SJW-A01100060,clear_any,False,1,-,晴
+SJW-A01101010,clear_any,True,0,陰雪朝霽,陰雪朝霽
+SJW-A01101180,clear_any,False,1,-,晴
+SJW-A01101190,clear_any,False,1,-,朝雨夕晴
+SJW-A01101200,clear_any,False,1,-,朝雨晩晴
+SJW-A01101210,clear_any,False,1,-,晴
+SJW-A01101220,clear_any,False,1,-,晴
+SJW-A01101230,clear_any,False,1,-,晴
+SJW-A01101240,clear_any,False,1,-,晴
+SJW-A01101250,clear_any,False,1,-,晴
+SJW-A01101260,clear_any,False,1,-,晴
+SJW-A01101280,clear_any,False,1,-,晴
+SJW-A01101290,clear_any,False,1,-,晴
+SJW-A01101300,clear_any,False,1,-,晴
+SJW-A01110010,clear_any,False,1,-,晴
+SJW-A01110020,clear_any,False,1,-,晴
+SJW-A01110030,clear_any,False,1,-,晴
+SJW-A01110040,clear_any,False,1,-,晴
+SJW-A01110050,clear_any,False,1,-,晴
+SJW-A01110060,clear_any,False,1,-,晴
+SJW-A01110070,clear_any,False,1,-,晴
+SJW-A01110090,clear_any,False,1,-,晴
+SJW-A01110100,clear_any,False,1,-,晴
+SJW-A01110110,clear_any,False,1,-,晴
+SJW-A01110120,clear_any,False,1,-,晴
+SJW-A01110130,clear_any,False,1,-,晴
+SJW-A01110140,clear_any,False,1,-,晴
+SJW-A01110150,clear_any,False,1,-,晴
+SJW-A01110160,clear_any,False,1,-,晴
+SJW-A01110170,clear_any,False,1,-,晴
+SJW-A01110180,clear_any,False,1,-,晴
+SJW-A01110190,clear_any,False,1,-,晴
+SJW-A01110200,clear_any,False,1,-,晴
+SJW-A01110210,clear_any,False,1,-,晴
+SJW-A01110220,clear_any,False,1,-,晴
+SJW-A01110230,clear_any,False,1,-,晴
+SJW-A01110240,clear_any,False,1,-,晴
+SJW-A01110250,clear_any,False,1,-,晴
+SJW-A01110260,clear_any,False,1,-,晴
+SJW-A01110280,clear_any,False,1,-,晴
+SJW-A01110290,clear_any,False,1,-,晴
+SJW-A01120020,clear_any,False,1,-,晴
+SJW-A01120030,clear_any,False,1,-,晴
+SJW-A01120040,clear_any,False,1,-,晴
+SJW-A01120050,clear_any,False,1,-,晴
+SJW-A01120100,clear_any,False,1,-,晴
+SJW-A01120110,clear_any,False,1,-,晴
+SJW-A01120120,clear_any,False,1,-,晴
+SJW-A01120130,clear_any,False,1,-,晴
+SJW-A01120140,clear_any,False,1,-,晴
+SJW-A01120150,clear_any,False,1,-,晴
+SJW-A01120160,clear_any,False,1,-,晴
+SJW-A01120170,clear_any,False,1,-,晴
+SJW-A01120180,clear_any,False,1,-,晴
+SJW-A01120190,clear_any,False,1,-,晴
+SJW-A01120200,clear_any,False,1,-,晴
+SJW-A01120210,clear_any,False,1,-,晴
+SJW-A01120220,clear_any,False,1,-,晴
+SJW-A01120230,clear_any,False,1,-,晴
+SJW-A01120240,clear_any,False,1,-,晴
+SJW-A01120250,clear_any,False,1,-,晴
+SJW-A01120260,clear_any,False,1,-,晴
+SJW-A01120270,clear_any,False,1,-,晴
+SJW-A01120280,clear_any,False,1,-,晴
+SJW-A01120290,clear_any,False,1,-,晴
+SJW-A01120300,clear_any,False,1,-,晴
+SJW-A03060300,clear_any,False,1,-,晴
+SJW-A04100010,clear_any,False,1,-,晴
+SJW-A05120210,clear_any,False,1,-,晴
+SJW-A07070010,clear_any,False,1,-,晴
+SJW-A07070020,clear_any,False,1,-,晴
+SJW-A07070030,clear_any,False,1,-,晴
+SJW-A07070040,clear_any,False,1,-,晴
+SJW-A07100230,clear_any,False,1,-,晴
+SJW-A09110280,clear_any,False,1,-,晴
+SJW-A12060080,clear_any,False,1,-,晴
+SJW-A12060090,clear_any,False,1,-,晴
+SJW-A12060100,clear_any,False,1,-,晴
+SJW-A12060120,clear_any,False,1,-,朝雨晩晴
+SJW-A13020030,clear_any,False,1,-,朝霧晩晴
+SJW-A13060110,clear_any,False,1,-,晴
+SJW-A13110240,clear_any,False,1,-,晴
+SJW-A15041010,clear_any,False,1,-,晴
+SJW-A15060160,clear_any,False,1,-,晴
+SJW-A15080250,clear_any,False,1,-,晴
+SJW-A16030130,clear_any,False,1,-,晴
+SJW-A16040040,clear_any,False,1,-,晴
+SJW-A16070120,clear_any,False,1,-,晴
+SJW-A16080010,clear_any,False,1,-,朝晴夕雨
+SJW-A17060210,clear_any,False,1,-,晴
+SJW-A17080150,clear_any,False,1,-,晴
+SJW-A17120270,clear_any,False,1,-,晴
+SJW-A20020130,clear_any,False,1,-,晴
+SJW-A23120080,clear_any,False,1,-,晴
+SJW-A26090050,clear_any,False,1,-,晴
+SJW-B00070152,clear_any,False,1,-, 晴
+SJW-B00100160,clear_any,False,1,-,晴
+SJW-B01070020,clear_any,False,1,-,晴
+SJW-B02030152,clear_any,False,1,-, 晴
+SJW-B02070240,clear_any,False,1,-,晴
+SJW-B02070250,clear_any,False,1,-,晴
+SJW-B02080260,clear_any,False,1,-,晴
+SJW-B02090220,clear_any,False,1,-,晴
+SJW-B04090020,clear_any,False,1,-,晴
+SJW-B06080200,clear_any,False,1,-,晴
+SJW-B06080220,clear_any,False,1,-,晴
+SJW-B06080230,clear_any,False,1,-,晴
+SJW-B06120210,clear_any,False,1,-,晴
+SJW-B06120220,clear_any,False,1,-,晴
+SJW-B06120230,clear_any,False,1,-,晴
+SJW-B06120240,clear_any,False,1,-,晴
+SJW-B06120250,clear_any,False,1,-,晴
+SJW-B06120260,clear_any,False,1,-,晴
+SJW-B06120270,clear_any,False,1,-,晴
+SJW-B06120280,clear_any,False,1,-,晴
+SJW-B06120290,clear_any,False,1,-,晴
+SJW-B07040200,clear_any,False,1,-,晴
+SJW-B07040230,clear_any,False,1,-,晴
+SJW-B07051210,clear_any,False,1,-,晴
+SJW-B07070230,clear_any,False,1,-,晴
+SJW-B07120010,clear_any,False,1,-,晴
+SJW-B07120020,clear_any,False,1,-,晴
+SJW-B07120030,clear_any,False,1,-,晴
+SJW-B07120040,clear_any,False,1,-,晴
+SJW-B07120180,clear_any,False,1,-,晴
+SJW-B09040220,clear_any,False,1,-,晴
+SJW-C00110152,clear_any,False,1,-, 晴
+SJW-C02010130,clear_any,False,1,-,朝陰晝晴
+SJW-C03030170,clear_any,False,1,-,晴
+SJW-C03060080,clear_any,False,1,-,朝晴暮雨
+SJW-C03070010,clear_any,False,1,-,晴
+SJW-C03100040,clear_any,False,1,-,晴
+SJW-C07060130,clear_any,True,0,"陰, 平明灑雨乃霽, 申末, 雨復如注。","陰, 平明灑雨乃霽, 申末, 雨復如注"
+SJW-C07070060,clear_any,False,1,-,晴
+SJW-C07070100,clear_any,False,1,-,晴
+SJW-C07070110,clear_any,False,1,-,晴
+SJW-C07070220,clear_any,False,1,-,晴
+SJW-C07090140,clear_any,False,1,-,晴
+SJW-C07090150,clear_any,False,1,-,晴
+SJW-C07090180,clear_any,False,1,-,晴
+SJW-C07090190,clear_any,False,1,-,晴
+SJW-C07110290,clear_any,False,1,-,晴
+SJW-C07110300,clear_any,False,1,-,晴
+SJW-C07120170,clear_any,False,1,-,晴
+SJW-C07120180,clear_any,False,1,-,晴
+SJW-C07120190,clear_any,False,1,-,晴
+SJW-C07120200,clear_any,False,1,-,晴
+SJW-C07120210,clear_any,False,1,-,晴
+SJW-C07120220,clear_any,False,1,-,晴
+SJW-C07120230,clear_any,False,1,-,晴
+SJW-C07120240,clear_any,False,1,-,晴
+SJW-C07120250,clear_any,False,1,-,晴
+SJW-C07120260,clear_any,False,1,-,晴
+SJW-C07120270,clear_any,False,1,-,晴
+SJW-C07120280,clear_any,False,1,-,晴
+SJW-C07120290,clear_any,False,1,-,晴
+SJW-C08040270,clear_any,False,1,雨,"雨, 朝陰暮晴"
+SJW-C08050200,clear_any,False,1,-,晴
+SJW-C08120020,clear_any,False,1,-,晴
+SJW-C08120110,clear_any,False,1,-,晴
+SJW-C08120120,clear_any,False,1,-,晴
+SJW-C08120270,clear_any,False,1,-,晴
+SJW-C08120280,clear_any,False,1,-,晴
+SJW-C09010010,clear_any,False,1,-,晴
+SJW-C10030250,clear_any,False,1,陰,"陰, 晴"
+SJW-C10030280,clear_any,False,1,陰,"陰, 晴"
+SJW-C10040040,clear_any,False,1,陰,"陰, 晴"
+SJW-C10040150,clear_any,False,1,雨,"雨, 朝雨暮晴"
+SJW-C11021010,clear_any,False,1,-,晴
+SJW-C11021030,clear_any,False,1,-,晴
+SJW-C11021040,clear_any,False,1,-,晴
+SJW-C11040290,clear_any,False,1,-,晴
+SJW-C11090120,clear_any,False,1,-,晴
+SJW-C11120180,clear_any,False,1,-,晴
+SJW-C11120190,clear_any,False,1,-,晴
+SJW-C12020100,clear_any,False,1,-,晴
+SJW-C12040110,clear_any,False,1,-,晴
+SJW-C12080140,clear_any,False,1,-,晴
+SJW-C12080160,clear_any,False,1,-,晴
+SJW-C12090130,clear_any,False,1,-,晴
+SJW-C12100090,clear_any,False,1,-,晴
+SJW-C13050020,clear_any,False,1,-,晴
+SJW-C13071142,clear_any,False,1,-, 晴
+SJW-C14110220,clear_any,True,0,午前雪午後陽,午前雪午後陽
+SJW-D02090240,clear_any,False,1,-,晴
+SJW-D04030142,clear_any,False,1,-, 晴
+SJW-D04120020,clear_any,False,1,-,晴
+SJW-D05090152,clear_any,False,1,-, 晴
+SJW-D06090152,clear_any,False,1,-, 朝晴暮雨
+SJW-D07020140,clear_any,False,1,-,晴
+SJW-D07030230,clear_any,False,1,-,晴
+SJW-D08020260,clear_any,False,1,-,晴
+SJW-D08020280,clear_any,False,1,-,晴
+SJW-D08020290,clear_any,False,1,-,晴
+SJW-D08020300,clear_any,False,1,-,晴
+SJW-D08040010,clear_any,False,1,-,晴
+SJW-D08110020,clear_any,False,1,-,晴
+SJW-D11110152,clear_any,False,1,-, 晴
+SJW-D12041200,clear_any,False,1,-,晴
+SJW-D12050030,clear_any,False,1,-,朝晴夕雨
+SJW-D12070152,clear_any,False,1,-, 晴
+SJW-D12110180,clear_any,False,1,-,晴
+SJW-D13090260,clear_any,False,1,-,晴
+SJW-D13110010,clear_any,False,1,-,晴
+SJW-D13110152,clear_any,False,1,-, 晴
+SJW-D15100230,clear_any,False,1,-,晴
+SJW-D22080152,clear_any,False,1,-, 晴
+SJW-D23010010,clear_any,False,1,-,晴
+SJW-D25071010,clear_any,False,1,-,晴
+SJW-D28010010,clear_any,False,1,-,晴
+SJW-D28100070,clear_any,False,1,陰,"陰, 晴"
+SJW-D34080200,clear_any,False,1,-,朝雨夕晴
+SJW-D37070010,clear_any,False,1,-,晴
+SJW-D37070020,clear_any,False,1,-,晴
+SJW-D37070030,clear_any,False,1,-,晴
+SJW-D37070040,clear_any,False,1,-,晴
+SJW-D37070180,clear_any,False,1,-,晴
+SJW-D37070190,clear_any,False,1,-,晴
+SJW-D37070290,clear_any,False,1,-,晴
+SJW-D37070300,clear_any,False,1,-,晴
+SJW-D37120010,clear_any,False,1,-,晴
+SJW-D37120260,clear_any,False,1,-,晴
+SJW-D37120270,clear_any,False,1,-,晴
+SJW-D37120300,clear_any,False,1,-,晴
+SJW-D39050152,clear_any,False,1,-, 晴
+SJW-D41080010,clear_any,False,1,-,晴
+SJW-D42030152,clear_any,False,1,-, 晴
+SJW-D43030141,clear_any,False,1,朝陰夕雨,"朝陰夕雨, 晴"
+SJW-D43030150,clear_any,False,1,雨,"雨, 晴"
+SJW-D44090010,clear_any,False,1,-,晴
+SJW-D45010010,clear_any,False,1,陰 申時日食,陰 申時日食
+SJW-D45010210,clear_any,False,1,-,晴
+SJW-D45010220,clear_any,False,1,-,晴
+SJW-D45010260,clear_any,False,1,-,晴
+SJW-D45070152,clear_any,False,1,-, 晴
+SJW-D45090152,clear_any,False,1,-, 晴
+SJW-D45110070,clear_any,False,1,-,晴
+SJW-D45110152,clear_any,False,1,-, 晴
+SJW-E00120010,clear_any,False,1,-,晴
+SJW-E00120050,clear_any,False,1,-,晴
+SJW-E01090010,clear_any,False,1,-,晴
+SJW-E04080010,clear_any,False,1,-,朝晴夕陰
+SJW-F01010160,clear_any,False,1,-,晴
+SJW-F01100030,clear_any,False,1,-,晴
+SJW-F03090010,clear_any,False,1,-,晴
+SJW-F07090271,clear_any,False,1,,晴
+SJW-F07100010,clear_any,False,1,-,晴
+SJW-F09060010,clear_any,True,0,朝陽夕雨,朝陽夕雨
+SJW-F12020121,clear_any,False,1,朝陰夕雨,"朝陰夕雨, 朝晴夕雨"
+SJW-F12030010,clear_any,False,1,-,晴
+SJW-F14050070,clear_any,True,0,朝陽夕陰,朝陽夕陰
+SJW-F15050250,clear_any,True,0,朝陽夕陰,朝陽夕陰
+SJW-F15070080,clear_any,True,0,朝陽夕陰,朝陽夕陰
+SJW-F15120170,clear_any,True,0,朝陰夕陽,朝陰夕陽
+SJW-F21080191,clear_any,False,1,丑初初刻,"丑初初刻, 晴"
+SJW-F24020051,clear_any,False,1,,晴
+SJW-F24030111,clear_any,False,1,,朝晴夕陰
+SJW-F27050100,clear_any,True,0,朝陽夕雨,朝陽夕雨
+SJW-F27050110,clear_any,True,0,朝雨夕陽,朝雨夕陽
+SJW-F27050240,clear_any,True,0,朝陰夕陽,朝陰夕陽
+SJW-F27090080,clear_any,True,0,朝陽夕雨,朝陽夕雨
+SJW-F29050250,clear_any,False,1,陰,"陰, 朝晴夕陰"
+SJW-F29050281,clear_any,False,1,朝陰夕雨,"朝陰夕雨, 或陰或晴"
+SJW-F30100060,clear_any,False,1,,晴
+SJW-F33120260,clear_any,True,0,朝雪暮霽,朝雪暮霽
+SJW-F35060110,clear_any,False,1,陰,"陰, 晴"
+SJW-F35120011,clear_any,False,1,,晴
+SJW-F36020191,clear_any,False,1,-, 朝陰夕晴
+SJW-F36030250,clear_any,False,1,或陰或雨,"或陰或雨, 或陰或晴"
+SJW-F36040251,clear_any,False,1,雨,"雨, 朝雨夕晴"
+SJW-F36060131,clear_any,False,1,,晴
+SJW-F36080070,clear_any,False,1,朝雨暮陰,"朝雨暮陰, 晴"
+SJW-F36090200,clear_any,False,1,晝陰夜雨,"晝陰夜雨, 晴"
+SJW-F36100101,clear_any,False,1,雨,"雨, 朝雨暮晴"
+SJW-F36110050,clear_any,False,1,或雪或陰,"或雪或陰, 雪, 晴"
+SJW-F36110080,clear_any,False,1,陰,"陰, 朝陰夕晴"
+SJW-F36120060,clear_any,False,1,陰,"陰, 晴"
+SJW-F37020120,clear_any,False,1,陰,"陰, 晴"
+SJW-F37050130,clear_any,False,1,陰,"陰, 晴"
+SJW-F37060061,clear_any,False,1,陰,"陰, 晴"
+SJW-F37060071,clear_any,False,1,-, 晴
+SJW-F37070010,clear_any,False,1,雨,"雨, 或雨或晴"
+SJW-F37070220,clear_any,False,1,陰,"陰, 朝陰夕晴"
+SJW-F37070230,clear_any,False,1,陰,"陰, 乍雨乍晴"
+SJW-F37080080,clear_any,False,1,或陰或雨,"或陰或雨, 朝晴暮陰"
+SJW-F37080130,clear_any,False,1,陰,"陰, 或陰或晴"
+SJW-F37090280,clear_any,False,1,,晴
+SJW-F37100010,clear_any,False,1,或陰或雨,"或陰或雨, 朝晴夕雨"
+SJW-F37100180,clear_any,False,1,朝陰夕雨,"朝陰夕雨, 朝晴夕雨"
+SJW-F37100190,clear_any,False,1,雨,"雨, 晴"
+SJW-F37100230,clear_any,False,1,陰,"陰, 晴"
+SJW-F37100250,clear_any,False,1,陰,"陰, 晴"
+SJW-F37100270,clear_any,False,1,陰,"陰, 晴"
+SJW-F37100290,clear_any,False,1,雨,"雨, 或晴或陰"
+SJW-F38020150,clear_any,False,1,雪,"雪, 晴"
+SJW-F38020180,clear_any,False,1,陰,"陰, 晴"
+SJW-F38020210,clear_any,False,1,陰,"陰, 晴"
+SJW-F38020230,clear_any,False,1,雪,"雪, 朝晴暮雪"
+SJW-F38030040,clear_any,False,1,,或雨或晴
+SJW-F38040030,clear_any,False,1,雨,"雨, 晴"
+SJW-F38040221,clear_any,False,1,陰,"陰, 晴"
+SJW-F38040270,clear_any,False,1,雨,"雨, 朝晴晝雨夕陰風"
+SJW-F38050171,clear_any,False,1,陰,"陰, 晴"
+SJW-F38050200,clear_any,False,1,陰,"陰, 朝陰夕晴"
+SJW-F38051030,clear_any,False,1,陰,"陰, 或陰或晴"
+SJW-F38060101,clear_any,False,1,雨,"雨, 朝晴午雨夕陰"
+SJW-F38060140,clear_any,False,1,雨,"雨, 晴暮雨"
+SJW-F39030080,clear_any,False,1,陰,"陰, 晴"
+SJW-F41021150,clear_any,False,1,陰,"陰, 朝晴暮陰"
+SJW-F41100010,clear_any,False,1,-,晴
+SJW-F44060010,clear_any,False,1,-,晴
+SJW-F44070100,clear_any,True,0,或陰或陽,或陰或陽
+SJW-F44110010,clear_any,False,1,-,晴
+SJW-F45040010,clear_any,False,1,-,晴
+SJW-F46010010,clear_any,False,1,-,晴
+SJW-F46120300,clear_any,False,1,-,晴
+SJW-F47090010,clear_any,False,1,-,晴
+SJW-F47100010,clear_any,False,1,-,晴
+SJW-F47110010,clear_any,False,1,-,朝雪暮晴
+SJW-F48010020,clear_any,False,1,-,晴
+SJW-F48020010,clear_any,False,1,-,晴
+SJW-F48040010,clear_any,False,1,-,晴
+SJW-F48050010,clear_any,False,1,-,朝陰暮晴
+SJW-F48110171,clear_any,False,1,,晴
+SJW-F48110191,clear_any,False,1,,晴
+SJW-F48110201,clear_any,False,1,,晴
+SJW-F48120010,clear_any,False,1,-,晴
+SJW-F49010010,clear_any,False,1,-,晴
+SJW-F49040010,clear_any,False,1,-,晴
+SJW-F49110250,clear_any,False,1,-,或晴或陰
+SJW-F51050200,clear_any,False,1,-,晴
+SJW-F51101010,clear_any,False,1,-,晴
+SJW-F51110150,clear_any,False,1,-,或晴或陰
+SJW-F51120160,clear_any,False,1,-,或晴或陰
+SJW-F52030160,clear_any,False,1,-,晴
+SJW-G00050290,clear_any,True,0,或雨或陽,或雨或陽
+SJW-G00070160,clear_any,False,1,-,晴
+SJW-G01090010,clear_any,False,1,-,晴
+SJW-G01090200,clear_any,False,1,時,時
+SJW-G04040090,clear_any,False,1,-,晴
+SJW-G04040220,clear_any,False,1,-,或晴或雨
+SJW-G04040230,clear_any,False,1,-,或晴或雨
+SJW-G04040240,clear_any,False,1,-,或晴或雨
+SJW-G04040250,clear_any,False,1,-,或晴或雨
+SJW-G04040260,clear_any,False,1,-,或晴或雨
+SJW-G04040270,clear_any,False,1,-,或晴或雨
+SJW-G04040280,clear_any,False,1,-,或晴或雨
+SJW-G04040290,clear_any,False,1,-,或晴或雨
+SJW-G04040300,clear_any,False,1,-,或晴或雨
+SJW-G04050010,clear_any,False,1,-,或晴或雨
+SJW-G04050020,clear_any,False,1,-,或晴或雨
+SJW-G04050030,clear_any,False,1,-,或晴或雨
+SJW-G04050040,clear_any,False,1,-,或晴或雨
+SJW-G04050050,clear_any,False,1,-,或晴或雨
+SJW-G04050060,clear_any,False,1,-,或晴或雨
+SJW-G04050070,clear_any,False,1,-,或晴或雨
+SJW-G04050080,clear_any,False,1,-,或晴或雨
+SJW-G04050170,clear_any,False,1,-,晴
+SJW-G04050180,clear_any,False,1,-,晴
+SJW-G04050190,clear_any,False,1,-,晴
+SJW-G13051010,clear_any,False,1,-,晴
+SJW-G21060200,clear_any,False,1,時,時
+SJW-H02080010,clear_any,False,1,日食,日食
+SJW-H02090110,clear_any,False,1,雨,"雨, 晴"
+SJW-H02090280,clear_any,False,1,雨,"雨, 晴"
+SJW-H02090290,clear_any,False,1,雨,"雨, 晴"
+SJW-H02100040,clear_any,False,1,雨,"雨, 晴"
+SJW-H03120150,clear_any,False,1,月食,月食
+SJW-H04120150,clear_any,False,1,月食,月食
+SJW-H05110160,clear_any,False,1,月食,月食
+SJW-H25100040,clear_any,False,1,-,晴
+SJW-H30010060,clear_any,False,1,-,晴
+SJW-I06120150,clear_any,False,1,時,時
+SJW-I08040050,clear_any,False,1,時,時
+SJW-I10090120,clear_any,False,1,雨,"雨, 晴"
+SJW-I10090130,clear_any,False,1,陰,"陰, 晴"
+SJW-I10090140,clear_any,False,1,雨,"雨, 晴"
+SJW-I10090190,clear_any,False,1,雨,"雨, 晴"
+SJW-I10090200,clear_any,False,1,陰,"陰, 晴"
+SJW-I10090240,clear_any,False,1,陰,"陰, 晴"
+SJW-K01070090,clear_any,False,1,-,晴
+SJW-K01110210,clear_any,False,1,-,晴
+SJW-K03030191,clear_any,False,1,-, 晴
+SJW-K03040060,clear_any,False,1,-,晴
+SJW-K04020010,clear_any,False,1,日食,日食
+SJW-K09050190,clear_any,False,1,-,晴
+SJW-K09120160,clear_any,False,1,-,晴
+SJW-K12090091,clear_any,False,1,-, 晴
+SJW-K12090101,clear_any,False,1,-, 晴
+SJW-K12090300,clear_any,False,1,-,晴
+SJW-K12110010,clear_any,False,1,-,晴
+SJW-K12110020,clear_any,False,1,-,晴
+SJW-K12110030,clear_any,False,1,-,晴
+SJW-K12110040,clear_any,False,1,-,晴
+SJW-K12110050,clear_any,False,1,-,晴
+SJW-K12110060,clear_any,False,1,-,晴
+SJW-K12110070,clear_any,False,1,-,晴
+SJW-K12110080,clear_any,False,1,-,晴
+SJW-K12110090,clear_any,False,1,-,晴
+SJW-K12110100,clear_any,False,1,-,晴
+SJW-K12110110,clear_any,False,1,-,晴
+SJW-K12110120,clear_any,False,1,-,晴
+SJW-K12110130,clear_any,False,1,-,晴
+SJW-K12110140,clear_any,False,1,-,晴
+SJW-K12110150,clear_any,False,1,-,晴
+SJW-K12110160,clear_any,False,1,-,晴
+SJW-K12110170,clear_any,False,1,-,晴
+SJW-K12110180,clear_any,False,1,-,晴
+SJW-K12110190,clear_any,False,1,-,晴
+SJW-K12110200,clear_any,False,1,-,晴
+SJW-K12110210,clear_any,False,1,-,晴
+SJW-K12110220,clear_any,False,1,-,晴
+SJW-K12110230,clear_any,False,1,-,晴
+SJW-K12110240,clear_any,False,1,-,晴
+SJW-K12110250,clear_any,False,1,-,晴
+SJW-K12110260,clear_any,False,1,-,晴
+SJW-K12110270,clear_any,False,1,-,晴
+SJW-K12110280,clear_any,False,1,-,晴
+SJW-K12110290,clear_any,False,1,-,晴
+SJW-K12110300,clear_any,False,1,-,晴
+SJW-K13010210,clear_any,False,1,-,晴
+SJW-K13051290,clear_any,False,1,-,晴
+SJW-K15110140,clear_any,False,1,時,時
+SJW-K19060111,clear_any,False,1,-, 或陰或晴
+SJW-K19060121,clear_any,False,1,-, 晴
+SJW-K19060141,clear_any,False,1,-, 晴
+SJW-K19060161,clear_any,False,1,-, 晴
+SJW-K19060301,clear_any,False,1,-, 晴
+SJW-K38090160,clear_any,False,1,月食,月食
+SJW-K38120200,clear_any,False,1,時,時
+SJW-A01040190,cloudy_any,False,1,-,陰
+SJW-A01100020,cloudy_any,False,1,-,陰雪朝霽
+SJW-A01101270,cloudy_any,False,1,-,朝陰晩雨
+SJW-A03070210,cloudy_any,False,1,朝霧晴,朝霧晴
+SJW-A03080090,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-A03090230,cloudy_any,False,1,霧,霧
+SJW-A03110210,cloudy_any,False,1,朝霧晩晴,朝霧晩晴
+SJW-A07020220,cloudy_any,False,1,朝霧晩晴,朝霧晩晴
+SJW-A13020020,cloudy_any,False,1,朝霧晩晴,朝霧晩晴
+SJW-A13020030,cloudy_any,False,1,-,朝霧晩晴
+SJW-A13070160,cloudy_any,False,1,昧爽至卯時沈霧,昧爽至卯時沈霧
+SJW-A13070170,cloudy_any,False,1,"晴, 自昧爽至辰時, 沈霧。夜五更, 有霧。","晴, 自昧爽至辰時, 沈霧夜五更, 有霧"
+SJW-A13070180,cloudy_any,False,1,"晴, 自昧爽至卯時, 沈霧。未時申時, 日暈。","晴, 自昧爽至卯時, 沈霧未時申時, 日暈"
+SJW-A13100170,cloudy_any,False,1,朝霧晩晴,朝霧晩晴
+SJW-A15010060,cloudy_any,False,1,"雪巳時止, 夜大風大霧大雪","雪巳時止, 夜大風大霧大雪"
+SJW-A15040030,cloudy_any,False,1,-,陰
+SJW-A17020270,cloudy_any,False,1,朝霧晝晴,朝霧晝晴
+SJW-A17030050,cloudy_any,False,1,-,陰 灑雨
+SJW-A18011240,cloudy_any,True,0,晝晦夕雨雪,晝晦夕雨雪
+SJW-A26040020,cloudy_any,False,1,霧雨,霧雨
+SJW-B02080290,cloudy_any,False,1,-,陰
+SJW-B02100220,cloudy_any,False,1,-,陰
+SJW-C02010130,cloudy_any,False,1,-,朝陰晝晴
+SJW-C06050030,cloudy_any,False,1,雨,"雨, 陰"
+SJW-C06050040,cloudy_any,False,1,晴,"晴, 朝陰夕晴"
+SJW-C06050050,cloudy_any,False,1,晴,"晴, 陰"
+SJW-C06050060,cloudy_any,False,1,晴,"晴, 朝陰夕晴"
+SJW-C08040180,cloudy_any,False,1,晴,"晴, 朝陰夕晴"
+SJW-C08040270,cloudy_any,False,1,雨,"雨, 朝陰暮晴"
+SJW-C08050280,cloudy_any,False,1,-,陰
+SJW-C11021020,cloudy_any,False,1,-,陰
+SJW-C11120150,cloudy_any,False,1,-,陰
+SJW-C14020200,cloudy_any,False,1,晴,"晴, 陰"
+SJW-D01100210,cloudy_any,False,1,-,陰
+SJW-D06081030,cloudy_any,False,1,-,陰
+SJW-D08090270,cloudy_any,False,1,朝霧夕雨,朝霧夕雨
+SJW-D11040150,cloudy_any,False,1,-,陰
+SJW-D11050020,cloudy_any,False,1,-,陰
+SJW-D12120160,cloudy_any,False,1,-,陰
+SJW-D13030152,cloudy_any,False,1,-, 陰
+SJW-D20080140,cloudy_any,False,1,朝霧夕雨,朝霧夕雨
+SJW-D23080240,cloudy_any,False,1,"晴, 昧爽至辰時有霧氣","晴, 昧爽至辰時有霧氣"
+SJW-D28100101,cloudy_any,False,1,雨,"雨, 陰夕雨"
+SJW-D28100121,cloudy_any,False,1,雨,"雨, 陰"
+SJW-D31100290,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-D34010050,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-D34010060,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-D34010110,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-D35030260,cloudy_any,False,1,朝霧晩晴,朝霧晩晴
+SJW-D37040010,cloudy_any,True,0,曇後晴,曇後晴
+SJW-D43030110,cloudy_any,False,1,雨,"雨, 朝陰夕雨"
+SJW-D46060040,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-E00110152,cloudy_any,False,1,-, 乍陰乍雪
+SJW-E01090040,cloudy_any,False,1,朝霧晝晴,朝霧晝晴
+SJW-E01110100,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-E02080170,cloudy_any,False,1,"晴 自昧爽至辰時, 有霧氣","晴 自昧爽至辰時, 有霧氣"
+SJW-E02100230,cloudy_any,False,1,"晴 夜一更二更, 有霧氣。四更, 月入太薇西垣內。","晴 夜一更二更, 有霧氣四更, 月入太薇西垣內"
+SJW-E04080010,cloudy_any,False,1,-,朝晴夕陰
+SJW-F01050200,cloudy_any,False,1,"晴, 自寅時至辰時沈霧","晴, 自寅時至辰時沈霧"
+SJW-F01050210,cloudy_any,False,1,"晴, 自寅時至辰時沈霧","晴, 自寅時至辰時沈霧"
+SJW-F02050030,cloudy_any,False,1,晴 卯時有霧氣。,晴 卯時有霧氣
+SJW-F02120110,cloudy_any,False,1,"晴。夜一更二更, 有霧氣。五更, 有霧氣。","晴夜一更二更, 有霧氣五更, 有霧氣"
+SJW-F03060060,cloudy_any,False,1,"晴 卯時有霧氣, 辰時日暈","晴 卯時有霧氣, 辰時日暈"
+SJW-F03060110,cloudy_any,False,1,"晴 自昧爽至辰時, 有霧氣","晴 自昧爽至辰時, 有霧氣"
+SJW-F03090020,cloudy_any,False,1,"晴, 卯時有霧氣, 辰時日有右珥","晴, 卯時有霧氣, 辰時日有右珥"
+SJW-F04090110,cloudy_any,False,1,"晴。夜一更二更, 有霧氣。","晴夜一更二更, 有霧氣"
+SJW-F05050251,cloudy_any,False,1,晴,"晴, 晴三更陰"
+SJW-F05110230,cloudy_any,False,1,"晴, 夜一更二更, 有霧氣","晴, 夜一更二更, 有霧氣"
+SJW-F05110240,cloudy_any,False,1,"晴, 辰時巳時, 有霧氣。未時申時, 日暈","晴, 辰時巳時, 有霧氣未時申時, 日暈"
+SJW-F08110100,cloudy_any,False,1,晴夜一更有霧氣,晴夜一更有霧氣
+SJW-F11110050,cloudy_any,False,1,晴辰時巳時有霧氣。,晴辰時巳時有霧氣
+SJW-F13070070,cloudy_any,False,1,晴自昧爽至辰時有霧氣,晴自昧爽至辰時有霧氣
+SJW-F13080290,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-F14090050,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-F16090021,cloudy_any,False,1,晴夜雨,"晴夜雨, 或陰或晴"
+SJW-F16090030,cloudy_any,False,1,晴,"晴, 晴晩陰"
+SJW-F18080020,cloudy_any,False,1,"晴, 卯時有霧氣","晴, 卯時有霧氣"
+SJW-F19040300,cloudy_any,False,1,"晴, 卯時霧氣, 午時未時日暈","晴, 卯時霧氣, 午時未時日暈"
+SJW-F19100180,cloudy_any,False,1,晴夜一更二更有霧氣,晴夜一更二更有霧氣
+SJW-F19110070,cloudy_any,False,1,朝霧午晴,朝霧午晴
+SJW-F20040170,cloudy_any,False,1,朝有霧氣暮晴,朝有霧氣暮晴
+SJW-F24020111,cloudy_any,False,1,,陰
+SJW-F24030111,cloudy_any,False,1,,朝晴夕陰
+SJW-F25040140,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-F27040090,cloudy_any,False,1,雨,"雨, 朝陰夕雨"
+SJW-F28120170,cloudy_any,False,1,朝晴暮雪,"朝晴暮雪, 朝陰暮晴"
+SJW-F30060100,cloudy_any,True,0,朝暗暮雨,朝暗暮雨
+SJW-F30100080,cloudy_any,False,1,-,朝陰夕雨
+SJW-F35060100,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F36020191,cloudy_any,False,1,-, 朝陰夕晴
+SJW-F36070110,cloudy_any,False,1,朝雨暮晴,"朝雨暮晴, 朝雨暮陰"
+SJW-F36070160,cloudy_any,False,1,雨,"雨, 朝雨暮陰"
+SJW-F36080221,cloudy_any,False,1,晴,"晴, 朝陰暮晴"
+SJW-F36090181,cloudy_any,False,1,晴,"晴, 或雨或陰"
+SJW-F36090291,cloudy_any,False,1,晴,"晴, 朝陰暮晴"
+SJW-F37010020,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37010030,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37010210,cloudy_any,False,1,或雪或晴,"或雪或晴, 或陰或雪"
+SJW-F37010220,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F37020161,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37020191,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37030091,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37050070,cloudy_any,False,1,雨,"雨, 陰"
+SJW-F37050210,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F37050260,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F37060140,cloudy_any,False,1,晴,"晴, 或晴或陰"
+SJW-F37060190,cloudy_any,False,1,晴,"晴, 或晴或陰"
+SJW-F37070090,cloudy_any,False,1,或晴或雨,"或晴或雨, 乍陰乍晴"
+SJW-F37070110,cloudy_any,False,1,晴,"晴, 朝陰暮晴"
+SJW-F37070130,cloudy_any,False,1,"晴 卯時辰時, 有霧氣","晴 卯時辰時, 有霧氣, 晴"
+SJW-F37070190,cloudy_any,False,1,晴,"晴, 朝晴暮陰"
+SJW-F37070250,cloudy_any,False,1,朝雨暮晴,"朝雨暮晴, 朝雨暮陰"
+SJW-F37070260,cloudy_any,False,1,朝雨暮晴,"朝雨暮晴, 朝雨暮陰"
+SJW-F37080050,cloudy_any,False,1,朝晴暮雨,"朝晴暮雨, 朝晴暮陰"
+SJW-F37090210,cloudy_any,False,1,晴,"晴, 朝雨夕陰"
+SJW-F37100030,cloudy_any,False,1,朝晴暮雨,"朝晴暮雨, 晴, 朝晴暮陰"
+SJW-F37100151,cloudy_any,False,1,,陰
+SJW-F37100280,cloudy_any,False,1,雨,"雨, 朝陰夕雨"
+SJW-F37100290,cloudy_any,False,1,雨,"雨, 或晴或陰"
+SJW-F37120090,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F37120161,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F37120230,cloudy_any,False,1,雪,"雪, 陰"
+SJW-F37120300,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38010041,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38010070,cloudy_any,False,1,或雪或晴,"或雪或晴, 陰"
+SJW-F38010240,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F38020051,cloudy_any,False,1,晴,"晴, 或晴或陰"
+SJW-F38020090,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38020250,cloudy_any,False,1,或雪或晴,"或雪或晴, 或陰或晴"
+SJW-F38030030,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38040270,cloudy_any,False,1,雨,"雨, 朝晴晝雨夕陰風"
+SJW-F38050030,cloudy_any,False,1,晴,"晴, 朝晴暮陰"
+SJW-F38050050,cloudy_any,False,1,或雨或晴,"或雨或晴, 朝陰暮晴"
+SJW-F38050080,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F38050181,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38050220,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F38050240,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F38051041,cloudy_any,False,1,或雨或晴,"或雨或晴, 朝雨暮陰"
+SJW-F38051101,cloudy_any,False,1,雨,"雨, 朝陰暮雨"
+SJW-F38051120,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38051151,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38051161,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F38060101,cloudy_any,False,1,雨,"雨, 朝晴午雨夕陰"
+SJW-F39030071,cloudy_any,False,1,晴,"晴, 陰"
+SJW-F40070090,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-F41040060,cloudy_any,False,1,朝霧夕晴,朝霧夕晴
+SJW-F42120270,cloudy_any,False,1,朝晴暮霧,朝晴暮霧
+SJW-F44060070,cloudy_any,False,1,雨,"雨, 朝雨暮陰"
+SJW-F44090010,cloudy_any,False,1,-,或陰或雨
+SJW-F45070170,cloudy_any,False,1,-,或陰或雨
+SJW-F46051120,cloudy_any,True,0,或隂或晴,或隂或晴
+SJW-F46090210,cloudy_any,False,1,"晴。卯時辰時, 有霧氣。","晴卯時辰時, 有霧氣"
+SJW-F46090220,cloudy_any,False,1,"晴。夜四更五更, 有霧氣。","晴夜四更五更, 有霧氣"
+SJW-F46090230,cloudy_any,False,1,"晴。自昧爽至辰時, 有霧氣。","晴自昧爽至辰時, 有霧氣"
+SJW-F46090260,cloudy_any,False,1,"晴。卯時辰時, 有霧氣。","晴卯時辰時, 有霧氣"
+SJW-F46110010,cloudy_any,False,1,-,陰
+SJW-F47010140,cloudy_any,False,1,"晴, 卯時·辰時有霧氣","晴, 卯時·辰時有霧氣"
+SJW-F47020010,cloudy_any,False,1,-,朝雪暮陰
+SJW-F48020101,cloudy_any,False,1,-, 或陰或雨
+SJW-F48020111,cloudy_any,False,1,-, 或陰或雨
+SJW-F48050010,cloudy_any,False,1,-,朝陰暮晴
+SJW-F48070010,cloudy_any,False,1,-,或雨或陰
+SJW-F48110010,cloudy_any,False,1,-,或陰或雨
+SJW-F49110250,cloudy_any,False,1,-,或晴或陰
+SJW-F51110150,cloudy_any,False,1,-,或晴或陰
+SJW-F51120160,cloudy_any,False,1,-,或晴或陰
+SJW-H01100090,cloudy_any,False,1,霧氣,霧氣
+SJW-H02090181,cloudy_any,False,1,晴,"晴, 或陰或晴"
+SJW-H02100150,cloudy_any,False,1,雨,"雨, 陰"
+SJW-I10090171,cloudy_any,False,1,晴,"晴, 陰"
+SJW-I10090221,cloudy_any,False,1,晴,"晴, 陰"
+SJW-I10090231,cloudy_any,False,1,晴,"晴, 陰"
+SJW-K01090040,cloudy_any,False,1,雷,雷
+SJW-K19060111,cloudy_any,False,1,-, 或陰或晴
+SJW-K19060191,cloudy_any,False,1,-, 晝陰夜雨
+SJW-A01101190,rain_any,False,1,-,朝雨夕晴
+SJW-A01101200,rain_any,False,1,-,朝雨晩晴
+SJW-A01101270,rain_any,False,1,-,朝陰晩雨
+SJW-A12040002,rain_any,False,1,-,雨
+SJW-A12060050,rain_any,False,1,-,雨
+SJW-A12060120,rain_any,False,1,-,朝雨晩晴
+SJW-A12060140,rain_any,False,1,-,大雨
+SJW-A12060150,rain_any,False,1,-,大雨
+SJW-A14110090,rain_any,True,0,陰雪灑,陰雪灑
+SJW-A16080010,rain_any,False,1,-,朝晴夕雨
+SJW-A17030050,rain_any,False,1,-,陰 灑雨
+SJW-A26040240,rain_any,True,0,霡霂,霡霂
+SJW-C03060080,rain_any,False,1,-,朝晴暮雨
+SJW-C07040171,rain_any,False,1,晴,"晴, 晝晴暮雨"
+SJW-C07040271,rain_any,False,1,晴,"晴, 朝雨晝晴"
+SJW-C08040240,rain_any,False,1,晴,"晴, 微雨"
+SJW-C10030240,rain_any,False,1,陰,"陰, 雨"
+SJW-D01030280,rain_any,False,1,-,小雨
+SJW-D01030290,rain_any,False,1,-,小雨
+SJW-D01030300,rain_any,False,1,-,小雨
+SJW-D02020040,rain_any,False,1,"晴 自辰時至申時, 日暈兩珥","晴 自辰時至申時, 日暈兩珥"
+SJW-D03070152,rain_any,False,1,-, 雨
+SJW-D06090152,rain_any,False,1,-, 朝晴暮雨
+SJW-D07070140,rain_any,True,0,乍陰霏,乍陰霏
+SJW-D07070150,rain_any,True,0,晝陰霏,晝陰霏
+SJW-D12050030,rain_any,False,1,-,朝晴夕雨
+SJW-D28100060,rain_any,False,1,陰,"陰, 雨雪"
+SJW-D34080200,rain_any,False,1,-,朝雨夕晴
+SJW-D37030250,rain_any,True,0,陰夕霏,陰夕霏
+SJW-D45010180,rain_any,False,1,"晴 酉時, 日暈兩珥。","晴 酉時, 日暈兩珥"
+SJW-E03030300,rain_any,False,1,"晴 卯時, 日暈。午時未時, 日暈兩珥","晴 卯時, 日暈午時未時, 日暈兩珥"
+SJW-F01050250,rain_any,False,1,大兩,大兩
+SJW-F02010060,rain_any,False,1,"晴。自卯時至午時, 日暈。未時申時, 日暈兩珥。夜一更月暈, 廻金星左珥。","晴自卯時至午時, 日暈未時申時, 日暈兩珥夜一更月暈, 廻金星左珥"
+SJW-F04120040,rain_any,False,1,"晴 未時, 日有兩珥","晴 未時, 日有兩珥"
+SJW-F05060130,rain_any,True,0,朝陰夕灑,朝陰夕灑
+SJW-F30040080,rain_any,True,0,或灑或陰,或灑或陰
+SJW-F30040150,rain_any,True,0,朝灑夕陰,朝灑夕陰
+SJW-F30100080,rain_any,False,1,-,朝陰夕雨
+SJW-F35030160,rain_any,False,1,晴,"晴, 雨"
+SJW-F35050190,rain_any,False,1,兩,兩
+SJW-F36080091,rain_any,False,1,陰,"陰, 朝陰夕雨"
+SJW-F36090011,rain_any,False,1,陰,"陰, 朝雨暮陰"
+SJW-F36090181,rain_any,False,1,晴,"晴, 或雨或陰"
+SJW-F36090241,rain_any,False,1,陰,"陰, 或雨或陰"
+SJW-F36100022,rain_any,False,1,或陰或晴,"或陰或晴, 或陰或雨, 晴"
+SJW-F36100141,rain_any,False,1,晴,"晴, 或雨或晴"
+SJW-F36110090,rain_any,False,1,或陰或晴,"或陰或晴, 雨"
+SJW-F37040130,rain_any,False,1,或陰晴,"或陰晴, 雨"
+SJW-F37040141,rain_any,False,1,陰,"陰, 雨"
+SJW-F37050080,rain_any,False,1,晴,"晴, 朝雨夕晴"
+SJW-F37070100,rain_any,False,1,或陰或晴,"或陰或晴, 朝雨暮晴"
+SJW-F37070230,rain_any,False,1,陰,"陰, 乍雨乍晴"
+SJW-F37080011,rain_any,False,1,晴,"晴, 或晴或雨"
+SJW-F37080140,rain_any,False,1,陰,"陰, 或雨或陰"
+SJW-F37080280,rain_any,False,1,晴,"晴, 朝雨暮晴"
+SJW-F37090020,rain_any,False,1,朝陰暮晴,"朝陰暮晴, 雨雹"
+SJW-F37090151,rain_any,False,1,晴,"晴, 朝雨暮晴"
+SJW-F37090210,rain_any,False,1,晴,"晴, 朝雨夕陰"
+SJW-F37100141,rain_any,False,1,或陰或晴,"或陰或晴, 或雨或晴"
+SJW-F38030040,rain_any,False,1,,或雨或晴
+SJW-F38030190,rain_any,False,1,晴,"晴, 雨"
+SJW-F38050091,rain_any,False,1,陰,"陰, 朝雨暮陰"
+SJW-F38050101,rain_any,False,1,陰,"陰, 或雨或陰"
+SJW-F38050121,rain_any,False,1,朝陰暮晴,"朝陰暮晴, 朝雨暮晴"
+SJW-F38050231,rain_any,False,1,或陰或晴,"或陰或晴, 朝雨暮陰"
+SJW-F38051071,rain_any,False,1,或陰或晴,"或陰或晴, 或雨或陰"
+SJW-F38060120,rain_any,False,1,晴,"晴, 雨"
+SJW-F44090010,rain_any,False,1,-,或陰或雨
+SJW-F45070170,rain_any,False,1,-,或陰或雨
+SJW-F48020101,rain_any,False,1,-, 或陰或雨
+SJW-F48020111,rain_any,False,1,-, 或陰或雨
+SJW-F48070010,rain_any,False,1,-,或雨或陰
+SJW-F48070211,rain_any,False,1,-, 雨
+SJW-F48070261,rain_any,False,1,-, 雨
+SJW-F48110010,rain_any,False,1,-,或陰或雨
+SJW-F50050251,rain_any,False,1,晴,"晴, 大雨"
+SJW-G03070190,rain_any,False,1,-,雨
+SJW-G04040220,rain_any,False,1,-,或晴或雨
+SJW-G04040230,rain_any,False,1,-,或晴或雨
+SJW-G04040240,rain_any,False,1,-,或晴或雨
+SJW-G04040250,rain_any,False,1,-,或晴或雨
+SJW-G04040260,rain_any,False,1,-,或晴或雨
+SJW-G04040270,rain_any,False,1,-,或晴或雨
+SJW-G04040280,rain_any,False,1,-,或晴或雨
+SJW-G04040290,rain_any,False,1,-,或晴或雨
+SJW-G04040300,rain_any,False,1,-,或晴或雨
+SJW-G04050010,rain_any,False,1,-,或晴或雨
+SJW-G04050020,rain_any,False,1,-,或晴或雨
+SJW-G04050030,rain_any,False,1,-,或晴或雨
+SJW-G04050040,rain_any,False,1,-,或晴或雨
+SJW-G04050050,rain_any,False,1,-,或晴或雨
+SJW-G04050060,rain_any,False,1,-,或晴或雨
+SJW-G04050070,rain_any,False,1,-,或晴或雨
+SJW-G04050080,rain_any,False,1,-,或晴或雨
+SJW-G05100010,rain_any,False,1,-,雨
+SJW-G19040240,rain_any,False,1,兩,兩
+SJW-H02090241,rain_any,False,1,晴,"晴, 雨"
+SJW-H02100081,rain_any,False,1,陰,"陰, 雨"
+SJW-K09040240,rain_any,False,1,-,雨
+SJW-K19060191,rain_any,False,1,-, 晝陰夜雨
+SJW-A01100020,snow_any,False,1,-,陰雪朝霽
+SJW-B07120270,snow_any,False,1,-,雪
+SJW-B07120280,snow_any,False,1,-,雪
+SJW-B07120290,snow_any,False,1,-,雪
+SJW-B07120300,snow_any,False,1,-,雪
+SJW-C03120050,snow_any,False,1,-,雪
+SJW-C06100220,snow_any,True,0,卯時微霰朝後晴,卯時微霰朝後晴
+SJW-D28100060,snow_any,False,1,陰,"陰, 雨雪"
+SJW-E00110152,snow_any,False,1,-, 乍陰乍雪
+SJW-F06020051,snow_any,False,1,晴,"晴, 朝晴夕雪"
+SJW-F36100240,snow_any,False,1,或雷或晴,"或雷或晴, 雪"
+SJW-F36110280,snow_any,False,1,或晴或陰,"或晴或陰, 朝陰暮雪"
+SJW-F38010111,snow_any,False,1,陰,"陰, 雪"
+SJW-F38010121,snow_any,False,1,陰,"陰, 雪"
+SJW-F38030100,snow_any,False,1,朝雨夕陰,"朝雨夕陰, 或雪或雨"
+SJW-F47020010,snow_any,False,1,-,朝雪暮陰
+SJW-F47110010,snow_any,False,1,-,朝雪暮晴
+SJW-F37090020,hail_any,False,1,朝陰暮晴,"朝陰暮晴, 雨雹"
+SJW-F38040270,wind_any,False,1,雨,"雨, 朝晴晝雨夕陰風"

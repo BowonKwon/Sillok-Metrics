@@ -19,7 +19,7 @@ Site: https://bowonkwon.github.io/Sillok-Metrics/ (한국어 · English) · Hub:
 |---|---|
 | `docs/` | the built site (GitHub Pages source): `ko/`, `en/`, `data/` |
 | `data/` | derived CSVs (one per table), `datapackage.json`, `coding/` (codebooks and every coding judgment) |
-| `src/` | `registry.py` (every metric's definition, in one place) and `takeaways.py` (page takeaways), `build_articles.py`, `check_articles.py`, `extract_keywords.py`, `export_coding_input.py`, `astro.py`, `espenak.py`, `check_calendar.py`, `metrics_a.py`–`metrics_e.py`, `merge_coding.py`, `reliability.py`, `build_site.py`; 1.2: `build_articles_ext.py` (Goryeosa, Jeolyo, Ilgi tables), `weather_tokens.py` (token rule R1), `astro_ext.py` (918–1910, two sites), `export_coding_input_ext.py`, `check_coding.py`, `metrics_f.py`, `metrics_g.py`, `site_ext.py`, `fetch_asos.py` |
+| `src/` | `registry.py` (every metric's definition, in one place) and `takeaways.py` (page takeaways), `build_articles.py`, `check_articles.py`, `extract_keywords.py`, `export_coding_input.py`, `astro.py`, `espenak.py`, `check_calendar.py`, `metrics_a.py`–`metrics_e.py`, `merge_coding.py`, `reliability.py`, `build_site.py`; 1.2: `build_articles_ext.py` (Goryeosa, Jeolyo, Ilgi tables), `weather_tokens.py` (token rule R1), `astro_ext.py` (918–1910, two sites), `export_coding_input_ext.py`, `check_coding.py`, `metrics_f.py`, `metrics_g.py`, `site_ext.py`, `fetch_asos.py`; 1.2.1: `extract_keywords_sillok_ext.py` |
 
 ## 공개 자료로 재현되는 범위 / What the public files reproduce
 
@@ -56,4 +56,4 @@ Code: MIT. Site text and this project's own contributions: CC BY 4.0. Derived ta
 
 ## 인용 / Citation
 
-Kwon, Bowon (2026). *Sillok Metrics* 1.2. https://bowonkwon.github.io/Sillok-Metrics/
+Kwon, Bowon (2026). *Sillok Metrics* 1.2.1. https://bowonkwon.github.io/Sillok-Metrics/

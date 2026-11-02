@@ -176,6 +176,14 @@ def fmt(v, spec) -> str:
     if v is None or (isinstance(v, float) and math.isnan(v)) or (isinstance(v, str) and v == ""):
         return ""
     try:
+        if isinstance(v, float) and spec and spec[-1] in "%f":
+            # 1.2.1: round half-up on the decimal value (format() rounds the binary float: 0.0295 → '2.9%', 0.575 → '0.57')
+            from decimal import Decimal, ROUND_HALF_UP
+            digits = int(spec.rstrip("%f").split(".")[-1] or 0) if "." in spec else 0
+            scaled = Decimal(repr(v)) * (100 if spec.endswith("%") else 1)
+            q = scaled.quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP)
+            s = f"{q:,.{digits}f}" if "," in spec else f"{q:.{digits}f}"
+            return s + ("%" if spec.endswith("%") else "")
         return format(v, spec)
     except Exception:
         return str(v)

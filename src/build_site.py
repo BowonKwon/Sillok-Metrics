@@ -31,7 +31,7 @@ T = {
         site="실록 메트릭스", tagline=SITE["ko"]["subtitle"],
         nav_home="홈", nav_kings="왕대", nav_metrics="지표", nav_prior="선행 결과", nav_reading="읽기용 판", nav_data="데이터", nav_method="방법·한계", lang_other="English",
         series="계열", definition="정의", formula="공식", reading="읽는 법", caveat="한계", source="자료원", unit="단위", external="외부 대조",
-        reliability="신뢰도 카드", rel_exact="집계값 — 원본 XML에서 그대로 센 수", rel_ext="외부 대조값 — 천문 계산과 맞춰 본 비율", rel_samp="표본 정밀도 — 손으로 코딩한 층화 표본에서 잰 「키워드가 지표의 뜻대로 쓰인 비율」",
+        reliability="신뢰도 카드", rel_exact="집계값 — 원본 XML에서 그대로 센 수", rel_ext="외부 대조값 — 천문 계산과 맞춰 본 비율", rel_samp="표본 정밀도 — 코딩한 층화 표본에서 잰 「키워드가 지표의 뜻대로 쓰인 비율」",
         table="표", download="CSV 내려받기", search="필터", metric_list="지표 목록", king_list="왕대 목록", all_kings="25대 전체",
         license="라이선스", cite="인용", built="생성일", version="판", hub="공개 자료 전체", nikh_link="국편 원문",
         articles="기사", dated="날짜 있는 기사", chars="글자(한자)", reign="재위", months="개월", per_year="1년당", saron="사론", edition="판본",
@@ -42,13 +42,13 @@ T = {
     ),
     "en": dict(
         site="Sillok Metrics", tagline=SITE["en"]["subtitle"],
-        nav_home="Home", nav_kings="Reigns", nav_metrics="Metrics", nav_prior="Prior results", nav_reading="Reading edition", nav_data="Data", nav_method="Method & limits", lang_other="한국어",
+        nav_home="Home", nav_kings="Reigns", nav_metrics="Metrics", nav_prior="Prior results", nav_reading="Reading edition", nav_data="Data", nav_method="Method and limits", lang_other="한국어",
         series="Series", definition="Definition", formula="Formula", reading="How to read it", caveat="Caveats", source="Sources", unit="Unit", external="External check",
-        reliability="Reliability card", rel_exact="Exact count — read straight from the source XML", rel_ext="External match — compared with an astronomical computation", rel_samp="Sampled precision — share of keyword hits that mean what the metric says, measured on a hand-coded stratified sample",
+        reliability="Reliability card", rel_exact="Exact count — read straight from the source XML", rel_ext="External match — compared with an astronomical computation", rel_samp="Sampled precision — share of keyword hits that mean what the metric says, measured on a coded stratified sample",
         table="Table", download="Download CSV", search="Filter", metric_list="All metrics", king_list="All reigns", all_kings="all 25 reigns",
         license="License", cite="Citation", built="Built", version="Version", hub="All public materials", nikh_link="NIKH source",
-        articles="articles", dated="dated articles", chars="characters", reign="reign", months="months", per_year="per year", saron="historians' comments", edition="Edition",
-        year="Year", decade="Decade", period="Period", share="share", n="count", prior="Prior result", ours="This site", prior_vs="Next to prior figures",
+        articles="articles", dated="dated articles", chars="characters", reign="reign", months="months", per_year="per year", saron="historians' comments", edition="edition",
+        year="year", decade="decade", period="period", share="share", n="count", prior="prior result", ours="this site", prior_vs="Next to prior figures",
         type_names={"observed": "observation report", "ritual": "rescue ritual", "forecast": "forecast / computation", "not_occurred": "did not occur / cloud", "discussion": "discussion / retrospect", "other": "not an eclipse", "all": "all"},
         windows={"match_seoul_w0": "eclipse visible from Seoul, same day", "match_seoul_w1": "eclipse visible from Seoul, ±1 day", "match_earth_w1": "eclipse anywhere on Earth, ±1 day", "match_seoul_prevday": "lunar eclipse visible from Seoul, same or previous day", "match_seoul_w1_l": "lunar eclipse visible from Seoul, ±1 day"},
         period_lbl="50-year period",
@@ -109,7 +109,7 @@ a.card:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--
 a.stat:hover{text-decoration:none;border-color:var(--fg3)}
 .spec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0 1.4rem;box-shadow:var(--shadow)}
 .rel{border-left:4px solid var(--accent2)}
-dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.4rem;margin:0}dt{color:var(--fg3);font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;padding-top:.15rem}dd{margin:0;min-width:0}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.4rem;margin:0}dt{color:var(--fg3);font-size:.86rem;letter-spacing:.01em;padding-top:.15rem}dd{margin:0;min-width:0}
 dd.formula{font-family:ui-monospace,"SF Mono",Consolas,"Noto Sans KR",monospace;font-size:.9rem;background:var(--bg2);border-radius:6px;padding:.45rem .65rem;line-height:1.6}
 @media(max-width:640px){dl{grid-template-columns:1fr}dt{margin-top:.5rem}}
 table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.6rem 0}
@@ -195,7 +195,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
                    "Counts on this site use the 'Veritable Records — original text' and 'supplementary person data' released by the National Institute of Korean History under KOGL Type 1, and the civil-examination roster of the Academy of Korean Studies (data.go.kr).")
     return f"""<!DOCTYPE html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(title)} — {t['site']}</title><meta name="description" content="{esc(desc or t['tagline'])}">
+<title>{esc(title) if title == t['site'] else esc(title) + ' — ' + t['site']}</title><meta name="description" content="{esc(desc or t['tagline'])}">
 <script>(function(){{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark"){{localStorage.setItem("skm-theme",q)}}else if(q==="auto"){{localStorage.removeItem("skm-theme")}}var v=localStorage.getItem("skm-theme");if(v)document.documentElement.setAttribute("data-theme",v)}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
@@ -317,7 +317,7 @@ def table_html(df: pd.DataFrame, cols, tid: str, lang: str, filt=True) -> str:
                 style = f' style="width:{int(50/len(wide))}%"'
             elif c == "nikh_url":
                 style = ' style="width:10%"'
-        out.append(f'<th class="{"num" if spec else ""}"{style}>{esc(hname)}</th>')
+        out.append(f'<th class="{"num" if spec else ""}"{style}>{esc(cap(hname, lang))}</th>')
     out.append("</tr></thead><tbody>")
     for _, r in df.iterrows():
         out.append("<tr>")
@@ -332,6 +332,17 @@ def table_html(df: pd.DataFrame, cols, tid: str, lang: str, filt=True) -> str:
         out.append("</tr>")
     out.append("</tbody></table></div>")
     return "".join(out)
+
+
+KEEP_LOWER = {"n", "p10", "p25", "p50", "p75", "p90", "p99", "max"}   # unit / statistic abbreviations stay as they are
+
+
+def cap(s, lang: str) -> str:
+    """Sentence case for English headers, legends and labels: first letter up, the rest untouched."""
+    s = "" if s is None else str(s)
+    if lang != "en" or not s or s in KEEP_LOWER or not s[0].islower():
+        return s
+    return s[0].upper() + s[1:]
 
 
 def fig(svg: str, caption: str) -> str:
@@ -393,12 +404,24 @@ class Data:
 
 
 KING_COL = {"ko": ("king_ko", "edition_ko"), "en": ("king_en", "edition_en")}
+PROVINCE_EN = {"京畿": "Gyeonggi", "全羅": "Jeolla", "咸吉": "Hamgil", "咸鏡": "Hamgyeong", "平安": "Pyeongan", "忠淸": "Chungcheong", "慶尙": "Gyeongsang",
+               "江原": "Gangwon", "黃海": "Hwanghae", "永安": "Yeongan", "서울(도명 없음)": "Seoul (no province named)"}
+JUSTICE_EN = {"사법-탄핵": "justice–impeachment", "사법-행형": "justice–punishment", "사법-재판": "justice–trials", "사법-치안": "justice–policing",
+              "사법-법제": "justice–legislation", "사법-사법": "justice–general"}
 
 PRECISION_KEYS = {"comet_years": "comet", "earthquake_articles": "earthquake", "summer_cold": "summer_cold", "royal_lecture_share": "royal_lecture",
                   "relief_share": "relief", "slave_share": "slaves", "death_penalty_mention": "death_penalty"}
 
 
 # ----------------------------------------------------------------- reliability card
+def undecided_ko(k: int) -> str:
+    return "판단 유보는 없었다." if k == 0 else f"판단 유보 {k}건은 no 로 셌다."
+
+
+def undecided_en(k: int) -> str:
+    return "No article was left undecided." if k == 0 else ("One article left undecided was counted as 'no'." if k == 1 else f"The {k} articles left undecided were counted as 'no'.")
+
+
 def reliability_card(m, D: Data, lang) -> str:
     t = T[lang]
     kind = m["reliability"]
@@ -414,7 +437,7 @@ def reliability_card(m, D: Data, lang) -> str:
             body.append(f"<p>{esc(m['external'][lang])}</p>")
         if mid == "n_articles":
             body.append("<p>" + ("색인 DB(2026-09, 다른 스크립트)와 30종 전부 기사 수·글자 수 일치. 본문에 남은 문자 참조 코드 0건." if lang == "ko" else
-                                 "Agrees with an independent 2026-09 index (different script) on articles and characters for all 30 editions; zero residual character-reference codes in the text.") + "</p>")
+                                 "Agrees with an independent 2026-09 index (built with separate code) on articles and characters for all 30 editions; zero residual character-reference codes in the text.") + "</p>")
     elif kind == "external-match":
         if mid == "solar_eclipse_match":
             s = D.solar
@@ -426,28 +449,28 @@ def reliability_card(m, D: Data, lang) -> str:
             if ag:
                 body.append("<p>" + (f"유형 분류: 기사 {D.agreement['n']}건 전수를 코더 4명이 나눠 코딩, 그중 {ag['n']}건을 다른 코더가 블라인드로 다시 코딩 — 일치 {ag['agreement']:.1%}, κ = {ag['kappa']:.2f} (관측 보고/일식 아님/그 밖으로 묶으면 κ = {ag['kappa_pooled']:.2f})."
                                      if lang == "ko" else
-                                     f"Typing: all {D.agreement['n']} articles were coded by four coders; {ag['n']} were blind re-coded by a fifth — agreement {ag['agreement']:.1%}, κ = {ag['kappa']:.2f} (κ = {ag['kappa_pooled']:.2f} when pooled into observation / not an eclipse / other).") + "</p>")
+                                     f"Classification by type: all {D.agreement['n']} articles were coded by four coders; {ag['n']} were blind re-coded by another coder — agreement {ag['agreement']:.1%}, κ = {ag['kappa']:.2f} (κ = {ag['kappa_pooled']:.2f} when pooled into observation / not an eclipse / other).") + "</p>")
         elif mid == "lunar_eclipse_match":
             l = D.lunar.set_index("window")
-            body.append("<p>" + (f"「月食」 기사 {int(l.loc['match_seoul_w1','n'])}건(유형 분류 없음) 중 ±1일 일치 {l.loc['match_seoul_w1','rate']:.1%} (95% {l.loc['match_seoul_w1','ci_lo']:.1%}–{l.loc['match_seoul_w1','ci_hi']:.1%}). 논의·회고 기사가 섞여 있어 하한이다 — 1.1에서 유형 분류 예정."
+            body.append("<p>" + (f"「月食」 기사 {int(l.loc['match_seoul_w1','n'])}건(유형 분류 없음) 중 ±1일 일치 {l.loc['match_seoul_w1','rate']:.1%} (95% {l.loc['match_seoul_w1','ci_lo']:.1%}–{l.loc['match_seoul_w1','ci_hi']:.1%}). 논의·회고 기사가 섞여 있어 하한이다 — 유형별 값은 1.2 의 G2."
                                  if lang == "ko" else
-                                 f"Of {int(l.loc['match_seoul_w1','n'])} '月食' articles (not typed), {l.loc['match_seoul_w1','rate']:.1%} match within ±1 day (95% {l.loc['match_seoul_w1','ci_lo']:.1%}–{l.loc['match_seoul_w1','ci_hi']:.1%}). Discussion and retrospective articles are mixed in, so this is a lower bound; typing is planned for 1.1.") + "</p>")
+                                 f"Of {int(l.loc['match_seoul_w1','n'])} '月食' articles (not classified by type), {l.loc['match_seoul_w1','rate']:.1%} match within ±1 day (95% {l.loc['match_seoul_w1','ci_lo']:.1%}–{l.loc['match_seoul_w1','ci_hi']:.1%}). Discussion and retrospective articles are mixed in, so this is a lower bound; the values by type are in G2 (1.2).") + "</p>")
         elif mid == "venus_phase":
             v = D.venus.iloc[0]
             body.append("<p>" + (f"기록일 {int(v.n_days):,}일. 내합 ±90일 안 {v.within_90d:.1%}(균등이면 {v.within_90d_uniform:.1%}), ±6일 안 {v.within_6d:.2%}(균등이면 {v.within_6d_uniform:.1%}). 300~900일 주기 스캔의 최대 레일리 Z는 {v.best_period_days:.1f}일에서 {v.rayleigh_Z_best:,.0f} — 금성 회합주기 583.92일과 0.04% 차이."
                                  if lang == "ko" else
-                                 f"{int(v.n_days):,} record days. {v.within_90d:.1%} fall within ±90 days of inferior conjunction (uniform: {v.within_90d_uniform:.1%}) and {v.within_6d:.2%} within ±6 days (uniform: {v.within_6d_uniform:.1%}). A period scan 300–900 days peaks at {v.best_period_days:.1f} days with Rayleigh Z = {v.rayleigh_Z_best:,.0f}, 0.04% from the 583.92-day synodic period.") + "</p>")
+                                 f"Record days: {int(v.n_days):,}. Of these, {v.within_90d:.1%} fall within ±90 days of inferior conjunction (uniform: {v.within_90d_uniform:.1%}) and {v.within_6d:.2%} within ±6 days (uniform: {v.within_6d_uniform:.1%}). A period scan over 300–900 days peaks at {v.best_period_days:.1f} days with Rayleigh Z = {v.rayleigh_Z_best:,.0f}, 0.04% from the 583.92-day synodic period.") + "</p>")
     else:
         key = PRECISION_KEYS.get(mid)
         p = D.precision.get(key) if key else None
         if p:
-            body.append("<p>" + (f"층화 표본 {p['n']}건(50년 구간마다 10건, 본실록)을 손으로 코딩한 정밀도 {p['precision']:.1%} (윌슨 95% {p['ci_lo']:.1%}–{p['ci_hi']:.1%}). 판단 유보 {p.get('reserved',0)}건은 no 로 셌다. 코드북과 판정 전체를 데이터 면에서 내려받을 수 있다."
+            body.append("<p>" + (f"층화 표본 {p['n']}건(50년 구간마다 10건, 본실록)을 코딩해 잰 정밀도 {p['precision']:.1%} (윌슨 95% {p['ci_lo']:.1%}–{p['ci_hi']:.1%}). {undecided_ko(p.get('reserved', 0))} 코드북과 판정 전체를 데이터 면에서 내려받을 수 있다."
                                  if lang == "ko" else
-                                 f"Precision {p['precision']:.1%} (Wilson 95% {p['ci_lo']:.1%}–{p['ci_hi']:.1%}) on a hand-coded stratified sample of {p['n']} articles (10 per 50-year period, principal editions). {p.get('reserved',0)} reserved judgements counted as 'no'. Codebook and every judgement are downloadable on the Data page.") + "</p>")
+                                 f"Precision {p['precision']:.1%} (Wilson 95% {p['ci_lo']:.1%}–{p['ci_hi']:.1%}) on a coded stratified sample of {p['n']} articles (10 per 50-year period, principal editions). " + undecided_en(p.get('reserved', 0)) + " The codebook and all judgments can be downloaded from the Data page.") + "</p>")
         elif mid == "death_penalty_mention":
             body.append("<p>" + ("표본 240건(50년 구간마다 20건)을 코딩해 「기사 안에서 집행이 확인되는」 비율을 구간별 윌슨 95% 구간과 함께 보정치로 썼다. 분모는 표본 기사 전체(사건이 아닌 기사 포함)다. 블라인드 재코딩 24건에서 집행 여부 κ = 1.00, 독립 검증자의 1400~1449년 표본 20건 재판정에서도 사건 17·집행 확인 2로 일치. 표본의 마지막 구간(1850~)은 고종 연간까지 뽑은 것이라 1.0 범위 밖 기사가 섞여 있다 — 그 구간의 보정치는 참고값."
                                  if lang == "ko" else
-                                 "A sample of 240 (20 per 50-year period) was coded for 'execution confirmed in the article'; the rate, over all sampled articles of the period, with its Wilson 95% interval is the correction. Blind re-coding of 24 gave κ = 1.00 on execution, and an independent coder re-reading the 20 articles of 1400–1449 found the same 17 events and 2 confirmed executions. The last stratum (1850–) was drawn up to the Gojong years, so it contains articles outside the 1.0 range and its corrected value is indicative only.") + "</p>")
+                                 "A sample of 240 (20 per 50-year period) was coded for 'execution confirmed in the article'. The confirmed rate per period (denominator: all sampled articles of the period, non-event articles included), with its Wilson 95% interval, is used as the correction factor. Blind re-coding of 24 gave κ = 1.00 on execution, and an independent coder re-reading the 20 articles of 1400–1449 found the same 17 events and 2 confirmed executions. The last period (1850–) was drawn up to the Gojong years, so it contains articles outside the 1.0 range and its corrected value is indicative only.") + "</p>")
         else:
             body.append("<p>" + ("표본 코딩 진행 중 — 이 판에서는 키워드 건수만 싣는다." if lang == "ko" else "Sample coding in progress; this version shows keyword counts only.") + "</p>")
     badge = {"exact": ("집계" if lang == "ko" else "exact"), "external-match": ("외부 대조" if lang == "ko" else "external"), "sampled-precision": ("표본 정밀도" if lang == "ko" else "sampled")}[kind]
@@ -467,7 +490,7 @@ def metric_figure(m, D: Data, lang) -> str:
     if mid in ("n_articles", "n_han", "han_per_year", "median_len", "saron_share", "empty_month_share"):
         col = {"n_articles": "n_articles", "n_han": "n_han", "han_per_year": "han_per_year", "median_len": "median_len", "saron_share": "saron_share", "empty_month_share": "empty_month_share"}[mid]
         items = [(r[ec], float(r[col]), 0 if r.is_main else 2) for _, r in ed.iterrows()]
-        out.append(fig(svg_bars(items, m["fmt"], row_h=20, label_w=250), ("판본 30종. 옅은 색은 수정·개수·보궐정오·중초본." if lang == "ko" else "All 30 editions; muted colour marks revised, supplemented, corrections and second-draft editions.")))
+        out.append(fig(svg_bars(items, m["fmt"], row_h=20, label_w=250), (f"판본 {len(ed)}종. 옅은 색은 수정·개수·보궐정오·중초본." if lang == "ko" else f"All {len(ed)} editions; muted color marks revised, supplemented, supplement-and-corrections and second-draft editions.")))
         if mid in ("n_articles", "n_han"):
             y = D.yearly
             colm = "n_articles" if mid == "n_articles" else "n_han"
@@ -475,7 +498,7 @@ def metric_figure(m, D: Data, lang) -> str:
                            ("연도별(본실록). 임진왜란 전후(1592~)의 골과 정조 이후의 감소가 보인다." if lang == "ko" else "By year, principal editions. Note the trough around the Imjin War (1592–) and the decline after Jeongjo.")))
         cols = [(ec, t["edition"], None), ("n_articles", t["articles"], ",.0f"), ("n_dated", t["dated"], ",.0f"), ("n_han", t["chars"], ",.0f"), ("reign_months", t["reign"] + " (" + t["months"] + ")", ",.0f"),
                 ("articles_per_year", t["articles"] + "/" + t["year"], ",.0f"), ("han_per_year", t["chars"] + "/" + t["year"], ",.0f"), ("median_len", ("기사 길이 중앙값" if lang == "ko" else "median length"), ",.0f"),
-                ("n_saron", t["saron"], ",.0f"), ("saron_share", t["saron"] + " " + t["share"], ".1%"), ("empty_months", ("기사 없는 달" if lang == "ko" else "empty months"), ",.0f")]
+                ("n_saron", t["saron"], ",.0f"), ("saron_share", ("사론 비율" if lang == "ko" else "share with historians' comments"), ".1%"), ("empty_months", ("기사 없는 달" if lang == "ko" else "empty months"), ",.0f")]
         out.append(table_html(ed, cols, "t_ed", lang))
         if mid == "median_len":
             L = D.length.merge(ed[["edition", ec]], on="edition")
@@ -504,10 +527,10 @@ def metric_figure(m, D: Data, lang) -> str:
             (("산삭 표시 글자 비율" if lang == "ko" else "share of characters marked deleted"), f"{g.marked_deleted_share:.1%}"),
             (("산삭 표시가 있는 기사" if lang == "ko" else "articles with deletion marks"), f"{int(g.articles_with_deletion_marks):,}")]) + "</div>")
         Y = D.gwy
-        out.append(fig(svg_lines([(("산삭 표시 비율" if lang == "ko" else "marked deleted"), [(int(r.year_ce), float(r.marked_deleted_share)) for _, r in Y.iterrows()], 1),
-                                  (("글자 수 감소율" if lang == "ko" else "character drop"), [(int(r.year_ce), float(r.han_drop)) for _, r in Y.iterrows()], 0)], ".0%", xstep=2),
+        out.append(fig(svg_lines([(("산삭 표시 비율" if lang == "ko" else "Marked deleted"), [(int(r.year_ce), float(r.marked_deleted_share)) for _, r in Y.iterrows()], 1),
+                                  (("글자 수 감소율" if lang == "ko" else "Character drop"), [(int(r.year_ce), float(r.han_drop)) for _, r in Y.iterrows()], 0)], ".0%", xstep=2),
                        ("연도별. 산삭 표시 비율(중초본 안의 削 표지)과 정초본까지의 글자 수 감소율." if lang == "ko" else "By year: share of characters inside deletion marks in the second draft, and the character drop to the final draft.")))
-        out.append(table_html(Y, [("year_ce", t["year"], None), ("n_articles", t["articles"] + " (2nd)", ",.0f"), ("final_articles", t["articles"] + " (final)", ",.0f"), ("n_han", t["chars"] + " (2nd)", ",.0f"), ("final_han", t["chars"] + " (final)", ",.0f"), ("marked_deleted_share", ("산삭 표시" if lang == "ko" else "marked deleted"), ".1%"), ("han_drop", ("글자 감소" if lang == "ko" else "char. drop"), ".1%")], "t_gw", lang, filt=False))
+        out.append(table_html(Y, [("year_ce", t["year"], None), ("n_articles", t["articles"] + (" (중초)" if lang == "ko" else " (second draft)"), ",.0f"), ("final_articles", t["articles"] + (" (정초)" if lang == "ko" else " (final draft)"), ",.0f"), ("n_han", t["chars"] + (" (중초)" if lang == "ko" else " (second draft)"), ",.0f"), ("final_han", t["chars"] + (" (정초)" if lang == "ko" else " (final draft)"), ",.0f"), ("marked_deleted_share", ("산삭 표시" if lang == "ko" else "marked deleted"), ".1%"), ("han_drop", ("글자 감소" if lang == "ko" else "character drop"), ".1%")], "t_gw", lang, filt=False))
     elif mid == "solar_eclipse_match":
         s = D.solar.copy()
         s["type_l"] = s.type.map(t["type_names"]); s["window_l"] = s.window.map(t["windows"])
@@ -548,19 +571,19 @@ def metric_figure(m, D: Data, lang) -> str:
         if mid == "earthquake_articles":
             Q = D.quake_prov.copy(); Q["decade"] = Q.year_ce // 10 * 10
             Qd = Q.drop(columns="year_ce").groupby("decade").sum().reset_index()
-            cols = [("decade", t["decade"], None)] + [(c, c, ",.0f") for c in Qd.columns if c != "decade"]
+            cols = [("decade", t["decade"], None)] + [(c, (c if lang == "ko" else PROVINCE_EN.get(c, c)), ",.0f") for c in Qd.columns if c != "decade"]
             out.append("<h3>" + ("연대·지역" if lang == "ko" else "By decade and province") + "</h3>" + table_html(Qd, cols, "t_qp", lang, filt=False))
     elif mid == "summer_cold":
         W = D.weather[D.weather.reliable]
-        out.append(fig(svg_lines([(("서리·눈" if lang == "ko" else "frost+snow"), [(int(r.decade), float(r.frost_snow_per_1000)) for _, r in W.iterrows()], 0),
-                                  (("우박" if lang == "ko" else "hail"), [(int(r.decade), float(r.hail_per_1000)) for _, r in W.iterrows()], 1)], ".0f", xstep=50, bands=[(1640, 1719, "1640–1719")]),
+        out.append(fig(svg_lines([(("서리·눈" if lang == "ko" else "Frost and snow"), [(int(r.decade), float(r.frost_snow_per_1000)) for _, r in W.iterrows()], 0),
+                                  (("우박" if lang == "ko" else "Hail"), [(int(r.decade), float(r.hail_per_1000)) for _, r in W.iterrows()], 1)], ".0f", xstep=50, bands=[(1640, 1719, "1640–1719")]),
                        ("10년 단위, 천기 분류 기사 1,000건당 기록일. 천기 기사 100건 미만인 연대(1780년대 이후 대부분)는 뺐다. 띠는 1640~1719년." if lang == "ko" else "By decade, record days per 1,000 weather-class articles; decades with fewer than 100 such articles (most after the 1780s) are omitted. Band: 1640–1719.")))
         out.append(table_html(D.weather, [("decade", t["decade"], None), ("weather_class_articles", ("천기 기사" if lang == "ko" else "weather-class articles"), ",.0f"), ("frost_days", ("서리 일" if lang == "ko" else "frost days"), ",.0f"), ("snow_days", ("눈 일" if lang == "ko" else "snow days"), ",.0f"), ("hail_days", ("우박 일" if lang == "ko" else "hail days"), ",.0f"), ("frost_snow_per_1000", ("서리·눈/1,000" if lang == "ko" else "frost+snow/1,000"), ".1f"), ("hail_per_1000", ("우박/1,000" if lang == "ko" else "hail/1,000"), ".1f"), ("reliable", ("그림 포함" if lang == "ko" else "plotted"), None)], "t_w", lang, filt=False))
     elif mid == "clan_concentration":
         C = D.clan; M = D.clan_mk
-        out.append(fig(svg_lines([(("고위직 첫 임명자" if lang == "ko" else "high-office appointees"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in C.iterrows()], 0),
-                                  (("하한(결측=별개 성관)" if lang == "ko" else "lower bound"), [(float(r.mid_year), float(r.top10_lower_bound)) for _, r in C.iterrows()], 2),
-                                  (("문과 급제자" if lang == "ko" else "exam passers"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in M.iterrows()], 1)], ".2f", xstep=50),
+        out.append(fig(svg_lines([(("고위직 첫 임명자" if lang == "ko" else "High-office appointees"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in C.iterrows()], 0),
+                                  (("하한(결측=별개 성관)" if lang == "ko" else "Lower bound"), [(float(r.mid_year), float(r.top10_lower_bound)) for _, r in C.iterrows()], 2),
+                                  (("문과 급제자" if lang == "ko" else "Examination passers"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in M.iterrows()], 1)], ".2f", xstep=50),
                        (f"상위 10개 성관 점유율, 구간마다 {int(C.resample_n.iloc[0])}명 재표집 1,000회 평균. 표에 95% 구간." if lang == "ko" else f"Top-10 clan share, mean of 1,000 resamples of {int(C.resample_n.iloc[0])} per period; 95% intervals in the table.")))
         out.append(table_html(C, [("period", t["period"], None), ("first_appointees", ("첫 임명자" if lang == "ko" else "first appointees"), ",.0f"), ("missing_share_after", ("보충 후 결측" if lang == "ko" else "unmatched after fill"), ".1%"), ("n", "n", ",.0f"), ("n_clans", ("성관 수" if lang == "ko" else "clans"), ",.0f"), ("top10_resampled", ("상위 10 (재표집)" if lang == "ko" else "top-10 (resampled)"), ".3f"), ("top10_ci_lo", "95% lo", ".3f"), ("top10_ci_hi", "95% hi", ".3f"), ("top10_lower_bound", ("하한" if lang == "ko" else "lower bound"), ".3f"), ("hhi", "HHI", ".4f"), ("effective_clans", ("유효 성관 수" if lang == "ko" else "effective clans"), ".1f"), ("top5", ("상위 5" if lang == "ko" else "top 5"), None)], "t_clan", lang, filt=False))
         f = D.clan_fill
@@ -585,16 +608,16 @@ def metric_figure(m, D: Data, lang) -> str:
         if mid == "justice_share":
             Jd = D.justice_dec
             out.append(fig(svg_lines([(t["share"], [(int(r.decade), float(r.justice_share)) for _, r in Jd.iterrows()], 0)], ".0%", xstep=50), ("10년 단위 사법 분류 기사 비율." if lang == "ko" else "Share of justice-classified articles by decade.")))
-            out.append(table_html(Jd, [("decade", t["decade"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_justice", ("사법" if lang == "ko" else "justice"), ",.0f"), ("justice_share", t["share"], ".1%")] + [(c, c, ",.0f") for c in Jd.columns if c.startswith("사법-")], "t_jd", lang, filt=False))
+            out.append(table_html(Jd, [("decade", t["decade"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_justice", ("사법" if lang == "ko" else "justice"), ",.0f"), ("justice_share", t["share"], ".1%")] + [(c, (c if lang == "ko" else JUSTICE_EN.get(c, c)), ",.0f") for c in Jd.columns if c.startswith("사법-")], "t_jd", lang, filt=False))
         if mid == "relief_share":
             Yr = D.relief_y
             out.append(fig(svg_lines([(t["share"], [(int(r.year_ce), float(r.keyword_share)) for _, r in Yr.iterrows()], 0)], ".0%", bands=[(1670, 1671, "1670–71"), (1695, 1696, "1695–96")]), ("연도별 비율. 띠는 경신(1670~71)·을병(1695~96) 대기근." if lang == "ko" else "Share by year. Bands: the great famines of 1670–71 and 1695–96.")))
     elif mid == "death_penalty_mention":
         E = D.death
-        out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "mentions per 1,000"), [(int(r.period[:4]) + 25, float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
+        out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "Mentions per 1,000"), [(int(r.period[:4]) + 25, float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
                                   (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(int(r.period[:4]) + 25, float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50),
                        ("50년 구간(중앙 연도). 보정치는 언급 기사 비율 × 표본에서 잰 집행 확인율." if lang == "ko" else "50-year periods (mid-year). The corrected line multiplies the mention rate by the execution-confirmed rate from the sample.")))
-        out.append(table_html(E, [("period", t["period"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "executed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
+        out.append(table_html(E, [("period", t["period"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "execution confirmed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "confirmation rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
         Rg = D.death_reign
         out.append(table_html(Rg, [(kc, t["reign"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f")], "t_dr", lang, filt=False))
     return "".join(out)
@@ -705,13 +728,13 @@ def headline(m, D, lang):
         return f"{D.gw.iloc[0].marked_deleted_share:.1%}", ("중초본 글자 중 산삭 표시" if ko else "second-draft characters marked deleted")
     if mid == "revised_saron_share":
         r = D.pairs.iloc[2]
-        return f"{r.saron_share_revised:.1%}", ("숙종실록보궐정오의 사론 기사 비율" if ko else "comment share, Sukjong corrections")
+        return f"{r.saron_share_revised:.1%}", ("숙종실록보궐정오의 사론 기사 비율" if ko else "share with comments, Sukjong Supplement and Corrections")
     if mid == "solar_eclipse_match":
         r = D.solar[(D.solar.type == "observed") & (D.solar.window == "match_seoul_w1")].iloc[0]
         return f"{r.rate:.1%}", (f"관측 보고 {int(r.n)}건 중 서울 가시 일식 일치" if ko else f"of {int(r.n)} observation reports match a Seoul eclipse")
     if mid == "lunar_eclipse_match":
         r = D.lunar.set_index("window").loc["match_seoul_w1"]
-        return f"{r.rate:.1%}", (f"월식 기사 {int(r.n)}건 중 ±1일 일치(유형 미분류)" if ko else f"of {int(r.n)} articles, untyped")
+        return f"{r.rate:.1%}", (f"월식 기사 {int(r.n)}건 중 ±1일 일치(유형 미분류)" if ko else f"of {int(r.n)} articles, not classified by type")
     if mid == "venus_phase":
         return f"{D.venus.iloc[0].best_period_days:.1f}", ("일 — 기록이 재현한 주기(금성 583.92)" if ko else "days recovered (Venus: 583.92)")
     if mid == "comet_years":
@@ -728,20 +751,21 @@ def headline(m, D, lang):
         C = D.clan
         return f"{C.top10_resampled.iloc[0]:.2f}→{C.top10_resampled.iloc[8]:.2f}", ("상위 10 성관 점유, 1392–1449 → 1800–1849" if ko else "top-10 clan share, 1392–1449 → 1800–1849")
     if mid == "royal_lecture_share":
-        return f"{share(D.lecture):.1%}", ("기사 중 경연 키워드 · 정밀도 0.82" if ko else "of articles · precision 0.82")
+        return f"{share(D.lecture):.1%}", ("기사 중 경연 키워드 · 정밀도 0.82" if ko else "of articles have a royal-lecture keyword · precision 0.82")
     if mid == "memorial_share":
-        return f"{share(D.memorial):.1%}", ("기사 중 상소·차자 키워드" if ko else "of articles mention a memorial")
+        return f"{share(D.memorial):.1%}", ("기사 중 상소·차자 키워드" if ko else "of articles have a memorial keyword")
     if mid == "justice_share":
-        return f"{D.justice.n_justice.sum() / D.justice.n_dated_articles.sum():.1%}", ("본실록 기사 중 사법 분류" if ko else "of articles classified under justice")
+        return f"{D.justice.n_justice.sum() / D.justice.n_dated_articles.sum():.1%}", ("본실록 기사 중 사법 분류" if ko else "of principal-edition articles classified under justice")
     if mid == "death_penalty_mention":
         r = D.death.loc[D.death.period == "1400–1449"].iloc[0]
         return f"{r.mentions_per_1000:.1f}", ("1400–1449년 언급 기사/1,000 — 정점" if ko else "mentions per 1,000 in 1400–1449, the peak")
     if mid == "relief_share":
-        return f"{share(D.relief):.1%}", ("기사 중 진휼·흉년 키워드 · 정밀도 0.81" if ko else "of articles · precision 0.81")
+        return f"{share(D.relief):.1%}", ("기사 중 진휼·흉년 키워드 · 정밀도 0.81" if ko else "of articles have a relief or famine keyword · precision 0.81")
     if mid == "eonmun_articles":
-        return f"{int(D.eonmun.n_keyword.sum()):,}", ("언문 언급 기사(본실록)" if ko else "articles mentioning the script")
+        return f"{int(D.eonmun.n_keyword.sum()):,}", ("언문 언급 기사(본실록)" if ko else "articles mentioning the script (principal editions)")
     if mid == "slave_share":
-        return f"{share(D.slave):.1%}", ("기사 중 노비 키워드 · 정밀도 0.54" if ko else "of articles · precision 0.54")
+        ps = D.precision.get("slaves", {}).get("precision", float("nan"))   # 1.2: v2 re-coding (was a fixed 0.54 label)
+        return f"{share(D.slave):.1%}", (f"기사 중 노비 키워드 · 정밀도 {ps:.2f}" if ko else f"of articles have a slaves keyword · precision {ps:.2f}")
     return "", ""
 
 
@@ -758,19 +782,20 @@ def king_takeaway(D, r, lang):
     def rk_ko(rk, tie):
         return f"{rk}위" if tie == 1 else (f"공동 {rk}위" if tie == 2 else f"{tie}대가 같은 값")
     def rk_en(rk, tie, lead="rank "):
-        return f"{lead}{rk}" if tie == 1 else (f"joint {lead}{rk}" if tie == 2 else f"{tie} editions share this value")
+        return f"{lead}{rk}" if tie == 1 else (f"joint {lead}{rk}" if tie == 2 else f"{tie} reigns share this value")
     J = D.justice.set_index("edition"); jv = float(J.loc[r.edition, "justice_share"]); jm = float(J.justice_share.median())
     Lc = D.lecture.set_index("edition"); lv = float(Lc.loc[r.edition, "keyword_share"]); lm = float(Lc.keyword_share.median())
     if lang == "ko":
         s = f"{r.edition_ko}은 재위 1년당 글자 수가 {len(M)}대 중 {rk_ko(rk_h, tie_h)}({r.han_per_year:,.0f}자), 기사 수는 {rk_ko(rk_a, tie_a)}다. 사론이 붙은 기사는 {r.saron_share:.1%}({rk_ko(rk_s, tie_s)})"
         s += "로 이 책에는 사관의 논평이 없다. " if r.saron_share == 0 else "다. "
-        s += f"사법 분류 기사 비율은 {jv:.1%}로 {len(M)}대 중앙값 {jm:.1%}보다 {'높고' if jv > jm else '낮고'}, 경연 키워드 비율은 {lv:.1%}(중앙값 {lm:.1%})다. 키워드 지표는 모두 기록 관행의 영향을 받으므로 왕대 간 차이는 「무엇을 적었나」의 차이로 먼저 읽는다."
+        cmp_ko = "와 같고" if f"{jv:.1%}" == f"{jm:.1%}" else ("보다 높고" if jv > jm else "보다 낮고")   # equal at the shown precision -> 같고 (wca is the median itself)
+        s += f"사법 분류 기사 비율은 {jv:.1%}로 {len(M)}대 중앙값 {jm:.1%}{cmp_ko}, 경연 키워드 비율은 {lv:.1%}(중앙값 {lm:.1%})다. 키워드 지표는 모두 기록 관행의 영향을 받으므로 왕대 간 차이는 「무엇을 적었나」의 차이로 먼저 읽는다."
         if r.edition in ("wza", "wzb"):
             s += " 이 실록은 공공누리 4유형이라 건수만 셌고, 기사 제목·본문 발췌는 싣지 않았다."
     else:
-        s = f"The {r.edition_en} {rk_en(rk_h, tie_h)} of {len(M)} in characters per reign-year ({r.han_per_year:,.0f}) and {rk_en(rk_a, tie_a, '')} in article count. {r.saron_share:.1%} of articles carry a historian's comment ({rk_en(rk_s, tie_s)})"
+        s = f"{r.edition_en}: {rk_en(rk_h, tie_h)} of {len(M)} reigns in characters per reign-year ({r.han_per_year:,.0f}), {rk_en(rk_a, tie_a)} in article count. Articles with a historian's comment make up {r.saron_share:.1%} ({rk_en(rk_s, tie_s)})"
         s += ", so this edition has no commentary. " if r.saron_share == 0 else ". "
-        s += f"Justice-classified articles are {jv:.1%} against a median of {jm:.1%} across reigns; royal-lecture keywords {lv:.1%} (median {lm:.1%}). Keyword metrics follow recording practice, so read differences between reigns first as differences in what was written down."
+        s += f"Justice-classified articles make up {jv:.1%} of the total, against a median of {jm:.1%} across reigns; royal-lecture keyword articles, {lv:.1%} (median {lm:.1%}). Keyword metrics follow recording practice, so read differences between reigns first as differences in what was written down."
         if r.edition in ("wza", "wzb"):
             s += " This edition is KOGL Type 4, so only counts are used; no titles or excerpts are published."
     return s
@@ -815,7 +840,7 @@ def king_page(r, D, lang):
             take_block(king_takeaway(D, r, lang), lang)]
     body.append('<div class="stats">' + "".join(f'<div class="stat"><div class="n">{v}</div><small>{k}</small></div>' for k, v in [
         (t["articles"], f"{int(r.n_articles):,}"), (t["chars"], f"{int(r.n_han):,}"), (t["reign"] + " (" + t["months"] + ")", f"{int(r.reign_months):,}"),
-        (t["chars"] + " " + t["per_year"], f"{r.han_per_year:,.0f}"), (t["saron"] + " " + t["share"], f"{r.saron_share:.1%}")]) + "</div>")
+        (t["chars"] + " " + t["per_year"], f"{r.han_per_year:,.0f}"), (("사론 비율" if lang == "ko" else "share with historians' comments"), f"{r.saron_share:.1%}")]) + "</div>")
     if len(eds) > 1:
         body.append("<h2>" + ("판본" if lang == "ko" else "Editions") + "</h2>" + table_html(eds, [(ec, t["edition"], None), ("n_articles", t["articles"], ",.0f"), ("n_han", t["chars"], ",.0f"), ("n_saron", t["saron"], ",.0f"), ("median_len", ("기사 길이 중앙값" if lang == "ko" else "median length"), ",.0f")], "t_k_ed", lang, filt=False))
     y = D.yearly_ed[D.yearly_ed.edition == r.edition]
@@ -831,7 +856,7 @@ def king_page(r, D, lang):
             rows.append(dict(metric=name, value=float(me[col].iloc[0]), med=float(tbl[col].median()), mid=mid, spec=".2%" if col in ("keyword_share", "justice_share") else ",.1f"))
     kw = pd.DataFrame(rows)
     body.append("<h2>" + ("이 왕대의 지표" if lang == "ko" else "Metrics for this reign") + "</h2>")
-    body.append('<div class="wrap"><table><thead><tr><th>' + ("지표" if lang == "ko" else "metric") + f'</th><th class="num">{t["ours"]}</th><th class="num">' + (f"{len(D.main_ed())}대 중앙값" if lang == "ko" else f"median of {len(D.main_ed())} reigns") + "</th></tr></thead><tbody>" +
+    body.append('<div class="wrap"><table><thead><tr><th>' + ("지표" if lang == "ko" else "Metric") + f'</th><th class="num">{cap(t["ours"], lang)}</th><th class="num">' + (f"{len(D.main_ed())}대 중앙값" if lang == "ko" else f"Median of {len(D.main_ed())} reigns") + "</th></tr></thead><tbody>" +
                 "".join(f'<tr><td><a href="../metrics/{x.mid}.html">{esc(x.metric)}</a></td><td class="num">{fmt(x.value, x.spec)}</td><td class="num">{fmt(x.med, x.spec)}</td></tr>' for _, x in kw.iterrows()) + "</tbody></table></div>")
     nikh_id = f"k{r.edition[1:]}"
     body.append(f'<p class="links"><a href="{NIKH}/search/inspectionMonthList.do?id={nikh_id}">{t["nikh_link"]}</a></p>')
@@ -844,7 +869,7 @@ def kings_index(D, lang):
     body = [f"<h1>{t['king_list']}</h1>",
             '<p class="src">' + ("태조~순종 27대. 고종·순종실록은 공공누리 제4유형이라 건수만 셌다(제목·본문 발췌 없음)." if lang == "ko" else "Taejo to Sunjong, 27 reigns. The Gojong and Sunjong records are KOGL Type 4, so only counts are used (no titles or excerpts).") + "</p>",
             take_block(("세로 막대는 연도별 글자 수, 바탕의 띠는 왕대다. 기록은 세종~선조에서 두껍고 정조 이후 얇아진다. 아래 카드에서 왕대마다 기사 수·글자 수와 그 왕대의 지표를 본다." if lang == "ko" else
-                        "Bars are characters per year; the shaded bands are reigns. The record is thick from Sejong to Seonjo and thins after Jeongjo. Each card opens a reign page with its counts and metrics."), lang, small=True),
+                        "Bars are characters per year; the shaded bands are reigns. The record is dense from Sejong to Seonjo and thins after Jeongjo. Each card opens a reign page with its counts and metrics."), lang, small=True),
             f'<div class="strip"><figure>{density_strip(D, lang)}<figcaption>' + ("연도별 한자 수(본실록), 1392–1910. 띠는 왕대." if lang == "ko" else "Characters per year (principal editions), 1392–1910; bands mark reigns.") + "</figcaption></figure></div>",
             fig(svg_bars([(r[kc], float(r.han_per_year), 0) for _, r in M.iterrows()], ",.0f", row_h=20, label_w=160, xlabel=(t["chars"] + " " + t["per_year"])), ("재위 1년당 글자 수(본실록)." if lang == "ko" else "Characters per reign-year (principal editions).")),
             "<div class='cards'>"]
@@ -861,7 +886,7 @@ def home(D, lang):
     obsE = D.solar[(D.solar.type == "observed") & (D.solar.window == "match_earth_w1")].iloc[0]
     stats = [(f"{int(D.ed.n_articles.sum()):,}", (f"기사 · 판본 {len(D.ed)}종" if lang == "ko" else f"articles · {len(D.ed)} editions"), "metrics/n_articles.html"),
              (f"{D.ed.n_han.sum()/1e6:.1f}M", ("한자 글자" if lang == "ko" else "Chinese characters"), "metrics/n_han.html"),
-             (f"{obs.rate:.0%}", ("일식 관측 보고가 서울 가시 일식과 맞는 비율" if lang == "ko" else "eclipse reports matching an eclipse visible from Seoul"), "metrics/solar_eclipse_match.html"),
+             (f"{obs.rate:.0%}", ("일식 관측 보고가 서울 가시 일식과 맞는 비율" if lang == "ko" else "eclipse observation reports matching an eclipse visible from Seoul"), "metrics/solar_eclipse_match.html"),
              (f"{obsE.rate:.0%}", ("지구 어딘가의 일식과 맞는 비율" if lang == "ko" else "matching an eclipse anywhere on Earth"), "metrics/solar_eclipse_match.html"),
              (f"{D.venus.iloc[0].best_period_days:.1f}", ("태백주현 기록이 재현한 금성 주기(일)" if lang == "ko" else "Venus period (days) recovered from daytime sightings"), "metrics/venus_phase.html")]
     five = (["실록은 생각보다 고르지 않다 — 재위 1년당 글자 수가 세종~숙종의 10만 자에서 헌종·철종의 1만 자대로 떨어진다.",
@@ -870,21 +895,21 @@ def home(D, lang):
              "고위직 첫 임명자의 상위 10개 성관 점유율은 0.28에서 0.45로 올랐다. 벌열화는 수치로 남는다.",
              "「사형」 기사의 정점(세종)은 판결 재가 기록이다. 실록은 형정 통계의 자료가 아니다."]
             if lang == "ko" else
-            ["The record is uneven: characters per reign-year fall from over 100,000 (Sejong–Sukjong) to the low ten-thousands (Heonjong, Cheoljong).",
-             "65% of eclipse observation reports match an eclipse visible from Seoul and 95% one somewhere on Earth; untyped, the rate is 24%.",
-             "2,937 days of daytime Venus sightings reproduce the planet's synodic period to 0.04%: observation records are observations.",
-             "The top-10 clan share among first appointees to high office rose from 0.28 to 0.45 — concentration left a number.",
+            ["The Sillok is more uneven than one might expect: characters per reign-year fall from around 100,000 (Sejong–Sukjong) to the low ten-thousands (Heonjong, Cheoljong).",
+             "Of eclipse observation reports, 65% match an eclipse visible from Seoul and 95% one somewhere on Earth; if article types are ignored, the rate is 24%.",
+             "Daytime sightings of Venus on 2,937 days reproduce the planet's synodic period to within 0.04%: observation records are observations.",
+             "The top-10 clan share among first appointees to high office rose from 0.28 to 0.45 — the concentration shows up in the numbers.",
              "The Sejong peak in death-penalty articles is sentencing paperwork; the Sillok is not a source of penal statistics."])
     scope = ("범위는 태조~순종 27대(1392~1910)다. 다만 고종·순종실록의 원문 데이터는 공공누리 제4유형(변경 금지·비상업)이라, 본문을 가공·인용하지 않는 집계(기사 수·글자 수·국편 분류·키워드 건수)에만 쓰고, 기사 제목·본문 발췌·천문 대조에는 쓰지 않았다. 공개하는 표본 코딩 표에서도 이 두 실록 기사의 제목·인용문·요약은 비웠다(판정만 남김). 태조~철종 25대의 원문은 제1유형(출처 표시)이다."
              if lang == "ko" else
-             "Scope: the 27 reigns from Taejo to Sunjong (1392–1910). The Gojong and Sunjong records are released under KOGL Type 4 (no derivatives, non-commercial), so they enter only counts that neither alter nor quote the text (articles, characters, NIKH classification, keyword hits); titles, text excerpts and the astronomical checks exclude them, and in the published coding tables their rows keep the judgement but have title, quote and summary blanked. The 25 reigns Taejo–Cheoljong are Type 1 (attribution).")
+             "Scope: the 27 reigns from Taejo to Sunjong (1392–1910). The Gojong and Sunjong records are released under KOGL Type 4 (no derivatives, non-commercial), so they enter only counts that neither alter nor quote the text (articles, characters, NIKH classification, keyword hits); titles, text excerpts and the astronomical checks exclude them, and in the published coding tables their rows keep the judgment but have their title, quote and summary blanked. The 25 reigns Taejo–Cheoljong are Type 1 (attribution).")
     body = [f'<div class="hero"><div class="glyph" aria-hidden="true">實錄</div><h1>{t["site"]}</h1><p class="lead">{esc(t["tagline"])}</p><p class="src" style="max-width:70ch">{esc(scope)}</p>'
             f'<div class="strip">{density_strip(D, lang)}<p class="src">' + ("연도별 한자 수 1392–1910(본실록). 띠는 왕대." if lang == "ko" else "Characters per year 1392–1910 (principal editions); bands mark reigns.") + '</p></div></div>',
             '<div class="take"><div class="l">' + ("핵심" if lang == "ko" else "Key points") + '</div><p>' + "<br>".join(f"{i+1}. {esc(x)}" for i, x in enumerate(five)) + "</p></div>",
             '<div class="stats">' + "".join(f'<a class="stat" href="{h}"><div class="n">{n}</div><small>{l}</small></a>' for n, l, h in stats) + "</div>",
-            '<div class="note">' + ("숫자마다 <b>신뢰도 카드</b>가 붙어 있다. 원본에서 그대로 센 값인지, 천문 계산과 맞춰 본 비율인지, 손으로 코딩한 표본에서 잰 정밀도인지를 지표 면마다 적었다. 원문 전문은 싣지 않고 기사마다 국사편찬위원회 원문으로 연결한다."
+            '<div class="note">' + ("숫자마다 <b>신뢰도 카드</b>가 붙어 있다. 원본에서 그대로 센 값인지, 천문 계산과 맞춰 본 비율인지, 코딩한 표본에서 잰 정밀도인지를 지표 면마다 적었다. 원문 전문은 싣지 않고 기사마다 국사편찬위원회 원문으로 연결한다."
                                    if lang == "ko" else
-                                   "Every number carries a <b>reliability card</b>: whether it was counted straight from the source, compared with an astronomical computation, or measured on a hand-coded sample. The site carries no full text; each article links to the National Institute of Korean History.") + "</div>"]
+                                   "Every number carries a <b>reliability card</b>: whether it was counted straight from the source, compared with an astronomical computation, or measured on a coded sample. The site carries no full text; each article links to the National Institute of Korean History.") + "</div>"]
     NUM = {"A": "1", "B": "2", "C": "3", "D": "4", "E": "5", "G": "6", "F": "7"}
     for s, sl in SERIES.items():
         body.append(f"<h2 class='num' data-n='{NUM[s]}'>{esc(sl[lang])}</h2>" + (f"<p class='src' style='max-width:80ch'>{esc(SERIES_INTRO[s][lang])}</p>" if s in SERIES_INTRO else "") + "<div class='cards'>")
@@ -900,9 +925,9 @@ def home(D, lang):
 def prior_page(D, lang):
     t = T[lang]; kc, ec = KING_COL[lang]
     body = [f"<h1>{t['nav_prior']}</h1>", take_block(("새로 보탠 것과 모아 정리한 것을 가른다. 왕별 기사 수(Bak & Oh), 조선 일식 기록 집계(안영숙·이용삼), 조선 전기 사론 수(차장섭), 실록의 형옥 기사 수(유승희)는 이미 있던 수치라 우리 재계산과 나란히 둔다. 어긋나면 둘 다 보인다." if lang == "ko" else
-                                                        "Separates what is new here from what was already measured. Articles per reign (Bak & Oh), Joseon eclipse records (Ahn & Lee), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu) existed before; they sit next to our recount, and disagreements are shown rather than resolved."), lang, small=True), '<p class="lead">' + ("기존 연구가 이미 낸 수치는 이 사이트의 재계산과 나란히 보인다. 원문에서 직접 읽은 값만 실었다." if lang == "ko" else "Figures that earlier studies already produced are shown next to this site's recount. Only values read from the original publications are included.") + "</p>"]
+                                                        "Separates what is new here from what was already measured. Articles per reign (Bak & Oh), Joseon eclipse records (Ahn & Lee), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu) existed before; they sit next to this site's recount, and disagreements are shown rather than resolved."), lang, small=True), '<p class="lead">' + ("기존 연구가 이미 낸 수치는 이 사이트의 재계산과 나란히 보인다. 원문에서 직접 읽은 값만 실었다." if lang == "ko" else "Figures that earlier studies already produced are shown next to this site's recount. Only values read from the original publications are included.") + "</p>"]
     for k, p in PRIOR.items():
-        body.append(f'<div class="spec"><p>{esc(p[lang])}</p><p class="src">{esc(p["cite"])}</p></div>')
+        body.append(f'<div class="spec"><p>{esc(p[lang])}</p><p class="src">{esc(p.get("cite_en", p["cite"]) if lang == "en" else p["cite"])}</p></div>')
     from check_articles import BAK_OH_2015
     M = D.ed[D.ed.edition.isin(BAK_OH_2015)].copy(); M["bak"] = M.edition.map(BAK_OH_2015); M["diff"] = M.n_dated - M.bak
     body.append("<h2>" + ("왕별 기사 수 — Bak & Oh (2015) 대 이 사이트" if lang == "ko" else "Articles per reign — Bak & Oh (2015) vs this site") + "</h2>" +
@@ -912,8 +937,8 @@ def prior_page(D, lang):
 
 def data_page(D, lang, files):
     t = T[lang]
-    body = [f"<h1>{t['nav_data']}</h1>", take_block(("기사 테이블 한 장(articles.csv.gz, 38만 행)이 이 사이트의 뼈대다. 지표는 전부 그 표와 천문 표에서 다시 만들 수 있고, 손으로 코딩한 판정도 전부 들어 있다. 원문은 없고 기사 ID로 국편에 간다." if lang == "ko" else
-                                                       "One article table (articles.csv.gz, 380k rows) is the backbone; every metric can be rebuilt from it and the astronomical tables, and every hand-coded judgement is included. No text — article IDs link to NIKH."), lang, small=True), '<p class="lead">' + ("모든 표를 CSV로 내려받을 수 있다. datapackage.json 에 파일마다 라이선스와 원자료를 적었다. 기사 테이블(articles.csv)은 기사마다 한 행이며 본문은 들어 있지 않다." if lang == "ko" else "Every table is downloadable as CSV; datapackage.json lists the licence and sources of each file. The article table (articles.csv) has one row per article and no text.") + "</p>",
+    body = [f"<h1>{t['nav_data']}</h1>", take_block((f"기사 테이블 한 장(articles.csv.gz, {D.ed.n_articles.sum() / 1e4:.0f}만 행)이 이 사이트의 뼈대다. 지표는 전부 그 표와 천문 표에서 다시 만들 수 있고, 코딩 판정도 전부 들어 있다. 원문은 없고 기사 ID로 국편에 간다." if lang == "ko" else
+                                                       f"One article table (articles.csv.gz, {D.ed.n_articles.sum() / 1e3:.0f}k rows) is the backbone; every metric can be rebuilt from it and the astronomical tables, and every coding judgment is included. No text — article IDs link to NIKH."), lang, small=True), '<p class="lead">' + ("모든 표를 CSV로 내려받을 수 있다. datapackage.json 에 파일마다 라이선스와 원자료를 적었다. 기사 테이블(articles.csv)은 기사마다 한 행이며 본문은 들어 있지 않다." if lang == "ko" else "Every table is downloadable as CSV; datapackage.json lists the license and sources of each file. The article table (articles.csv) has one row per article and no text.") + "</p>",
             '<div class="files">' + "".join(f'<a href="../data/{f}">{f}</a>' for f in files) + "</div>",
             '<p class="files"><a href="../data/datapackage.json">datapackage.json</a></p>',
             "<h2>" + t["license"] + "</h2><p>" + ("파생 표: 공공누리 제1유형 원자료의 2차 저작물로, 원자료 출처 표시를 유지하는 한 자유롭게 쓸 수 있다(이 사이트의 자체 저작 부분은 CC BY 4.0). 고종·순종실록(제4유형) 행은 본문을 담지 않은 건수·메타데이터만이며 `license` 열에 KOGL-4 로 표시했다 — 상업적 이용은 삼가 달라. 코드: MIT. 원문·인물 데이터는 국사편찬위원회, 문과방목은 한국학중앙연구원의 것이다." if lang == "ko" else "Derived tables are derivative works of KOGL Type 1 sources and may be used freely as long as the source attribution is kept (this site's own contributions: CC BY 4.0). Rows from the Gojong and Sunjong records (Type 4) carry counts and metadata only, no text, and are marked KOGL-4 in the `license` column; please refrain from commercial use of those rows. Code: MIT. Original text and person data belong to the National Institute of Korean History; the examination roster to the Academy of Korean Studies.") + "</p>"]
@@ -937,7 +962,7 @@ TAKE_METHOD_KO
 <h2>천문 계산</h2>
 <p>{esc(SOURCES['de406']['ko'])} 일식은 합삭마다 서울(37.57°N, 126.98°E)에서 태양과 달의 겉보기 원반이 겹치는지, 태양이 지평선 위에 있는지를 2분 간격으로 검사했다. 겉보기 반지름은 태양 696,000km·달 1,737.4km 로 두었고(695,700km 로 바꾸면 1528-11-22의 극미한 접촉 한 건이 빠져 184회가 된다), 표의 `newmoon_jd`·`jd` 열은 TT 율리우스일이다. 그렇게 얻은 1392~1863년 서울 가시 일식 {len(D.solar_rec)}회는 모두 Espenak–Meeus 목록에 있고, 목록의 1,125회는 전부 같은 날(±1일)의 합삭과 맞았다. 월식은 skyfield 의 월식 탐색 함수로 구하고 식 최대 때 달이 지평선 위에 있는지로 서울 가시 여부를 정했다. 시각 비교는 당시 백각법·경점법 때문에 이 판에서는 하지 않았다.</p>
 <h2>키워드와 표본 코딩</h2>
-<p>계열 C·D·E의 많은 지표는 한문 키워드로 기사를 고른다. 키워드는 뜻이 다른 자리에도 걸리므로(「日食一升」은 하루 한 되를 먹는다는 뜻이다) 지표마다 층화 표본을 손으로 코딩해 정밀도와 윌슨 95% 구간을 신뢰도 카드에 적었다. 일식 기사 332건은 전수를 유형 분류했고 34건을 다른 코더가 블라인드로 다시 코딩했다. 코딩은 코드북에 따라 복수의 언어모델 코더가 했고, 인용문은 모두 원문과 문자열로 대조했다. 코드북과 판정 전체를 공개한다.</p>
+<p>계열 C·D·E의 많은 지표는 한문 키워드로 기사를 고른다. 키워드는 뜻이 다른 자리에도 걸리므로(「日食一升」은 하루 한 되를 먹는다는 뜻이다) 지표마다 층화 표본을 코딩해 정밀도와 윌슨 95% 구간을 신뢰도 카드에 적었다. 일식 기사 332건은 전수를 유형 분류했고 34건을 다른 코더가 블라인드로 다시 코딩했다. 코딩은 코드북에 따라 복수의 언어모델 코더가 했고, 인용문은 모두 원문과 문자열로 대조했다. 코드북과 판정 전체를 공개한다.</p>
 <h2>신뢰도 카드</h2>
 <p>세 종류다. <b>집계값</b>은 원본에서 그대로 센 수이며 외부 수치(Bak & Oh 2015, 2026-09 색인)와 대조했다. <b>외부 대조값</b>은 천문 계산과 맞춰 본 비율이다. <b>표본 정밀도</b>는 키워드가 지표의 뜻대로 쓰인 비율이다. 키워드 지표의 건수는 정밀도를 곱해 읽어야 한다.</p>
 <h2>한계</h2>
@@ -956,34 +981,34 @@ METHOD_EXT_KO
 <h1>Method and limits</h1>
 TAKE_METHOD_EN
 <h2>Sources</h2>
-<p>{esc(SOURCES['nikh_xml']['en'])} The range is therefore Taejo to Sunjong, 1392–1910; the Gojong and Sunjong records appear in the article table without titles (ID, date, character count, classification and link only) and without context excerpts in the keyword table. The sky series (C) covers Taejo–Cheoljong only. Sample coding does include articles from the two records, but in the published coding tables their title, quote and summary are blanked. Reign length is measured as the JDN span between first and last dated article, the same rule before and after the 1896 calendar switch.</p>
+<p>{esc(SOURCES['nikh_xml']['en'])} The range is therefore Taejo to Sunjong, 1392–1910; the Gojong and Sunjong records appear in the article table without titles (ID, date, character count, classification and link only) and without context excerpts in the keyword table. The sky series (C) covers Taejo–Cheoljong only. Sample coding does include articles from the two records, but in the published coding tables their title, quote and summary are blanked. Reign length is measured as the JDN span between the first and last dated articles, the same rule before and after the 1896 calendar switch.</p>
 <p>{esc(SOURCES['nikh_persons']['en'])} {esc(SOURCES['aks_munkwa']['en'])}</p>
 <h2>Counting unit</h2>
 <p>Everything is counted per <b>article</b>: one biblioData type="T" element in the NIKH XML. Of {int(D.ed.n_articles.sum()):,} articles, {int(D.ed.n_dated.sum()):,} carry a date. Time series use the principal editions only (the final draft for Gwanghaegun); revised and supplemented editions appear only in the editions series. Characters are the Chinese characters of the article text.</p>
 <h2>Dates</h2>
-<p>Sillok dates are lunar. The CE year and lunar month/day are kept as given; solar dates come from korean_lunar_calendar, shown in the Julian calendar before 15 October 1582. From 1 January 1896 (Geonyang 1) the court used the Gregorian calendar and the NIKH XML marks those days 陽曆, so their month and day are taken as given rather than converted (`date_system` column). The conversion was checked astronomically: the {len(D.cal):,} lunar month-starts of 1392–1928 were compared with DE406 new moons in Seoul local mean time (UT1 + 126.978° E; ΔT from the Stephenson–Morrison–Hohenkerk 2016 model) — {n0:,} ({n0/len(D.cal):.1%}) fall on the same day, {n1} one day off, none two or more. Eclipse matching therefore uses a ±1-day window, with the same-day value shown alongside. 26 dated articles have no solar date because the conversion package rejected the day: 23 are a 30th in a month the package gives 29 days, 2 are a 31st, 1 has an unknown day (99). Whether these are errors in the source or differences between calendars is left open until a check against the KASI chronological tables. A further 38 articles whose day reads '??' are counted as undated.</p>
+<p>Sillok dates are lunar. The CE year and lunar month/day are kept as given; solar dates come from korean_lunar_calendar, shown in the Julian calendar before 15 October 1582. From 1 January 1896 (Geonyang 1) the court used the Gregorian calendar and the NIKH XML marks those days 陽曆, so their month and day are taken as given rather than converted (`date_system` column). The conversion was checked astronomically: the {len(D.cal):,} lunar month-starts of 1392–1928 were compared with DE406 new moons in Seoul local mean time (UT1 + 126.978° E; ΔT from the Stephenson–Morrison–Hohenkerk 2016 model) — {n0:,} ({n0/len(D.cal):.1%}) fall on the same day, {n1} one day off, none two or more. Eclipse matching therefore uses a ±1-day window, with the same-day value shown alongside. Of the dated articles, 26 have no solar date because the conversion package rejected the day: 23 fall on the 30th of a month to which the package assigns only 29 days, 2 on a 31st, and 1 has an unknown day (99). Whether these are errors in the source or differences between calendars is left open until a check against the KASI chronological tables. A further 38 articles whose day reads '??' are counted as undated.</p>
 <h2>Astronomy</h2>
-<p>{esc(SOURCES['de406']['en'])} For every new moon the apparent discs of Sun and Moon were tested for overlap above the Seoul horizon (37.57° N, 126.98° E) at 2-minute steps. Apparent radii use 696,000 km for the Sun and 1,737.4 km for the Moon (with 695,700 km one grazing contact on 1528-11-22 drops out, giving 184); the `newmoon_jd` and `jd` columns are TT Julian dates. The {len(D.solar_rec)} eclipses visible from Seoul in 1392–1863 so obtained all appear in the Espenak–Meeus canon, and all 1,125 of its eclipses match a new moon within ±1 day. Lunar eclipses come from skyfield's eclipse finder; visibility is the Moon's altitude at maximum. Times of day were not compared in this version because of the period's hour systems.</p>
+<p>{esc(SOURCES['de406']['en'])} For every new moon the apparent discs of Sun and Moon were tested for overlap above the Seoul horizon (37.57° N, 126.98° E) at 2-minute steps. Apparent radii use 696,000 km for the Sun and 1,737.4 km for the Moon (with 695,700 km one grazing contact on 1528-11-22 drops out, giving 184); the `newmoon_jd` and `jd` columns are TT Julian dates. The {len(D.solar_rec)} eclipses visible from Seoul in 1392–1863 so obtained all appear in the Espenak–Meeus canon, and all 1,125 of its eclipses match a new moon within ±1 day. Lunar eclipses come from skyfield's eclipse finder; visibility is judged by the Moon's altitude at maximum eclipse. Times of day were not compared in this version because of the timekeeping systems of the period.</p>
 <h2>Keywords and sample coding</h2>
-<p>Many metrics in series C, D and E select articles by Chinese-character keywords. Keywords also hit other meanings ('日食一升' is a daily ration of rice), so each keyword metric was hand-coded on a stratified sample and its precision with a Wilson 95% interval sits on the reliability card. All 332 eclipse articles were typed, and 34 were blind re-coded by another coder. Coding followed a codebook and was done by several language-model coders; every quotation was string-checked against the source. Codebooks and all judgements are published.</p>
+<p>Many metrics in series C, D and E select articles by Chinese-character keywords. Keywords also match passages where the characters mean something else ('日食一升' is a daily ration of rice), so for each keyword metric a stratified sample of hits was coded, and its precision with a Wilson 95% interval sits on the reliability card. All 332 eclipse articles were classified by type, and 34 were blind re-coded by another coder. Coding followed a codebook and was done by several language-model coders; every quotation was string-checked against the source. Codebooks and all judgments are published.</p>
 <h2>Reliability cards</h2>
-<p>Three kinds. <b>Exact counts</b> are read straight from the source and checked against external figures (Bak & Oh 2015; an independent 2026-09 index). <b>External matches</b> are rates of agreement with astronomical computation. <b>Sampled precision</b> is the share of keyword hits that mean what the metric says; keyword counts should be read multiplied by it.</p>
+<p>Three kinds. <b>Exact counts</b> are read straight from the source and checked against external figures (Bak & Oh 2015; an independent 2026-09 index). <b>External matches</b> are rates of agreement with astronomical computation. <b>Sampled precision</b> is the share of keyword hits that mean what the metric says; multiply keyword counts by it.</p>
 <h2>Limits</h2>
 <ul><li>The Sillok records what was written down, not what happened. Frequency metrics (omens, death-penalty mentions, relief) reflect recording practice — the Sejong peak in death-penalty mentions turned out to be sentencing paperwork.</li>
-<li>NIKH's classification, comment tags and person links are modern editorial work of varying granularity. Person appearance counts are not used as metrics because of mislinks.</li>
-<li>The roster fill for clan concentration is 91% accurate, and 20% of seats remain unmatched after 1850.</li>
-<li>The series C lunar match rate (C2) is an untyped lower bound; G2 in 1.2 gives the typed values.</li></ul>
+<li>NIKH's classification, comment tags and person links are modern editorial work of varying granularity. Person appearance counts are not used as metrics because of linking errors.</li>
+<li>The roster fill for clan concentration is 91% accurate, and after 1850 the clan of 20% of appointees remains unidentified.</li>
+<li>The series C lunar match rate (C2) is a lower bound without type classification; G2 in 1.2 gives the values by type.</li></ul>
 METHOD_EXT_EN
 <h2>Prior work</h2>
-<p>New here: the article-level table, precision for keyword metrics, eclipse match rates by article type, like-for-like comparison of edition pairs, and character-level deletion counts for the Gwanghaegun diary. Articles per reign (Bak & Oh 2015), Joseon eclipse records (Ahn & Lee 2004), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu 2007) already existed and are shown next to the recount on the Prior results page.</p>
+<p>New here: the article-level table, precision for keyword metrics, eclipse match rates by article type, like-for-like comparison of edition pairs, and character-level deletion counts for the Daily Records of Gwanghaegun. Articles per reign (Bak & Oh 2015), Joseon eclipse records (Ahn & Lee 2004), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu 2007) already existed and are shown next to the recount on the Prior results page.</p>
 <h2>Attribution</h2>
 <p>This work uses the 'Veritable Records of the Joseon Dynasty — original text' and '— supplementary person data' created by the National Institute of Korean History (Ministry of Education) in 2022 and released under KOGL Type 1 at the Korean public data portal (https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do), and the 'Successful candidates of the civil service examination' released by the Academy of Korean Studies (https://www.data.go.kr/data/15052752/fileData.do). Astronomy: NASA/JPL DE406; eclipse canon: Espenak & Meeus (NASA/TP-2006-214141).</p>
-<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 ({BUILD_DATE}) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now read "10 editions share this value". No number, table or data file changed.<br>VERSION_EN</p>
+<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 ({BUILD_DATE}) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now say how many reigns share the value. No number, table or data file changed.<br>VERSION_EN</p>
 """
     ko = ko.replace("METHOD_EXT_KO", method_ext(D, "ko", esc)).replace("VERSION_KO", VERSION_LINE["ko"].replace("{BUILD_DATE}", BUILD_DATE))
     en = en.replace("METHOD_EXT_EN", method_ext(D, "en", esc)).replace("VERSION_EN", VERSION_LINE["en"].replace("{BUILD_DATE}", BUILD_DATE))
-    ko = ko.replace("TAKE_METHOD_KO", take_block("세는 단위는 기사, 날짜는 음력 원문 그대로에 양력 환산을 더한 것, 천문은 DE406 직접 계산이다. 키워드 지표는 손으로 코딩한 표본의 정밀도를 곱해 읽는다. 실록은 「일어난 일」이 아니라 「적은 일」의 기록이라는 한계가 모든 빈도형 지표에 걸린다.", "ko", small=True))
-    en = en.replace("TAKE_METHOD_EN", take_block("Articles are the unit; dates are the lunar originals plus a solar conversion; astronomy is computed directly from DE406. Keyword metrics are read multiplied by the precision of hand-coded samples. The Sillok records what was written, not what happened — a limit that applies to every frequency metric.", "en", small=True))
+    ko = ko.replace("TAKE_METHOD_KO", take_block("세는 단위는 기사, 날짜는 음력 원문 그대로에 양력 환산을 더한 것, 천문은 DE406 직접 계산이다. 키워드 지표는 코딩한 표본의 정밀도를 곱해 읽는다. 실록은 「일어난 일」이 아니라 「적은 일」의 기록이라는 한계가 모든 빈도형 지표에 걸린다.", "ko", small=True))
+    en = en.replace("TAKE_METHOD_EN", take_block("Articles are the unit; dates are the lunar originals plus a solar conversion; astronomy is computed directly from DE406. Multiply keyword metrics by the precision measured on coded samples. The Sillok records what was written, not what happened — a limit that applies to every frequency metric.", "en", small=True))
     return page(lang, t["nav_method"], f'<div class="prose">{ko if lang == "ko" else en}</div>', depth=1, active="method")
 
 
@@ -1013,23 +1038,23 @@ TAKE_READ_KO
 """
     en = f"""
 <h1>Reading edition</h1>
-<p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; here is only what was seen. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; no excerpts are published, and their rows in the coding tables carry judgements without title or quote.</p>
+<p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; this page reports only what the figures show. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; no excerpts are published, and their rows in the coding tables carry judgments without title or quote.</p>
 TAKE_READ_EN
 <h2>How much was written</h2>
-<p>The principal editions for the 27 reigns from Taejo to Sunjong hold {int(M.n_articles.sum()):,} articles and {M.n_han.sum()/1e6:.1f} million Chinese characters (Gojong and Sunjong counted only). Per reign-year the {top.king_en} records are the densest at {top.han_per_year:,.0f} characters and the {low.king_en} records the thinnest at {low.han_per_year:,.0f}. Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000; after Jeongjo the density collapses. This is the number behind NIKH's remark that the record thins toward the end.</p>
+<p>The principal editions for the 27 reigns from Taejo to Sunjong hold {int(M.n_articles.sum()):,} articles and {M.n_han.sum()/1e6:.1f} million Chinese characters (Gojong and Sunjong: counts only). Per reign-year the {top.king_en} records are the densest at {top.han_per_year:,.0f} characters and the {low.king_en} records the thinnest at {low.han_per_year:,.0f}. Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000; after Jeongjo the density collapses. This puts a number on NIKH's remark that the record thins toward the end.</p>
 <p>Historians' comments first exceed 2% of articles under Seongjong, peak under Jungjong, Myeongjong and Seonjo, and vanish from Jeongjo onward. Cha Jang-seop's hand count for early Joseon and the NIKH tags agree to within a few dozen per reign.</p>
 <h2>Where the editions diverge</h2>
-<p>The Revised Seonjo records are 7% of the original by articles and 10% by characters; NIKH's 'one fifth' is an impression by fascicle count. 60% of the revised edition's days also have an article in the original. The Supplemented Hyeonjong records have 13% more articles and 34% more characters than the original — a rewrite, not a cut. The Gwanghaegun diary lost {g.article_drop:.0%} of its articles and {g.han_drop:.0%} of its characters between drafts, and {g.marked_deleted_share:.0%} of the second draft's characters sit inside deletion marks.</p>
+<p>The Revised Seonjo records are 7% of the original by articles and 10% by characters; NIKH's 'one fifth' is an impression by fascicle count. Of the revised edition's days, 60% also have an article in the original. The Supplemented Hyeonjong records have 13% more articles and 34% more characters than the original — a rewrite, not a cut. The Daily Records of Gwanghaegun lost {g.article_drop:.0%} of its articles and {g.han_drop:.0%} of its characters between drafts, and {g.marked_deleted_share:.0%} of the second draft's characters sit inside deletion marks.</p>
 <h2>Was the sky right?</h2>
-<p>Reading all 332 articles containing '日食', one in three turned out to be a memorial or edict using an eclipse as an argument, and one in seven was not an eclipse at all ('日食一升' is a daily ration of rice). Of the 84 read as a report that an eclipse occurred that day, {obs.rate:.0%} fall within ±1 day of a computed eclipse visible from Seoul and {obsE.rate:.0%} match an eclipse somewhere on Earth. Most of the rest are '地下日食' — eclipses after sunset entered as computed. Seen the other way, {D.solar_rec.has_article_w1.mean():.0%} of the {len(D.solar_rec)} eclipses visible from Seoul have an article.</p>
-<p>The {int(v.n_days):,} days on which Venus was reported visible in daylight are sharper still. A period search returns {v.best_period_days:.1f} days, 0.04% from the synodic period of 583.92; {v.within_90d:.0%} of the records fall within 90 days of inferior conjunction and the conjunction itself is empty. At least this kind of record carries the signal of real observation.</p>
+<p>When all 332 articles containing '日食' were read and classified, one in three turned out to be a memorial or edict using an eclipse as an argument, and one in seven was not an eclipse at all ('日食一升' is a daily ration of rice). Of the 84 read as a report that an eclipse occurred that day, {obs.rate:.0%} fall within ±1 day of a computed eclipse visible from Seoul and {obsE.rate:.0%} match an eclipse somewhere on Earth. Most of the rest are '地下日食' — eclipses after sunset that were recorded from calculation. Seen the other way, {D.solar_rec.has_article_w1.mean():.0%} of the {len(D.solar_rec)} eclipses visible from Seoul have an article.</p>
+<p>The {int(v.n_days):,} days on which Venus was reported visible in daylight give an even sharper result. A period search returns {v.best_period_days:.1f} days, 0.04% from the synodic period of 583.92; {v.within_90d:.0%} of the records fall within 90 days of inferior conjunction and the conjunction itself is empty. At least this kind of record carries the signal of real observation.</p>
 <h2>Who held office</h2>
-<p>Grouping first appointees to the highest offices by 50-year period, the share of the top ten clans rises from {C.top10_resampled.iloc[0]:.2f} to {C.top10_resampled.iloc[8]:.2f}; concentration among examination passers over the same period is smaller. The two groups differ in composition, so the gap is not read as a promotion effect.</p>
+<p>When first appointees to high office are grouped by 50-year period, the share of the top ten clans rises from {C.top10_resampled.iloc[0]:.2f} to {C.top10_resampled.iloc[8]:.2f}; concentration among examination passers over the same period is smaller. The two groups differ in composition, so the gap is not read as a promotion effect.</p>
 <h2>A death-penalty article is not an execution</h2>
 <p>Articles with capital-punishment terms are most frequent under Sejong, but the sample shows most of them are sentencing reports applying the code; execution is confirmed in 2 of 20. In the sample the confirmation rate is higher in the late 16th to early 18th century, but with 20 articles per period the distribution is not settled. Of the 2,853 capital cases Yu Seung-hui counted in the Ilseongnok for Jeongjo–Cheoljong, only 111 can be found in the Sillok. The Sillok is not a source of penal statistics.</p>
 """
     ko = ko.replace("TAKE_READ_KO", take_block("실록의 관측 기록은 계량에 쓸 수 있을 만큼 정확하고, 빈도형 기록은 기록 관행을 탄다. 이 둘을 갈라 읽는 것이 이 사이트의 한 문장 요약이다.", "ko"))
-    en = en.replace("TAKE_READ_EN", take_block("The Sillok's observational entries are accurate enough for quantitative use; its frequency entries follow recording practice. Reading the two apart is this site in one sentence.", "en"))
+    en = en.replace("TAKE_READ_EN", take_block("The Sillok's observational articles are accurate enough for quantitative use; its frequency counts follow recording practice. Telling the two apart is this site in one sentence.", "en"))
     return page(lang, t["nav_reading"], f'<div class="prose">{ko if lang == "ko" else en}</div>', depth=1, active="reading")
 
 

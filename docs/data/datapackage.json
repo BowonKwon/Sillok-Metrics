@@ -2,7 +2,7 @@
  "profile": "data-package",
  "name": "sillok-metrics",
  "title": "Sillok Metrics — derived data",
- "version": "1.2",
+ "version": "1.2.1",
  "created": "2026-11-02",
  "homepage": "https://bowonkwon.github.io/Sillok-Metrics/",
  "contributors": [
@@ -1226,6 +1226,46 @@
    ]
   },
   {
+   "name": "g3_venus_articles",
+   "path": "g3_venus_articles.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 4028,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
+   "name": "g3_venus_control",
+   "path": "g3_venus_control.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 8000,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
    "name": "g3_appulse",
    "path": "g3_appulse.csv",
    "format": "csv",
@@ -1306,6 +1346,26 @@
    ]
   },
   {
+   "name": "g3_appulse_control",
+   "path": "g3_appulse_control.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 400,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "JPL DE406 planetary ephemeris read with skyfield",
+     "path": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+     "license": "public domain (NASA/JPL)"
+    }
+   ]
+  },
+  {
    "name": "g4_comet",
    "path": "g4_comet.csv",
    "format": "csv",
@@ -1350,7 +1410,7 @@
    "path": "g5_sunspot.csv",
    "format": "csv",
    "encoding": "utf-8",
-   "rows": 10,
+   "rows": 14,
    "licenses": [
     {
      "name": "KOGL-1-derivative + CC-BY-4.0",
@@ -1390,7 +1450,7 @@
    "path": "g5_sunspot_articles.csv",
    "format": "csv",
    "encoding": "utf-8",
-   "rows": 120,
+   "rows": 170,
    "licenses": [
     {
      "name": "KOGL-1-derivative + CC-BY-4.0",
@@ -1711,6 +1771,26 @@
     {
      "title": "National Institute of Korean History, 'Seungjeongwon Ilgi' (data.go.kr 15064218, KOGL Type 1): 297 XML volumes, 104,074 day nodes, 1,792,433 articles",
      "path": "https://www.data.go.kr/data/15064218/fileData.do",
+     "license": "KOGL Type 1 (attribution)"
+    }
+   ]
+  },
+  {
+   "name": "keyword_hits_sillok_ext",
+   "path": "keyword_hits_sillok_ext.csv",
+   "format": "csv",
+   "encoding": "utf-8",
+   "rows": 445,
+   "licenses": [
+    {
+     "name": "KOGL-1-derivative + CC-BY-4.0",
+     "path": "https://www.kogl.or.kr/info/license.do"
+    }
+   ],
+   "sources": [
+    {
+     "title": "National Institute of Korean History (Ministry of Education), 'Veritable Records of the Joseon Dynasty — original text' (data.go.kr dataset 15053647, KOGL Type ",
+     "path": "https://www.data.go.kr/data/15053647/fileData.do",
      "license": "KOGL Type 1 (attribution)"
     }
    ]

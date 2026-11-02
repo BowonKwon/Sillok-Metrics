@@ -131,10 +131,27 @@ def main():
                 cur = 0
         if cur: lengths.append(cur)
         return (max(lengths) if lengths else 0, float(np.mean(lengths)) if lengths else 0.0)
+    def runs_by_day(g):
+        """1.2.1: runs over unique calendar days (duplicate nodes collapsed, a day counts as 晴-only if all its nodes are),
+        broken by any calendar gap; 1.2 ran over nodes sorted by JDN, so duplicates could lengthen and gaps could join runs."""
+        dd = g[g.jdn_use.notna()].groupby("jdn_use").clear_only.agg(lambda s: bool(len(s)) and bool(s.fillna(False).all())).sort_index()
+        best = cur = 0; lengths = []; prev = None
+        for j, f in dd.items():
+            if prev is not None and j - prev > 1 and cur:
+                lengths.append(cur); cur = 0
+            if f:
+                cur += 1
+            else:
+                if cur: lengths.append(cur)
+                cur = 0
+            prev = j
+        if cur: lengths.append(cur)
+        return (max(lengths) if lengths else 0, float(np.mean(lengths)) if lengths else 0.0)
+    d["jdn_use"] = d.jdn_ganji.where(d.jdn_ganji.notna(), d.jdn) if "jdn_ganji" in d else d.jdn
     out = []
     for keys, g in d.sort_values("jdn").groupby(KEYS):
         gw = g[g.kind == "weather"]
-        mx, mean_run = runs(list(g.clear_only.fillna(False)))
+        mx, mean_run = runs_by_day(g)
         # rainy season: solar July (Changma) — share of weather days with rain_any
         july = gw[pd.to_datetime(gw.solar_date, errors="coerce").dt.month == 7]
         out.append(dict(zip(KEYS, keys)) | dict(n_days_weather=len(gw), clear_only_share=gw.clear_only.mean(), longest_clear_run=mx, mean_clear_run=mean_run,
@@ -147,18 +164,26 @@ def main():
     # count as "no gauge rain" here, so the second rate is the share of gauge-dry days on which the cell still says rain.
     g = lm[lm.kind == "weather"].copy()
     g["half"] = (g.year_ce.astype(int) // 50) * 50
+    def gauge_block(period, gg):
+        """1.2.1: the 1.2 'false rain' (rain token on days with no gauge amount or 0) mixed two very different sets — days whose
+        gauge entry is 0 (flag e: precipitation without measurable depth, almost all with a rain/snow token) and days with no
+        gauge entry at all. They are now reported separately, together with any-precipitation recall and the share of Lee's own
+        weather string carrying 雨 on measured-rain days (the same gap, so it is a property of the record, not of the token rule)."""
+        rainy = gg[gg.gauge_mm > 0]; n = len(rainy)
+        k = int(rainy.rain_any.fillna(False).sum()); lo, hi = wilson(k, n)
+        kp = int(rainy.precip_any.fillna(False).sum())
+        klee = int(rainy.lee_text.astype(str).str.contains("雨").sum())
+        dry = gg[~(gg.gauge_mm > 0)]; k2 = int(dry.rain_any.fillna(False).sum()); n2 = len(dry); lo2, hi2 = wilson(k2, n2)
+        zero = gg[gg.gauge_mm == 0]; na = gg[gg.gauge_mm.isna()]
+        return dict(period=period, gauge_days=len(gg), gauge_rain_days=n, cell_rain_on_gauge_rain=k, recall=k / n if n else np.nan, recall_lo=lo, recall_hi=hi,
+                    cell_precip_on_gauge_rain=kp, recall_precip=kp / n if n else np.nan, lee_text_rain_on_gauge_rain=klee, lee_text_rain_share=klee / n if n else np.nan,
+                    gauge_dry_days=n2, cell_rain_on_gauge_dry=k2, false_rain=k2 / n2 if n2 else np.nan, false_lo=lo2, false_hi=hi2,
+                    gauge_zero_days=len(zero), cell_precip_on_gauge_zero=int(zero.precip_any.fillna(False).sum()), cell_rain_on_gauge_zero=int(zero.rain_any.fillna(False).sum()),
+                    gauge_na_days=len(na), cell_rain_on_gauge_na=int(na.rain_any.fillna(False).sum()), cell_precip_on_gauge_na=int(na.precip_any.fillna(False).sum()))
     rg = []
     for h, gg in g.groupby("half"):
-        rainy = gg[gg.gauge_mm > 0]
-        k = int(rainy.rain_any.fillna(False).sum()); n = len(rainy); lo, hi = wilson(k, n)
-        dry = gg[~(gg.gauge_mm > 0)]
-        k2 = int(dry.rain_any.fillna(False).sum()); n2 = len(dry); lo2, hi2 = wilson(k2, n2)
-        rg.append(dict(period=f"{h}–{h+49}", gauge_days=len(gg), gauge_rain_days=n, cell_rain_on_gauge_rain=k, recall=k / n if n else np.nan, recall_lo=lo, recall_hi=hi,
-                       gauge_dry_days=n2, cell_rain_on_gauge_dry=k2, false_rain=k2 / n2 if n2 else np.nan, false_lo=lo2, false_hi=hi2))
-    rainy = g[g.gauge_mm > 0]; k = int(rainy.rain_any.fillna(False).sum()); n = len(rainy); lo, hi = wilson(k, n)
-    dry = g[~(g.gauge_mm > 0)]; k2 = int(dry.rain_any.fillna(False).sum()); n2 = len(dry); lo2, hi2 = wilson(k2, n2)
-    rg.append(dict(period="1778–1907", gauge_days=len(g), gauge_rain_days=n, cell_rain_on_gauge_rain=k, recall=k / n if n else np.nan, recall_lo=lo, recall_hi=hi,
-                   gauge_dry_days=n2, cell_rain_on_gauge_dry=k2, false_rain=k2 / n2 if n2 else np.nan, false_lo=lo2, false_hi=hi2))
+        rg.append(gauge_block(f"{h}–{h+49}", gg))
+    rg.append(gauge_block("1778–1907", g))
     pd.DataFrame(rg).to_csv(D / "f_rain_gauge.csv", index=False)
     print("rain gauge days", len(g))
 
@@ -184,22 +209,24 @@ def main():
     pd.DataFrame(rows).to_csv(D / "f_asos.csv", index=False)
     print("ASOS overlap", len(am))
 
-    # ---------------- F4 missing
-    rows = []
-    for keys, g in d.groupby(KEYS):
-        j = g.jdn.dropna().astype(int)
+    # ---------------- F4 missing (1.2.1: counted on unique calendar days; 1.2 used span − node count, which let duplicate
+    # day nodes offset missing days and produced negative values for Yeongjo and Gojong)
+    if "jdn_use" not in d:
+        d["jdn_use"] = d.jdn_ganji.where(d.jdn_ganji.notna(), d.jdn) if "jdn_ganji" in d else d.jdn
+    def missing_block(g):
+        j = g.jdn_use.dropna().astype(int)
         span = int(j.max() - j.min() + 1) if len(j) else 0
-        rows.append(dict(zip(KEYS, keys)) | dict(calendar_days=span, day_nodes=len(g), missing_day_nodes=span - len(g), blank_cells=int((g.kind == "blank").sum()),
-                                             dash_cells=int((g.weather == "-").sum()), note_only=int((g.kind == "note_only").sum()),
-                                             missing_share=(span - len(g)) / span if span else np.nan, blank_share=(g.kind == "blank").mean()))
+        uniq = int(j.nunique())
+        return dict(calendar_days=span, day_nodes=len(g), unique_days=uniq, duplicate_nodes=int(len(j) - uniq), undated_nodes=int(g.jdn_use.isna().sum()),
+                    missing_days=span - uniq, blank_cells=int((g.kind == "blank").sum()), dash_cells=int((g.weather == "-").sum()), note_only=int((g.kind == "note_only").sum()),
+                    missing_share=(span - uniq) / span if span else np.nan, blank_share=(g.kind == "blank").mean())
+    rows = [dict(zip(KEYS, keys)) | missing_block(g) for keys, g in d.groupby(KEYS)]
     pd.DataFrame(rows).sort_values("king_no").to_csv(D / "f_missing_reign.csv", index=False)
-    y = d.groupby("year_ce").agg(day_nodes=("day_id", "size"), blank_cells=("kind", lambda s: (s == "blank").sum()), note_only=("kind", lambda s: (s == "note_only").sum()),
-                                 jmin=("jdn", "min"), jmax=("jdn", "max")).reset_index()
-    y["span"] = (y.jmax - y.jmin + 1)
-    y["missing_day_nodes"] = y.span - y.day_nodes
-    y.drop(columns=["jmin", "jmax"]).to_csv(D / "f_missing_yearly.csv", index=False)
+    y = pd.DataFrame([dict(year_ce=int(yr)) | missing_block(g) for yr, g in d.groupby("year_ce")])
+    y.to_csv(D / "f_missing_yearly.csv", index=False)
     tot_span = sum(r["calendar_days"] for r in rows)
-    print("F4: calendar days", tot_span, "nodes", len(d), "missing", tot_span - len(d), "blank", int((d.kind == "blank").sum()))
+    print("F4: calendar days", tot_span, "nodes", len(d), "unique days", sum(r["unique_days"] for r in rows), "missing", sum(r["missing_days"] for r in rows),
+          "duplicates", sum(r["duplicate_nodes"] for r in rows), "undated", sum(r["undated_nodes"] for r in rows), "blank", int((d.kind == "blank").sum()))
 
     # reliability snippets for the cards
     rel = {}

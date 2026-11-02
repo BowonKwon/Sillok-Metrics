@@ -64,8 +64,31 @@ def load_articles():
     A = pd.concat([a[cols], e[cols]], ignore_index=True)
     A["jdn_use"] = A.jdn_ganji.where(A.jdn_ganji.notna(), A.jdn)
     k1 = pd.read_parquet(D / "keyword_hits.parquet"); k2 = pd.read_parquet(D / "keyword_hits_ext.parquet")
-    K = pd.concat([k1[["article_id", "pattern", "n_hits"]], k2[["article_id", "pattern", "n_hits"]]], ignore_index=True)
+    ks = [k1[["article_id", "pattern", "n_hits"]], k2[["article_id", "pattern", "n_hits"]]]
+    if (D / "keyword_hits_sillok_ext.parquet").exists():   # 1.2.1: sunspot / guest_star counted in the Sillok too (extract_keywords_sillok_ext.py)
+        ks.append(pd.read_parquet(D / "keyword_hits_sillok_ext.parquet")[["article_id", "pattern", "n_hits"]])
+    K = pd.concat(ks, ignore_index=True)
     return A.set_index("article_id"), K
+
+
+def load_rules():
+    p = C / "overrides.json"
+    return json.load(open(p, encoding="utf-8")).get("rules", []) if p.exists() else []
+
+
+def apply_rules(df, bundle):
+    """Editor rules from overrides.json (1.2.1): rows whose quote/summary match the regex get type=set_type; the coder's
+    type is kept in type_coder and the rule name in rule. Coder files are untouched."""
+    if len(df) == 0:
+        return df
+    df = df.copy(); df["type_coder"] = df["type"]; df["rule"] = ""
+    for r in load_rules():
+        if bundle not in r["bundles"]:
+            continue
+        pat = re.compile(r["regex"])
+        hit = (df["quote"].fillna("") + " " + df["summary"].fillna("")).map(lambda s: bool(pat.search(s))) & (df["type"] != r["set_type"])
+        df.loc[hit, "type"] = r["set_type"]; df.loc[hit, "rule"] = r["name"]
+    return df
 
 
 def load_coded(prefix):
@@ -77,7 +100,7 @@ def load_coded(prefix):
         src = "sillok" if "sillok" in name else ("goryeosa_jeolyo" if "jeolyo" in name else ("sjw" if "sjw" in name else "goryeo"))
         for r in read_jsonl(p):
             r["coded_file"] = name; r["src_hint"] = src; rows.append(r)
-    return pd.DataFrame(rows)
+    return apply_rules(pd.DataFrame(rows), "solar" if prefix.startswith("solar") else "lunar")
 
 
 def match_table(cod, A, ecl, kind):
@@ -126,10 +149,10 @@ def g3_venus(A, K):
     ids = K[K.pattern == "venus_daytime"].article_id.unique()
     a = A.loc[A.index.intersection(ids)]
     a = a[a.jdn_use.notna()]
-    rows = []
+    rows = []; arts = []; ctrl_rows = []
     rng = random.Random(SEED)
     for src, g in a.groupby("source"):
-        jd = g.jdn_use.astype(int).values + 0.5 - 127 / 360   # local noon
+        jd = g.jdn_use.astype(int).values - 127 / 360   # local mean noon at 127°E (integer JDN = noon UT; 1.2 had +0.5, i.e. 00h of the next day — fixed in 1.2.1)
         t = ts.ut1_jd(jd)
         e = earth.at(t)
         el = e.observe(sun).apparent().separation_from(e.observe(venus).apparent()).degrees
@@ -139,11 +162,15 @@ def g3_venus(A, K):
         east = ((lon_v - lon_s) % 360) < 180
         # control: random days in the same span
         lo, hi = int(g.jdn_use.min()), int(g.jdn_use.max())
-        rj = np.array([rng.randint(lo, hi) for _ in range(2000)]) + 0.5 - 127 / 360
+        rj_jdn = np.array([rng.randint(lo, hi) for _ in range(2000)]); rj = rj_jdn - 127 / 360
         er = earth.at(ts.ut1_jd(rj)); elr = er.observe(sun).apparent().separation_from(er.observe(venus).apparent()).degrees
+        for aid, sd, j, e_, ev in zip(g.index, g.solar_date, g.jdn_use.astype(int), el, east):
+            arts.append(dict(article_id=aid, source=src, solar_date=sd, jdn=int(j), elongation_deg=float(e_), evening=bool(ev)))
+        for j, e_ in zip(rj_jdn, elr):
+            ctrl_rows.append(dict(source=src, jdn=int(j), elongation_deg=float(e_)))
         rows.append(dict(source=src, n_dated=len(g), median_elongation=float(np.median(el)), share_elong_ge30=float((el >= 30).mean()), share_elong_ge40=float((el >= 40).mean()),
                          share_evening=float(east.mean()), control_median_elongation=float(np.median(elr)), control_share_ge30=float((elr >= 30).mean()), control_share_ge40=float((elr >= 40).mean())))
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows), pd.DataFrame(arts), pd.DataFrame(ctrl_rows)
 
 
 STARS = {  # J2000 RA (h), Dec (deg): bright stars that appear in 犯 reports under their Chinese names
@@ -181,7 +208,7 @@ def g3_appulse(A, K):
     seps = []
     for _, r in P.iterrows():
         # sample the night of that civil date (local 18h to next 6h) every 30 min; minimum separation
-        jd0 = r.jdn + 0.5 - 127 / 360 + 0.25
+        jd0 = r.jdn + 0.25 - 127 / 360   # 18:00 local mean time of the civil date (1.2 had +0.75, i.e. 06:00 of the next day — fixed in 1.2.1)
         t = ts.ut1_jd(jd0 + np.arange(0, 0.5001, 1 / 48))
         obs = earth.at(t)
         b = obs.observe(moon if r.body == "月" else eph[PLANETS[r.body]]).apparent()
@@ -203,16 +230,16 @@ def g3_appulse(A, K):
                          share_le5=float((g.min_sep_deg <= 5).mean()), share_le10=float((g.min_sep_deg <= 10).mean()),
                          median_sep_pm1=float(g.min_sep_pm1_deg.median()), share_le1_5_pm1=float((g.min_sep_pm1_deg <= 1.5).mean()), share_le5_pm1=float((g.min_sep_pm1_deg <= 5).mean())))
     # control: same pairs on random dates
-    rng = random.Random(SEED); ctrl = []
+    rng = random.Random(SEED); ctrl = []; ctrl_rows = []
     for _, r in P.sample(min(400, len(P)), random_state=SEED).iterrows():
         j = rng.randint(int(P.jdn.min()), int(P.jdn.max()))
-        t = ts.ut1_jd(j + 0.5 - 127 / 360 + 0.25 + np.arange(0, 0.5001, 1 / 48)); obs = earth.at(t)
+        t = ts.ut1_jd(j + 0.25 - 127 / 360 + np.arange(0, 0.5001, 1 / 48)); obs = earth.at(t)
         b = obs.observe(moon if r.body == "月" else eph[PLANETS[r.body]]).apparent()
         tg = obs.observe(eph[PLANETS[r.target]]).apparent() if r.target in PLANETS else obs.observe(Star(ra_hours=STARS[r.target][0], dec_degrees=STARS[r.target][1])).apparent()
-        ctrl.append(float(b.separation_from(tg).degrees.min()))
+        ctrl.append(float(b.separation_from(tg).degrees.min())); ctrl_rows.append(dict(body=r.body, target=r.target, jdn=int(j), min_sep_deg=ctrl[-1]))
     ctrl = np.array(ctrl)
     summ.append(dict(source="control (random dates, same pairs)", n_pairs=len(ctrl), median_sep=float(np.median(ctrl)), share_le1_5=float((ctrl <= 1.5).mean()), share_le5=float((ctrl <= 5).mean()), share_le10=float((ctrl <= 10).mean())))
-    return pd.DataFrame(summ), P
+    return pd.DataFrame(summ), P, pd.DataFrame(ctrl_rows)
 
 
 def g4_comet(A, K):
@@ -287,8 +314,9 @@ def main():
         agreement["lunar_types"] = {src: dict(Counter(g.type)) for src, g in a2.groupby("source")}
         print("G2", s2[s2.type == "observed"][["source", "n_dated", "match_pm1", "rate_pm1"]].to_string(index=False))
     # ---------------- G3
-    gv = g3_venus(A, K); gv.to_csv(D / "g3_venus.csv", index=False); print("G3 venus\n", gv.to_string(index=False))
-    ga, gap = g3_appulse(A, K); ga.to_csv(D / "g3_appulse.csv", index=False); gap.to_csv(D / "g3_appulse_articles.csv", index=False)
+    gv, gva, gvc = g3_venus(A, K); gv.to_csv(D / "g3_venus.csv", index=False); gva.to_csv(D / "g3_venus_articles.csv", index=False); gvc.to_csv(D / "g3_venus_control.csv", index=False)
+    print("G3 venus\n", gv.to_string(index=False))
+    ga, gap, gac = g3_appulse(A, K); ga.to_csv(D / "g3_appulse.csv", index=False); gap.to_csv(D / "g3_appulse_articles.csv", index=False); gac.to_csv(D / "g3_appulse_control.csv", index=False)
     print("G3 appulse\n", ga.to_string(index=False) if len(ga) else "none")
     # ---------------- G4
     g4, g4a, ncomets = g4_comet(A, K); g4.to_csv(D / "g4_comet.csv", index=False); g4a.to_csv(D / "g4_comet_articles.csv", index=False)
@@ -321,12 +349,13 @@ def main():
         for lab, (s1_, s2_) in {"goryeosa→jeolyo": ("goryeosa", "goryeosa_jeolyo"), "jeolyo→goryeosa": ("goryeosa_jeolyo", "goryeosa"), "sillok→sjw (1623–1863)": ("sillok", "sjw"), "sjw→sillok (1623–1863)": ("sjw", "sillok")}.items():
             S1, S2 = days(s1_, pattern, coded), days(s2_, pattern, coded)
             if "1623" in lab:
-                lo, hi = 2313900, 2401900   # JDN bounds ≈ 1623-01 .. 1864-01
+                lo, hi = 2313849, 2401871   # JDN of 1623-01-01 and 1863-12-31 (Gregorian); 1.2 used 2313900..2401900 (1623-02-21..1864-01-29), same counts
                 S1 = {j for j in S1 if lo <= j <= hi}; S2 = {j for j in S2 if lo <= j <= hi}
             n, k, r = overlap(S1, S2)
             rows.append(dict(phenomenon=pattern, direction=lab, basis="observed-coded days" if coded is not None else "keyword days", n_days=n, also_in_other=k, share=r))
     pd.DataFrame(rows).to_csv(D / "g6_overlap.csv", index=False)
     print("G6\n", pd.DataFrame(rows).to_string(index=False))
+    blind_pairs = []
     def kappa(a, b):
         n = len(a); po = sum(x == y for x, y in zip(a, b)) / n; ca, cb = Counter(a), Counter(b)
         pe = sum(ca[k] * cb[k] for k in set(ca) | set(cb)) / (n * n); return ((po - pe) / (1 - pe) if pe < 1 else 1.0), po
@@ -334,22 +363,35 @@ def main():
         p = C / blind_file
         if main_df is None or not p.exists():
             continue
-        b = {r["article_id"]: r for r in read_jsonl(p)}
+        bdf = apply_rules(pd.DataFrame(read_jsonl(p)), "solar" if name.startswith("solar") else "lunar").set_index("article_id")
         m = main_df[~main_df.coded_file.str.contains("blind")].drop_duplicates("article_id").set_index("article_id")
-        ids = [i for i in b if i in m.index]
+        ids = [i for i in bdf.index if i in m.index]
         if not ids:
             continue
-        a1_, b1_ = [m.loc[i, "type"] for i in ids], [b[i]["type"] for i in ids]
-        k, po = kappa(a1_, b1_)
         pool = lambda x: "observation" if x == "observed" else ("other" if x == "other" else "not_observation")
-        kp, pop = kappa([pool(x) for x in a1_], [pool(x) for x in b1_])
-        agreement[f"{name}_blind"] = dict(n=len(ids), agreement=po, kappa=k, agreement_pooled=pop, kappa_pooled=kp)
-        print(name, "blind n", len(ids), "agreement %.3f kappa %.3f pooled kappa %.3f" % (po, k, kp))
+        res = {}
+        for tag, col in (("coder", "type_coder"), ("after_rule", "type")):
+            a1_, b1_ = [m.loc[i, col] for i in ids], [bdf.loc[i, col] for i in ids]
+            k, po = kappa(a1_, b1_); kp, pop = kappa([pool(x) for x in a1_], [pool(x) for x in b1_])
+            res[tag] = dict(n=len(ids), agreement=po, kappa=k, agreement_pooled=pop, kappa_pooled=kp)
+        agreement[f"{name}_blind"] = dict(res["coder"], after_rule=res["after_rule"])
+        print(name, "blind n", len(ids), "coder: agreement %.3f kappa %.3f pooled %.3f" % (res["coder"]["agreement"], res["coder"]["kappa"], res["coder"]["kappa_pooled"]),
+              "| after rule: %.3f %.3f %.3f" % (res["after_rule"]["agreement"], res["after_rule"]["kappa"], res["after_rule"]["kappa_pooled"]))
+        for i in ids:
+            blind_pairs.append(dict(bundle=name, article_id=i, type_main_coder=m.loc[i, "type_coder"], type_blind_coder=bdf.loc[i, "type_coder"], type_main=m.loc[i, "type"], type_blind=bdf.loc[i, "type"], main_coder=m.loc[i, "coded_file"]))
+    for name, df_ in (("solar_v2", sol), ("lunar", lun)):
+        if len(df_):
+            agreement[f"{name}_rule_changes"] = {k: int(v) for k, v in Counter(f"{a}->{b}" for a, b, r_ in zip(df_.type_coder, df_.type, df_.rule) if r_).items()}
+    gs = K[K.pattern == "guest_star"].article_id.unique(); gs = A.loc[A.index.intersection(gs)]; gs = gs[gs.source == "sillok"]
+    if len(gs):
+        se_ = gs[gs.king_no == 14]
+        agreement["guest_star_sillok"] = dict(all=int(len(gs)), seonjo=int(len(se_)), seonjo_1604_1605=int(se_.year_ce.isin([1604, 1605]).sum()), y1604=int((gs.year_ce == 1604).sum()))
+        print("guest star (Sillok)", agreement["guest_star_sillok"])
     if len(ga):
         agreement["appulse_pairs_parsed"] = dict(parsed=int(len(gap)), of_articles=int(gap.attrs.get("n_appulse_articles", 0)))
     json.dump(agreement, open(D / "g_coding_agreement.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     # publishable coding tables (all 1.2 sources are KOGL-1 or unrestricted; Sillok rows are Taejo–Cheoljong only)
-    cols = ["article_id", "source", "type", "boundary", "time_text", "magnitude_text", "not_seen_reason", "summary", "quote", "coder"]
+    cols = ["article_id", "source", "type", "type_coder", "rule", "boundary", "time_text", "magnitude_text", "not_seen_reason", "summary", "quote", "coder"]
     if len(sol):
         s = sol.copy(); s["source"] = s.article_id.map(A.source); s["coder"] = s.coded_file
         s[cols].to_csv(C / "solar_eclipse_types_v2.csv", index=False, encoding="utf-8")
@@ -367,6 +409,27 @@ def main():
     v2 = [r for f in sorted(glob.glob(str(C / "slaves_v2_coded_[0-9].jsonl"))) for r in read_jsonl(f)]
     if v2:
         pd.DataFrame(v2)[["article_id", "relevant", "reason", "quote"]].to_csv(C / "slaves_v2_judgements.csv", index=False, encoding="utf-8")
+    # 1.2.1: blind pairs (solar v2, lunar, slaves v2) and the 1.0 precision samples (Taejo–Cheoljong only) so that κ and v1 values can be re-derived
+    pb = C / "slaves_v2_coded_blind30.jsonl"
+    if v2 and pb.exists():
+        mv = {r["article_id"]: r["relevant"] for r in v2}
+        for r in read_jsonl(pb):
+            if r["article_id"] in mv:
+                blind_pairs.append(dict(bundle="slaves_v2", article_id=r["article_id"], type_main_coder=mv[r["article_id"]], type_blind_coder=r["relevant"], type_main=mv[r["article_id"]], type_blind=r["relevant"], main_coder=""))
+    if blind_pairs:
+        pd.DataFrame(blind_pairs).to_csv(C / "blind_recoding_pairs.csv", index=False, encoding="utf-8")
+    ov = json.load(open(C / "overrides.json", encoding="utf-8")).get("overrides", {}) if (C / "overrides.json").exists() else {}
+    rows = []
+    for b in ("comet", "slaves", "earthquake", "relief", "royal_lecture", "summer_cold"):
+        p = C / f"{b}_coded.jsonl"
+        if p.exists():
+            for r in read_jsonl(p):
+                if r["article_id"][:3] in ("wza", "wzb", "wzc"):
+                    continue
+                rel = ov.get(b, {}).get(r["article_id"], r.get("relevant", ""))
+                rows.append(dict(bundle=("slaves_v1" if b == "slaves" else b), article_id=r["article_id"], relevant=rel, relevant_coder=r.get("relevant", ""), reason=r.get("reason", ""), quote=r.get("quote", "")))
+    if rows:
+        pd.DataFrame(rows).to_csv(C / "precision_sillok_samples.csv", index=False, encoding="utf-8")
 
 
 if __name__ == "__main__":

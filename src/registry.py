@@ -19,7 +19,7 @@ Fields
 SITE = {
     "ko": {"title": "실록 메트릭스", "subtitle": "조선왕조실록을 기사 단위로 센 수치와, 그 수치를 얼마나 믿어도 되는지"},
     "en": {"title": "Sillok Metrics", "subtitle": "The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number"},
-    "version": "1.2.3",
+    "version": "1.2.4",
 }
 
 SERIES = {
@@ -65,11 +65,11 @@ SOURCES = {
 
 # prior results shown next to our numbers (only values read from the original publication)
 PRIOR = {
-    "bak_oh_2015": {"ko": "Bak & Oh (2015), 국편 누리집을 긁어 센 왕별 기사 수(Table 1). 태조~철종 합계 347,926건(고종·순종 포함 380,271건).",
-                    "en": "Bak & Oh (2015), articles per reign counted from the NIKH website (Table 1): 347,926 for Taejo–Cheoljong (380,271 with Gojong and Sunjong).",
+    "bak_oh_2015": {"ko": "Bak & Oh (2015), 국편 누리집을 긁어 센 왕별 기사 수(p. 11, Table 1). 표의 태조~철종 합계 347,926건, 27왕 합계 380,723건. 본문이 적은 코퍼스 총수 380,271건(「1392–1863」)은 표 합과 452건 차이가 나는 논문 자체의 불일치다(1.2.3 까지는 이 값을 「고종·순종 포함」으로 잘못 적었다).",
+                    "en": "Bak & Oh (2015), articles per reign counted from the NIKH website (p. 11, Table 1): the table sums to 347,926 for Taejo–Cheoljong and 380,723 for all 27 reigns. The corpus total stated in the text, 380,271 ('1392–1863'), differs from the table sum by 452, an inconsistency within the paper (up to 1.2.3 this site wrongly labeled that figure 'with Gojong and Sunjong').",
                     "cite": "Bak, J. & Oh, A. (2015). Five Centuries of Monarchy in Korea: Mining the Text of the Annals of the Joseon Dynasty. LaTeCH 2015, 10–14. doi:10.18653/v1/W15-3702"},
-    "cha_saron": {"ko": "차장섭, 「朝鮮前期 實錄의 史論」, 『국사관논총』 32: 조선 전기 사론 총 3,435회(표 2: 정종 1·세조 5·예종 2·성종 629·연산군 34·중종 1,261·인종 55·명종 1,439). 「史臣曰」 하나를 1회로 셌다.",
-                  "en": "Cha Jang-seop, 'Historians' comments in the early Joseon Veritable Records', Guksagwan Nonchong 32: 3,435 comments in early Joseon (Table 2: Jeongjong 1, Sejo 5, Yejong 2, Seongjong 629, Yeonsangun 34, Jungjong 1,261, Injong 55, Myeongjong 1,439), each '史臣曰' counted as one comment.",
+    "cha_saron": {"ko": "차장섭, 「朝鮮前期 實錄의 史論」, 『국사관논총』 32(1992), Ⅲ절 표 2: 조선 전기 사론 총 3,435회(표 2: 정종 1·세조 5·예종 2·성종 629·연산군 34·중종 1,261·인종 55·명종 1,439 — 표의 합은 3,426으로 본문의 총수와 9 차이가 나며, 이는 원문 그대로다). 「史臣曰」 하나를 1회로 셌다.",
+                  "en": "Cha Jang-seop, 'Historians' comments in the early Joseon Veritable Records', Guksagwan Nonchong 32 (1992), section III, Table 2: 3,435 comments in early Joseon (Table 2: Jeongjong 1, Sejo 5, Yejong 2, Seongjong 629, Yeonsangun 34, Jungjong 1,261, Injong 55, Myeongjong 1,439; the table sums to 3,426, nine short of the total stated in the text, as in the original), each '史臣曰' counted as one comment.",
                   "cite": "차장섭, 「朝鮮前期 實錄의 史論」, 『國史館論叢』 32, 국사편찬위원회.", "cite_en": "Cha Jang-seop, 'Historians' comments in the early Joseon Veritable Records' (in Korean), Guksagwan Nonchong 32, National Institute of Korean History."},
     "nikh_haejae": {"ko": "국사편찬위원회 왕대별 해제: 선조수정실록은 「원본의 1/5」, 경종수정실록은 「원 실록의 1/3 분량」, 광해군일기 정초본은 중초본보다 「1/3 정도 축소」.",
                     "en": "NIKH edition notes: the Revised Seonjo records are 'one fifth of the original', the Revised Gyeongjong records 'one third', and the final draft of the Daily Records of Gwanghaegun 'reduced by about a third' from the second draft.",

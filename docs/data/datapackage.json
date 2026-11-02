@@ -2,8 +2,8 @@
  "profile": "data-package",
  "name": "sillok-metrics",
  "title": "Sillok Metrics — derived data",
- "version": "1.2.3",
- "created": "2026-11-02",
+ "version": "1.2.4",
+ "created": "2026-11-03",
  "homepage": "https://bowonkwon.github.io/Sillok-Metrics/",
  "contributors": [
   {
@@ -14,6 +14,7 @@
  "description": "Article-level counts and metrics for the Veritable Records of the Joseon Dynasty (Taejo–Cheoljong). No article text is included; each article ID links to the NIKH site. Source data: NIKH (KOGL Type 1), AKS; astronomy from JPL DE406 and the Espenak–Meeus canon.",
  "resources": [
   {
+   "description": "solar_date_ganji and date_flag (1.2.4): solar_date_ganji follows the article's ganji where a whole lunar month is one day off the converted date (ganji_month_shift) or where the conversion package refused the day (ganji_only); equals solar_date otherwise (blank for ganji_unresolved). Metrics use solar_date.",
    "name": "articles",
    "path": "articles.csv.gz",
    "format": "csv (gzip)",
@@ -1584,7 +1585,7 @@
      "license": "KOGL Type 1 (attribution)"
     },
     {
-     "title": "Lyu et al",
+     "title": "Lyu, Z., Ichikawa, K., Cheng, Y., Hayakawa, H",
      "path": "https://doi.org/10.5281/zenodo.8382243",
      "license": "CC BY 4.0"
     }
@@ -1609,7 +1610,7 @@
      "license": "KOGL Type 1 (attribution)"
     },
     {
-     "title": "Lyu et al",
+     "title": "Lyu, Z., Ichikawa, K., Cheng, Y., Hayakawa, H",
      "path": "https://doi.org/10.5281/zenodo.8382243",
      "license": "CC BY 4.0"
     }

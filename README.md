@@ -9,7 +9,7 @@ Site: https://bowonkwon.github.io/Sillok-Metrics/ (한국어 · English) · Hub:
 
 **범위 / Scope.** 태조~순종 27대(1392~1910). 고종·순종실록의 원문 데이터는 공공누리 제4유형(변경 금지·비상업)이라 본문을 가공·인용하지 않는 집계(기사 수·글자 수·국편 분류·키워드 건수)에만 쓰고, 기사 제목·본문 발췌·천문 대조에는 쓰지 않았다. 표본 코딩에는 두 실록의 기사도 들어가지만, 공개 코딩 표에서 그 기사의 제목·인용문·요약은 비웠다. The Gojong and Sunjong records are KOGL Type 4 (no derivatives, non-commercial); they enter only counts that neither alter nor quote the text and are excluded from titles, excerpts and the astronomical checks. Sample coding does include articles from the two records, but in the published coding tables their title, quote and summary are blanked.
 
-국사편찬위원회가 공공데이터포털에 개방한 실록 원문 XML(공공누리 제1유형)을 기사(414,501건, 판본 33종) 단위로 세어 지표 34개를 만들었다. 일곱 계열이다: 기록의 양과 밀도, 판본 비교, 하늘과 기후, 정치·인사, 형정·사회, 그리고 1.2 에서 더한 「기록과 하늘 — 사료 셋」(고려사 천문지·고려사절요·승정원일기의 천문 기사 13,337건을 실록과 같은 코드북·같은 천문 계산으로 대조)과 「승정원일기 날씨 칸」(날 104,074건의 날씨 칸을 토큰 규칙으로 분해하고 Lyu 외 2024·Lee 외 2024 데이터셋, 측우기, 기상청 관측과 대조). 숫자마다 신뢰도 카드가 붙는다 — 원본에서 그대로 센 값인지, 천문 계산(JPL DE406)과 맞춰 본 비율인지, 손으로 코딩한 층화 표본에서 잰 정밀도인지. 원문 전문은 싣지 않으며 기사마다 국사편찬위원회 원문으로 연결한다.
+국사편찬위원회가 공공데이터포털에 개방한 실록 원문 XML(공공누리 제1유형)을 기사(414,501건, 판본 33종) 단위로 세어 지표 34개를 만들었다. 일곱 계열이다: 기록의 양과 밀도, 판본 비교, 하늘과 기후, 정치·인사, 형정·사회, 그리고 1.2 에서 더한 「기록과 하늘 — 사료 셋」(고려사 천문지·고려사절요·승정원일기의 천문 기사 13,337건을 실록과 같은 코드북·같은 천문 계산으로 대조)과 「승정원일기 날씨 칸」(날 104,074건의 날씨 칸을 토큰 규칙으로 분해하고 Lyu 외 2024·Lee 외 2024 데이터셋, 측우기, 기상청 관측과 대조). 숫자마다 신뢰도 카드가 붙는다 — 원본에서 그대로 센 값인지, 천문 계산(JPL DE406)과 맞춰 본 비율인지, 언어모델 코더가 코딩한 층화 표본에서 잰 정밀도인지. 원문 전문은 싣지 않으며 기사마다 국사편찬위원회 원문으로 연결한다.
 
 34 metrics in seven series (volume, editions, sky and weather, politics, justice and society, and — added in 1.2 — 'Record and sky: three sources', which classifies by type 13,337 astronomy articles of the Goryeosa treatise, the Goryeosa-jeolyo and the Seungjeongwon Ilgi with the Sillok's codebook and the same DE406 computation, and 'The weather cell of the Seungjeongwon Ilgi', which decomposes the 104,074 daily weather cells with a token rule and checks them against the Lyu et al. 2024 and Lee et al. 2024 datasets, the rain gauge and KMA observations) computed over the 414,501 articles (33 editions) of the NIKH XML releases. Every metric carries a reliability card: exact count, external match against astronomical computation (JPL DE406), or sampled precision from coded stratified samples. No article text is republished; every article links to the NIKH site.
 
@@ -56,4 +56,4 @@ Code: MIT. Site text and this project's own contributions: CC BY 4.0. Derived ta
 
 ## 인용 / Citation
 
-Kwon, Bowon (2026). *Sillok Metrics* 1.2.3. https://bowonkwon.github.io/Sillok-Metrics/
+Kwon, Bowon (2026). *Sillok Metrics* 1.2.4. https://bowonkwon.github.io/Sillok-Metrics/

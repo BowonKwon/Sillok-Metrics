@@ -738,18 +738,26 @@ def king_takeaway(D, r, lang):
     M = D.main_ed().copy()
     kc = KING_COL[lang][0]
     def rank(col, asc=False):
-        return int(M[col].rank(ascending=asc, method="min").loc[M.edition == r.edition].iloc[0])
-    rk_h, rk_a, rk_s = rank("han_per_year"), rank("n_articles"), rank("saron_share")
+        # (rank, number of editions sharing the value). Ties get the same "min" rank, so the text must say so:
+        # two tied -> "joint n", three or more -> no rank, just how many share the value (1.1.1 fix: ten editions
+        # with no commentary were each shown as a solitary "18th").
+        v = M.loc[M.edition == r.edition, col].iloc[0]
+        return int(M[col].rank(ascending=asc, method="min").loc[M.edition == r.edition].iloc[0]), int((M[col] == v).sum())
+    (rk_h, tie_h), (rk_a, tie_a), (rk_s, tie_s) = rank("han_per_year"), rank("n_articles"), rank("saron_share")
+    def rk_ko(rk, tie):
+        return f"{rk}위" if tie == 1 else (f"공동 {rk}위" if tie == 2 else f"{tie}대가 같은 값")
+    def rk_en(rk, tie, lead="rank "):
+        return f"{lead}{rk}" if tie == 1 else (f"joint {lead}{rk}" if tie == 2 else f"{tie} editions share this value")
     J = D.justice.set_index("edition"); jv = float(J.loc[r.edition, "justice_share"]); jm = float(J.justice_share.median())
     Lc = D.lecture.set_index("edition"); lv = float(Lc.loc[r.edition, "keyword_share"]); lm = float(Lc.keyword_share.median())
     if lang == "ko":
-        s = f"{r.edition_ko}은 재위 1년당 글자 수가 {len(M)}대 중 {rk_h}위({r.han_per_year:,.0f}자), 기사 수는 {rk_a}위다. 사론이 붙은 기사는 {r.saron_share:.1%}({rk_s}위)"
+        s = f"{r.edition_ko}은 재위 1년당 글자 수가 {len(M)}대 중 {rk_ko(rk_h, tie_h)}({r.han_per_year:,.0f}자), 기사 수는 {rk_ko(rk_a, tie_a)}다. 사론이 붙은 기사는 {r.saron_share:.1%}({rk_ko(rk_s, tie_s)})"
         s += "로 이 책에는 사관의 논평이 없다. " if r.saron_share == 0 else "다. "
         s += f"사법 분류 기사 비율은 {jv:.1%}로 {len(M)}대 중앙값 {jm:.1%}보다 {'높고' if jv > jm else '낮고'}, 경연 키워드 비율은 {lv:.1%}(중앙값 {lm:.1%})다. 키워드 지표는 모두 기록 관행의 영향을 받으므로 왕대 간 차이는 「무엇을 적었나」의 차이로 먼저 읽는다."
         if r.edition in ("wza", "wzb"):
             s += " 이 실록은 공공누리 4유형이라 건수만 셌고, 기사 제목·본문 발췌는 싣지 않았다."
     else:
-        s = f"The {r.edition_en} rank {rk_h} of {len(M)} in characters per reign-year ({r.han_per_year:,.0f}) and {rk_a} in article count. {r.saron_share:.1%} of articles carry a historian's comment (rank {rk_s})"
+        s = f"The {r.edition_en} {rk_en(rk_h, tie_h)} of {len(M)} in characters per reign-year ({r.han_per_year:,.0f}) and {rk_en(rk_a, tie_a, '')} in article count. {r.saron_share:.1%} of articles carry a historian's comment ({rk_en(rk_s, tie_s)})"
         s += ", so this edition has no commentary. " if r.saron_share == 0 else ". "
         s += f"Justice-classified articles are {jv:.1%} against a median of {jm:.1%} across reigns; royal-lecture keywords {lv:.1%} (median {lm:.1%}). Keyword metrics follow recording practice, so read differences between reigns first as differences in what was written down."
         if r.edition in ("wza", "wzb"):
@@ -930,7 +938,7 @@ TAKE_METHOD_KO
 <p>이 사이트가 새로 보태는 것은 기사 단위 메타 테이블, 키워드 지표의 정밀도, 일식 기사의 유형별 일치율, 판본 쌍의 같은 잣대 비교, 광해군일기 산삭의 글자 단위 계량이다. 왕별 기사 수(Bak & Oh 2015), 조선 일식 기록 집계(안영숙·이용삼 2004), 조선 전기 사론 수(차장섭), 실록의 형옥 기사 수(유승희 2007)는 이미 있는 수치이므로 「선행 결과」 면에서 재계산과 나란히 보인다.</p>
 <h2>출처 표시</h2>
 <p>본 저작물은 '교육부 국사편찬위원회'에서 2022년 작성하여 공공누리 제1유형으로 개방한 '조선왕조실록 정보_실록원문'·'조선왕조실록 정보_부가정보 인물 데이터'를 이용하였으며, 해당 저작물은 '공공데이터포털(https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do)'에서 무료로 다운받으실 수 있습니다. 성관 보충에는 '한국학중앙연구원'이 공공데이터포털(https://www.data.go.kr/data/15052752/fileData.do)에 개방한 '조선조문과급제자'를 이용하였습니다. 천문 계산은 NASA/JPL DE406, 일식 목록은 Espenak & Meeus (NASA/TP-2006-214141)를 썼다.</p>
-<h2>판</h2><p>1.0 (2026-11-02) — 첫 공개. 지표 24개, 판본 30종, 왕대 25.<br>1.1 ({BUILD_DATE}) — 고종·순종실록을 건수 집계에 포함(판본 33종, 왕대 27). 계열 C 와 표본 코딩은 태조~철종 그대로.</p>
+<h2>판</h2><p>1.0 (2026-11-02) — 첫 공개. 지표 24개, 판본 30종, 왕대 25.<br>1.1 ({BUILD_DATE}) — 고종·순종실록을 건수 집계에 포함(판본 33종, 왕대 27). 계열 C 와 표본 코딩은 태조~철종 그대로.<br>1.1.1 ({BUILD_DATE}) — 왕대 요약문의 동률 순위 표기 정정: 사론 비율이 0 인 왕대 10 을 각각 「18위」로 적던 것을 「10대가 같은 값」으로 바꿨다. 수치·표·데이터 파일은 그대로.</p>
 """
     en = f"""
 <h1>Method and limits</h1>
@@ -957,7 +965,7 @@ TAKE_METHOD_EN
 <p>New here: the article-level table, precision for keyword metrics, eclipse match rates by article type, like-for-like comparison of edition pairs, and character-level deletion counts for the Gwanghaegun diary. Articles per reign (Bak & Oh 2015), Joseon eclipse records (Ahn & Lee 2004), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu 2007) already existed and are shown next to the recount on the Prior results page.</p>
 <h2>Attribution</h2>
 <p>This work uses the 'Veritable Records of the Joseon Dynasty — original text' and '— supplementary person data' created by the National Institute of Korean History (Ministry of Education) in 2022 and released under KOGL Type 1 at the Korean public data portal (https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do), and the 'Successful candidates of the civil service examination' released by the Academy of Korean Studies (https://www.data.go.kr/data/15052752/fileData.do). Astronomy: NASA/JPL DE406; eclipse canon: Espenak & Meeus (NASA/TP-2006-214141).</p>
-<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).</p>
+<h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 ({BUILD_DATE}) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 ({BUILD_DATE}) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now read "10 editions share this value". No number, table or data file changed.</p>
 """
     ko = ko.replace("TAKE_METHOD_KO", take_block("세는 단위는 기사, 날짜는 음력 원문 그대로에 양력 환산을 더한 것, 천문은 DE406 직접 계산이다. 키워드 지표는 손으로 코딩한 표본의 정밀도를 곱해 읽는다. 실록은 「일어난 일」이 아니라 「적은 일」의 기록이라는 한계가 모든 빈도형 지표에 걸린다.", "ko", small=True))
     en = en.replace("TAKE_METHOD_EN", take_block("Articles are the unit; dates are the lunar originals plus a solar conversion; astronomy is computed directly from DE406. Keyword metrics are read multiplied by the precision of hand-coded samples. The Sillok records what was written, not what happened — a limit that applies to every frequency metric.", "en", small=True))

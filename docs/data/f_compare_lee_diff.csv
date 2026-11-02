@@ -82,7 +82,6 @@ SJW-G08050040,1784-06-21,clear_any,True,3,或陰或晴,或陰或晴
 SJW-G08080120,1784-09-26,clear_any,True,7,或〈晴〉或雨,或<晴>或雨
 SJW-G08090100,1784-10-23,clear_any,True,7,或晴或雨,或晴或雨
 SJW-G08110220,1785-01-02,clear_any,True,8,晴,雪
-SJW-G08110230,1785-01-03,clear_any,False,1,雪,晴
 SJW-G09030170,1785-04-25,clear_any,True,3,或陰或晴,或陰或晴
 SJW-G09030190,1785-04-27,clear_any,True,7,或雨或晴,或雨或晴
 SJW-G09040130,1785-05-21,clear_any,True,3,或陰或晴,或陰或晴
@@ -1245,7 +1244,6 @@ SJW-K25050030,1888-06-12,rain_any,False,7,晴,雨
 SJW-K36040230,1899-06-01,rain_any,False,7,晴,雨
 SJW-K42030180,1905-04-22,rain_any,True,8,陰雪雨,陰雪雨
 SJW-G08110220,1785-01-02,snow_any,False,8,晴,雪
-SJW-G08110230,1785-01-03,snow_any,True,1,雪,晴
 SJW-H02120160,1803-01-09,snow_any,True,7,雨雪,雨雪
 SJW-H08020110,1808-03-07,snow_any,True,3,陰風雪,陰風雪
 SJW-H11120250,1812-02-07,snow_any,True,7,雨雪,雨雪

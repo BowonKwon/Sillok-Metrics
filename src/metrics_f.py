@@ -99,6 +99,11 @@ def main():
     lee = pd.read_excel(X / "zenodo-lee2024" / "Seoul_precipitation_1778-1907_Lee_etal_2024.xlsx", sheet_name="daily_data")
     lee["date"] = pd.to_datetime(dict(year=lee.yy, month=lee.mm, day=lee.dd), errors="coerce").dt.strftime("%Y-%m-%d")
     lee = lee.rename(columns={"wx": "lee_text", "swx": "lee_cat", "rrn": "gauge_mm"})
+    # 1.2.3: daily_data has 47,480 rows for 47,476 dates - four dates appear twice (1785-01-01/02/03, 1873-01-01); one pair is identical, three
+    # pair a 晴/no-gauge row with a 雪/0 mm row. One row per date is kept, preferring the row with a gauge value (then the first), so the joins
+    # below are one-to-one on the date; up to 1.2.2 the duplicates added four rows to the F1 and F2 joins.
+    lee_rows_total = len(lee); lee_dup_dates = int(lee.date.duplicated().sum())
+    lee = lee.assign(_has=lee.gauge_mm.notna()).sort_values(["date", "_has"], ascending=[True, False], kind="stable").drop_duplicates("date", keep="first").drop(columns="_has")
     lm = d[d.solar_date.notna()].merge(lee[["date", "lee_text", "lee_cat", "gauge_mm", "flag_a-d", "flag_e"]], left_on="solar_date", right_on="date", how="inner")
     # Lee categories (weather_code sheet): 1 clear, 3 cloudy/mixed, 7 rain, 8 snow, 0 missing, 'm' no document
     lm["lee_cat"] = lm.lee_cat.astype(str)
@@ -164,7 +169,7 @@ def main():
     # count as "no gauge rain" here, so the second rate is the share of gauge-dry days on which the cell still says rain.
     g = lm[lm.kind == "weather"].copy()
     # 1.2.2: one row per calendar date. A date with two weather nodes (duplicates, see F4) counts as rain if any node says rain
-    # (any policy; a few duplicated dates disagree, e.g. 1802-11-03 雨/陰). 1.2.1 counted rows (8,364 instead of 8,320 dates).
+    # (any policy; a few duplicated dates disagree, e.g. 1802-11-03 雨/陰). 1.2.1 counted rows (8,364 instead of 8,320 dates). 1.2.3: Lee duplicates removed, so gauge_rows counts diary nodes.
     lee_rain_total = int((lee.gauge_mm > 0).sum()); lee_zero_total = int((lee.gauge_mm == 0).sum()); lee_na_total = int(lee.gauge_mm.isna().sum())
     g["lee_rain_text"] = g.lee_text.astype(str).str.contains("雨")
     n_rows = len(g)
@@ -191,7 +196,7 @@ def main():
     for h, gg in g.groupby("half"):
         rg.append(gauge_block(f"{h}–{h+49}", gg))
     rg.append(gauge_block("1778–1907", g))
-    rg[-1].update(lee_rain_days_total=lee_rain_total, lee_zero_days_total=lee_zero_total, lee_na_days_total=lee_na_total)   # Lee's own counts; the difference to gauge_*_days = days without a weather node in the diary
+    rg[-1].update(lee_rain_days_total=lee_rain_total, lee_zero_days_total=lee_zero_total, lee_na_days_total=lee_na_total, lee_rows_total=lee_rows_total, lee_dates_total=len(lee), lee_duplicate_dates=lee_dup_dates)   # Lee's own counts; the difference to gauge_*_days = days without a weather node in the diary
     pd.DataFrame(rg).to_csv(D / "f_rain_gauge.csv", index=False)
     print("rain gauge dates", len(g), "rows", n_rows, "Lee rain days", lee_rain_total, "matched", int((g.gauge_mm > 0).sum()))
 

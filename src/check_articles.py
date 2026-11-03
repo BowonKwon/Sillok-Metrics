@@ -3,7 +3,7 @@
 
   python src/check_articles.py [--index path/to/sillok-index.sqlite]
 
-1. per-edition article counts vs an independent count (the vault index DB built by a different
+1. per-edition article counts vs an independent count (a separate index DB built by a different
    script in 2026-09, optional) and vs Bak & Oh (2015) Table 1 (articles with a date);
 2. characters: sum of n_han vs the 2026-09-26 conversion check (49,533,709 CJK + 3,001,739 Hangul
    over the 30 editions, Taejo–Cheoljong);

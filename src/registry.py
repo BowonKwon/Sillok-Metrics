@@ -19,7 +19,7 @@ Fields
 SITE = {
     "ko": {"title": "실록 메트릭스", "subtitle": "조선왕조실록을 기사 단위로 센 수치와, 그 수치를 얼마나 믿어도 되는지"},
     "en": {"title": "Sillok Metrics", "subtitle": "The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number"},
-    "version": "1.2.4",
+    "version": "1.2.5",
 }
 
 SERIES = {
@@ -111,11 +111,11 @@ METRICS = [
     dict(id="han_per_year", series="A", table="a_editions", unit="characters/year", fmt=",.0f", reliability="exact",
          ko=dict(name="재위 1년당 글자 수", definition="글자 수를 재위 기간(년)으로 나눈 값 — 기록의 밀도.",
                  formula="글자 수 / 재위 햇수. 재위 햇수 = (마지막 날짜 기사 JDN − 첫 날짜 기사 JDN + 1) / 365.2422 — 1896년 양력 전환 전후를 같은 잣대로 센다. 재위 개월 수는 그 구간이 닿는 달력 월의 수(1895년 12월까지 음력 월·윤달 포함, 1896년 1월부터 양력 월).",
-                 reading="세종·성종·중종·선조·숙종이 10만 자를 넘고, 정조 이후 급감해 헌종·철종은 1만~1.5만 자다.",
+                 reading="세종·성종·중종·선조·정조 등 11개 왕대가 10만 자를 넘고(재위 1~3년인 인종·예종·문종·단종 포함) 숙종은 7만 자대다. 정조 이후 급감해 헌종·철종은 1만~1.5만 자다.",
                  caveat="재위 기간은 실록의 첫·마지막 날짜 있는 기사로 쟀다(즉위·승하 당일과 약간 다를 수 있다)."),
          en=dict(name="Characters per reign-year", definition="Characters divided by the length of the reign in years — the density of the record.",
                  formula="Characters / reign length in years, where years = (JDN of last dated article − JDN of first + 1) / 365.2422 — the same rule before and after the 1896 switch to the solar calendar. Reign months = calendar months touched by that span (lunar months incl. leap months to Dec 1895, solar months from Jan 1896).",
-                 reading="Sejong, Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000 a year; after Jeongjo the density collapses to 10–15 thousand under Heonjong and Cheoljong.",
+                 reading="Eleven reigns exceed 100,000 a year, among them Sejong, Seongjong, Jungjong, Seonjo and Jeongjo (and the one- to three-year reigns of Injong, Yejong, Munjong and Danjong); Sukjong is near 72,000. After Jeongjo the density collapses to 10–15 thousand under Heonjong and Cheoljong.",
                  caveat="Reign length is measured from the first to the last dated article, which may differ slightly from the dates of accession and death.")),
     dict(id="median_len", series="A", table="a_editions", unit="characters", fmt=",.0f", reliability="exact",
          ko=dict(name="기사 길이(중앙값)", definition="한 기사의 한자 수의 중앙값. 분포 표에 10·25·75·90·99 백분위를 함께 둔다.",
@@ -133,7 +133,7 @@ METRICS = [
                  caveat="국편의 사론 태그 기준이다. 세주(細註)에 적힌 논평은 태그되지 않았을 수 있다."),
          en=dict(name="Share of articles with a historian's comment", definition="Share of articles that carry a historian's comment (史臣曰, XML postScript). The count of comments and their share of characters are shown too.",
                  formula="Articles with ≥1 postScript / all articles",
-                 reading="First exceeds 2% under Seongjong and peaks at 3–8% in Jungjong, Myeongjong and Seonjo. From Jeongjo onward it is zero.",
+                 reading="First exceeds 2% under Seongjong and peaks at 3–8% under Jungjong, Myeongjong and Seonjo. From Jeongjo onward it is zero.",
                  caveat="Follows NIKH tagging; comments written as small-type notes may be untagged."),
          external=dict(ko="차장섭의 조선 전기 왕대별 사론 수(「史臣曰」 1개=1회)를 나란히 보인다. 우리 쪽은 두 값을 구분한다 — 사론 태그가 붙은 기사 수(성종 658·연산군 40·중종 1,213·인종 50·명종 1,254)와 사론 태그 수(665·40·1,346·56·1,455). 차장섭과 단위가 같은 것은 뒤의 태그 수다.",
                        en="Shown next to Cha Jang-seop's early-Joseon counts (one '史臣曰' = one comment). Two values on this site are kept apart: articles carrying a comment tag (Seongjong 658, Yeonsangun 40, Jungjong 1,213, Injong 50, Myeongjong 1,254) and the number of tags (665, 40, 1,346, 56, 1,455); the latter shares Cha's unit.")),
@@ -173,7 +173,7 @@ METRICS = [
                  caveat="산삭 표시는 국편 입력(proofreading 요소)을 따른다. 정초본에 새로 보태진 글은 이 지표에 들어가지 않는다."),
          en=dict(name="Deletions in the Daily Records of Gwanghaegun", definition="Share of characters marked as deleted in the second draft, and the drop in articles and characters from the second to the final draft.",
                  formula="Characters inside deletion marks / characters of the second draft; 1 − final/second for articles and for characters",
-                 reading="Articles fell by 15%; the character drop and the share of marked deletions are in the table. The three differ because deletions were made within articles as well as of whole articles.",
+                 reading="Articles fell by 15%; the character drop and the share of marked deletions are in the table. The three differ because deletions were made both within articles and by removing whole articles.",
                  caveat="Deletion marks follow NIKH's proofreading markup. Text added in the final draft is not captured."),
          external=dict(ko="국편 해제 「1/3 정도 축소」와 나란히.", en="Shown next to NIKH's 'reduced by about a third'.")),
     dict(id="revised_saron_share", series="B", table="b_pairs", unit="share", fmt=".1%", reliability="exact",

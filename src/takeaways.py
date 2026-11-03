@@ -44,7 +44,7 @@ TAKEAWAYS = {
         en="Only 47% of all lunar-eclipse articles match a visible eclipse within ±1 day. Articles were not classified by type here, so this is a lower bound; the values by type are in G2 (1.2). Do not use the article count as an observation count."),
     "venus_phase": dict(
         ko="400년 치 기록이 한 행성의 주기를 0.04% 오차로 재현한다. 「실록의 천문 기록은 실제 관측의 누적」이라는 명제의 가장 강한 계량 근거이며, 증거법으로 옮기면 관찰 기록과 평가 기록의 신빙성을 따로 따져야 한다는 사례다.",
-        en="Four centuries of articles reproduce a planet's period to within 0.04%. The strongest quantitative support for treating the Sillok's astronomical articles as accumulated observation — and, carried over to the law of evidence, a case for weighing observational and evaluative records differently."),
+        en="Four centuries of articles reproduce a planet's period to within 0.04%. The strongest quantitative support for treating the Sillok's astronomical articles as accumulated observation — and, by analogy with the law of evidence, a case for weighing observational and evaluative records differently."),
     "comet_years": dict(
         ko="혜성 기사 수는 정밀도 68%를 곱해 읽어야 한다. 셋 중 하나는 혜성을 근거로 든 상소·논의다. 핼리 회귀 연도의 봉우리는 그대로 보인다.",
         en="Multiply comet article counts by the 68% precision; one in three is a memorial or debate citing a comet. The Halley-year peaks survive the correction."),
@@ -53,7 +53,7 @@ TAKEAWAYS = {
         en="Of earthquake articles, 76% are actual reports, so they are usable as a source for historical seismicity catalogs. Articles without a province are assigned to Seoul, so regional comparisons need care."),
     "summer_cold": dict(
         ko="소빙기 가설을 실록으로 검증할 때의 결론은 「1500~1750년 전체가 아니라 1640~1719년」이다. 다만 키워드 정밀도가 54%라 절대 수치보다 연대 간 비교로만 쓴다.",
-        en="Tested against the Sillok, the Little Ice Age hypothesis is supported for 1640–1719 rather than across 1500–1750. With 54% keyword precision, use it for comparisons between decades, not as absolute counts."),
+        en="Tested against the Sillok, the Little Ice Age hypothesis is supported for 1640–1719 rather than across 1500–1750. Because keyword precision is only 54%, use the series for comparisons between decades, not as absolute counts."),
     "clan_concentration": dict(
         ko="벌열화 통설을 수치로 확인한 것이다. 상위 10개 성관의 고위직 점유율이 17세기부터 19세기 전반까지 계속 올랐고, 본관 결측을 비관적으로 채운 하한에서도 추세가 남는다. 성관은 가문보다 넓은 단위라는 점만 잊지 않으면 논문에 인용할 수 있다.",
         en="Puts a number on the thesis of oligarchic concentration: the top-10 clan share of high office rose from the 17th century to the early 19th, and the rise holds even under a pessimistic lower bound. Citable, provided a clan is understood to be wider than a lineage."),

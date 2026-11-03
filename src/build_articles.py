@@ -10,7 +10,7 @@ month/day, leap flag); the solar conversion (proleptic Gregorian → Julian Day 
 before 1582-10-15) comes from korean_lunar_calendar and is validated separately
 (src/check_calendar.py).
 
-Known source quirks handled here (same fixes as the vault converter, 2026-09-26):
+Known source quirks handled here (same fixes as an earlier converter, 2026-09-26):
   * supplementary CJK written as two surrogate numeric references (&#55381;&#56892;)
   * double-escaped references (&amp;#x26E02;) in 516 files
   * bare CJK tags such as <斯干/> (book titles) in Sejong

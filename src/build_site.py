@@ -8,6 +8,7 @@ from a CSV in data/derived (copied to site/data) and every metric text from regi
 """
 from __future__ import annotations
 
+import re
 import argparse
 import html
 import json
@@ -173,6 +174,13 @@ def esc(s) -> str:
 
 
 def fmt(v, spec) -> str:
+    s = _fmt(v, spec)
+    if isinstance(v, (int, float)) and s.startswith("-"):
+        return s[1:] if s.strip("-0.,%") == "" else "−" + s[1:]
+    return s
+
+
+def _fmt(v, spec) -> str:
     if v is None or (isinstance(v, float) and math.isnan(v)) or (isinstance(v, str) and v == ""):
         return ""
     try:
@@ -210,7 +218,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
 <style>{CSS}</style></head><body>
 <header><a class="brand" href="{root}{lang}/index.html">{t['site']}</a>
 <nav>{navh}</nav>
-<div class="right"><button id="theme" class="theme" type="button" aria-label="theme">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
+<div class="right"><button id="theme" class="theme" type="button" aria-label="{"테마" if lang == "ko" else "Theme"}">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
 <main>{body}</main>
 <footer>{t['site']} · {t['version']} {VERSION} · {t['built']} {BUILD_DATE} · <a href="{REPO}">GitHub</a> · {t['hub']} <a href="https://bowonkwon.github.io/{hub_path}">bowonkwon.github.io</a><br>{attribution}</footer>
 <script>{JS}</script></body></html>"""
@@ -255,7 +263,7 @@ def svg_lines(series, spec, width=900, height=320, ylabel="", xstep=None, bands=
         out.append(f'<text x="{X(xv):.1f}" y="{height-12}" text-anchor="middle">{xv}</text>')
         xv += step
     if ylabel:
-        out.append(f'<text x="{L}" y="10">{esc(ylabel)}</text>')
+        out.append(f'<text x="{L}" y="10">{esc(cap(ylabel, "en"))}</text>')
     for name, pts, ci in series:
         pts = [p for p in pts if not math.isnan(p[1])]
         if not pts:
@@ -286,10 +294,10 @@ def svg_bars(items, spec, width=900, row_h=22, label_w=240, xlabel="", errors=No
     for v in nice_ticks(lo, hi):
         out.append(f'<line class="grid" x1="{x(v):.1f}" y1="6" x2="{x(v):.1f}" y2="{h-30}"/><text x="{x(v):.1f}" y="{h-14}" text-anchor="middle">{fmt(v, spec)}</text>')
     if xlabel:
-        out.append(f'<text x="{label_w+pw/2:.0f}" y="{h-2}" text-anchor="middle">{esc(xlabel)}</text>')
+        out.append(f'<text x="{label_w+pw/2:.0f}" y="{h-2}" text-anchor="middle">{esc(cap(xlabel, "en"))}</text>')
     for i, (name, v, ci) in enumerate(items):
         y = 8 + i * row_h
-        out.append(f'<text x="{label_w-8}" y="{y+row_h*0.68:.1f}" text-anchor="end">{esc(name)}</text>')
+        out.append(f'<text x="{label_w-8}" y="{y+row_h*0.68:.1f}" text-anchor="end">{esc(cap(name, "en"))}</text>')
         if isinstance(v, float) and math.isnan(v):
             continue
         out.append(f'<rect x="{x(0):.1f}" y="{y+2}" width="{max(x(v)-x(0),1):.1f}" height="{row_h-6}" fill="var(--s{ci+1})" rx="3"><title>{esc(name)}: {fmt(v, spec)}</title></rect>')
@@ -301,7 +309,7 @@ def svg_bars(items, spec, width=900, row_h=22, label_w=240, xlabel="", errors=No
 
 
 def legend(entries) -> str:
-    return '<div class="legend">' + "".join(f'<span style="--c:var(--s{ci+1})">{esc(n)}</span>' for n, ci in entries) + "</div>"
+    return '<div class="legend">' + "".join(f'<span style="--c:var(--s{ci+1})">{esc(cap(n, "en"))}</span>' for n, ci in entries) + "</div>"
 
 
 def table_html(df: pd.DataFrame, cols, tid: str, lang: str, filt=True) -> str:
@@ -552,24 +560,29 @@ def metric_figure(m, D: Data, lang) -> str:
         rec = D.solar_rec
         out.append("<p>" + (f"거꾸로 보면: 1392~1863년에 서울에서 보였을 계산 일식 {len(rec)}회 가운데 ±1일 안에 「日食」 기사가 있는 것은 {int(rec.has_article_w1.sum())}회({rec.has_article_w1.mean():.0%})다. 식분별 포착률은 이 판에서 따로 내지 않았다."
                              if lang == "ko" else
-                             f"Seen the other way round: of the {len(rec)} computed eclipses visible from Seoul in 1392–1863, {int(rec.has_article_w1.sum())} ({rec.has_article_w1.mean():.0%}) have a '日食' article within ±1 day. Capture rates by magnitude are not broken out in this version.") + "</p>")
+                             f"Seen the other way around: of the {len(rec)} computed eclipses visible from Seoul in 1392–1863, {int(rec.has_article_w1.sum())} ({rec.has_article_w1.mean():.0%}) have a '日食' article within ±1 day. Capture rates by magnitude are not broken out in this version.") + "</p>")
         A = D.solar_art.copy(); A["type_l"] = A.type.map(t["type_names"])
         out.append("<h3>" + ("기사 전체(322건, 날짜 있는 것)" if lang == "ko" else "All dated articles (322)") + "</h3>" +
-                   table_html(A, [("article_id", "ID", None), ("solar_date", ("양력(1582년 전은 율리우스력)" if lang == "ko" else "solar date (Julian before 1582)"), None), ("type_l", ("유형" if lang == "ko" else "type"), None), ("match_seoul_w1", ("서울 ±1일" if lang == "ko" else "Seoul ±1d"), None), ("match_earth_w1", ("지구 ±1일" if lang == "ko" else "Earth ±1d"), None), ("days_to_nearest_seoul_eclipse", ("가장 가까운 서울 일식까지(일)" if lang == "ko" else "days to nearest Seoul eclipse"), ",.0f"), ("nikh_url", t["nikh_link"], None)], "t_solar_art", lang))
+                   table_html(A, [("article_id", "ID", None), ("solar_date", ("양력(1582년 전은 율리우스력)" if lang == "ko" else "solar date (Julian before 1582)"), None), ("type_l", ("유형" if lang == "ko" else "type"), None), ("match_seoul_w1", ("서울 ±1일" if lang == "ko" else "Seoul ±1 d"), None), ("match_earth_w1", ("지구 ±1일" if lang == "ko" else "Earth ±1 d"), None), ("days_to_nearest_seoul_eclipse", ("가장 가까운 서울 일식까지(일)" if lang == "ko" else "days to nearest Seoul eclipse"), ",.0f"), ("nikh_url", t["nikh_link"], None)], "t_solar_art", lang))
     elif mid == "lunar_eclipse_match":
         l = D.lunar.copy(); l["window_l"] = l.window.map(lambda w: t["windows"].get(w if w != "match_seoul_w1" else "match_seoul_w1_l", w))
         out.append(table_html(l, [("window_l", ("대조 창" if lang == "ko" else "window"), None), ("n", t["n"], ",.0f"), ("matched", ("일치" if lang == "ko" else "matched"), ",.0f"), ("rate", t["share"], ".1%"), ("ci_lo", "95% lo", ".1%"), ("ci_hi", "95% hi", ".1%")], "t_lunar", lang, filt=False))
         A = D.lunar_art
-        out.append(table_html(A, [("article_id", "ID", None), ("solar_date", ("양력" if lang == "ko" else "solar date"), None), ("match_seoul_w1", ("서울 ±1일" if lang == "ko" else "Seoul ±1d"), None), ("nikh_url", t["nikh_link"], None)], "t_lunar_art", lang))
+        out.append(table_html(A, [("article_id", "ID", None), ("solar_date", ("양력" if lang == "ko" else "solar date"), None), ("match_seoul_w1", ("서울 ±1일" if lang == "ko" else "Seoul ±1 d"), None), ("nikh_url", t["nikh_link"], None)], "t_lunar_art", lang))
     elif mid == "venus_phase":
         pg = D.venus_pg
         out.append(fig(svg_lines([("Z", [(float(r.period), float(r.Z)) for _, r in pg.iterrows()], 0)], ",.0f", xstep=100, bands=[(580, 588, "583.92")]),
                        ("300~900일 주기 스캔의 레일리 Z. 띠는 금성 회합주기 583.92일." if lang == "ko" else "Rayleigh Z across trial periods 300–900 days; the band marks the 583.92-day synodic period.")))
         ph = D.venus_days.phase_days
         bins = list(range(-292, 293, 12)); hist = [int(((ph >= a) & (ph < a + 12)).sum()) for a in bins[:-1]]
-        items = [(f"{a:+d}…{a+12:+d}", float(h), 1 if abs(a + 6) <= 90 else 2) for a, h in zip(bins[:-1], hist)]
+        items = [(f"{a:+d}…{a+12:+d}".replace("-", "−"), float(h), 1 if abs(a + 6) <= 90 else 2) for a, h in zip(bins[:-1], hist)]
         out.append(fig(svg_bars(items, ",.0f", row_h=14, label_w=110, xlabel=("기록 일수" if lang == "ko" else "record days")), ("내합(0) 기준 위상별 기록 일수. 내합 ±90일(진한 색)에 66%가 몰리고 내합 당일 부근은 비어 있다." if lang == "ko" else "Record days by phase relative to inferior conjunction (0). 66% lie within ±90 days (darker); the conjunction itself is nearly empty.")))
-        out.append(table_html(D.venus.T.reset_index().rename(columns={"index": "key", 0: "value"}), [("key", "", None), ("value", "", None)], "t_venus", lang, filt=False))
+        vr = D.venus.iloc[0]
+        VROWS = [("n_days", "기록 일수", "Record days", ",.0f"), ("within_90d", "내합 ±90일 안 비율", "Share within ±90 days of inferior conjunction", ".1%"),
+                 ("within_6d", "내합 ±6일 안 비율", "Share within ±6 days of inferior conjunction", ".2%"), ("best_period_days", "주기 탐색 최적 주기(일)", "Best period from the period search (days)", ".1f"),
+                 ("rayleigh_Z_at_583_92", "레일리 Z(583.92일)", "Rayleigh Z at 583.92 days", ",.1f"), ("rayleigh_Z_best", "레일리 Z(최적 주기)", "Rayleigh Z at the best period", ",.1f")]
+        VT = pd.DataFrame([{"item": (k if lang == "ko" else e), "value": fmt(float(vr[c]), sp)} for c, k, e, sp in VROWS])
+        out.append(table_html(VT, [("item", ("항목" if lang == "ko" else "Item"), None), ("value", ("값" if lang == "ko" else "Value"), None)], "t_venus", lang, filt=False))
     elif mid in ("comet_years", "earthquake_articles"):
         Y = D.comet if mid == "comet_years" else D.quake
         bands = [(y - 0.5, y + 0.5, "Halley") for y in (1456, 1531, 1607, 1682, 1759, 1835)] if mid == "comet_years" else None
@@ -654,7 +667,7 @@ def density_strip(D, lang, width=1000, height=150) -> str:
     bw = pw / len(years)
     X = lambda yr: L + (yr - 1392) * bw
     spans = king_spans(D)
-    out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="characters per year, 1392–1863">']
+    out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{"연도별 글자 수, 1392–1863" if lang == "ko" else "Characters per year, 1392–1863"}">']
     for i, (kn, ko, en, a, b) in enumerate(spans):
         out.append(f'<rect x="{X(a):.1f}" y="{T}" width="{max(X(b + 1) - X(a), 1):.1f}" height="{ph}" fill="var(--s{1 if i % 2 == 0 else 3})" fill-opacity=".10"/>')
         if b - a >= 14:
@@ -691,7 +704,7 @@ def reign_ribbon(D, king_no, lang, width=1000, height=46) -> str:
 def blurb(text: str, limit: int = 120) -> str:
     """First whole sentence(s) of a takeaway up to about `limit` characters — the same rule in both languages."""
     import re as _re
-    parts = _re.split(r"(?<=[.!?。])\s+", text.strip())
+    parts = _re.split(r"(?<=[.!?。])(?<!\bal\.)(?<!e\.g\.)(?<!i\.e\.)\s+", text.strip())   # 1.2.5: not after et al. / e.g. / i.e.
     out = ""
     for p in parts:
         if out and len(out) + len(p) > limit:
@@ -897,13 +910,13 @@ def home(D, lang):
              (f"{obs.rate:.0%}", ("일식 관측 보고가 서울 가시 일식과 맞는 비율" if lang == "ko" else "eclipse observation reports matching an eclipse visible from Seoul"), "metrics/solar_eclipse_match.html"),
              (f"{obsE.rate:.0%}", ("지구 어딘가의 일식과 맞는 비율" if lang == "ko" else "matching an eclipse anywhere on Earth"), "metrics/solar_eclipse_match.html"),
              (f"{D.venus.iloc[0].best_period_days:.1f}", ("태백주현 기록이 재현한 금성 주기(일)" if lang == "ko" else "Venus period (days) recovered from daytime sightings"), "metrics/venus_phase.html")]
-    five = (["실록은 생각보다 고르지 않다 — 재위 1년당 글자 수가 세종~숙종의 10만 자에서 헌종·철종의 1만 자대로 떨어진다.",
+    five = (["실록은 생각보다 고르지 않다 — 재위 1년당 글자 수가 성종·중종·세종·정조 등의 10만 자 이상에서 헌종·철종의 1만 자대로 떨어진다.",
              "일식 「관측 보고」 기사의 65%는 서울에서 실제로 보인 일식과, 95%는 지구 어딘가의 일식과 맞는다. 기사 유형을 가리지 않으면 24%다.",
              "낮에 금성을 보았다는 기록 2,937일은 금성 회합주기를 0.04% 오차로 재현한다 — 관측 기록은 관측이다.",
              "고위직 첫 임명자의 상위 10개 성관 점유율은 0.28에서 0.45로 올랐다. 벌열화는 수치로 남는다.",
              "「사형」 기사의 정점(세종)은 판결 재가 기록이다. 실록은 형정 통계의 자료가 아니다."]
             if lang == "ko" else
-            ["The Sillok is more uneven than one might expect: characters per reign-year fall from around 100,000 (Sejong–Sukjong) to the low ten-thousands (Heonjong, Cheoljong).",
+            ["The Sillok is more uneven than one might expect: characters per reign-year fall from over 100,000 (Seongjong, Jungjong, Sejong, Jeongjo and others) to about 13,000–14,000 (Heonjong, Cheoljong).",
              "Of eclipse observation reports, 65% match an eclipse visible from Seoul and 95% one somewhere on Earth; if article types are ignored, the rate is 24%.",
              "Daytime sightings of Venus on 2,937 days reproduce the planet's synodic period to within 0.04%: observation records are observations.",
              "The top-10 clan share among first appointees to high office rose from 0.28 to 0.45 — the concentration shows up in the numbers.",
@@ -1012,7 +1025,7 @@ METHOD_EXT_EN
 <h2>Prior work</h2>
 <p>New here: the article-level table, precision for keyword metrics, eclipse match rates by article type, like-for-like comparison of edition pairs, and character-level deletion counts for the Daily Records of Gwanghaegun. Articles per reign (Bak & Oh 2015), Joseon eclipse records (Ahn & Lee 2004), early-Joseon historians' comments (Cha) and Sillok criminal cases (Yu 2007) already existed and are shown next to the recount on the Prior results page.</p>
 <h2>Attribution</h2>
-<p>This work uses the 'Veritable Records of the Joseon Dynasty — original text' and '— supplementary person data' created by the National Institute of Korean History (Ministry of Education) in 2022 and released under KOGL Type 1 at the Korean public data portal (https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do), and the 'Successful candidates of the civil service examination' released by the Academy of Korean Studies (https://www.data.go.kr/data/15052752/fileData.do). Astronomy: NASA/JPL DE406; eclipse canon: Espenak & Meeus (NASA/TP-2006-214141).</p>
+<p>This work uses the 'Veritable Records of the Joseon Dynasty — original text' and '— supplementary person data' created by the National Institute of Korean History (Ministry of Education) in 2022 and released under KOGL Type 1 on the Korean public data portal (https://www.data.go.kr/data/15053647/fileData.do · /15053645/fileData.do), and the 'Successful candidates of the civil service examination' released by the Academy of Korean Studies (https://www.data.go.kr/data/15052752/fileData.do). Astronomy: NASA/JPL DE406; eclipse canon: Espenak & Meeus (NASA/TP-2006-214141).</p>
 <h2>Versions</h2><p>1.0 (2026-11-02) — first release: 24 metrics, 30 editions, 25 reigns.<br>1.1 (2026-11-02) — Gojong and Sunjong added to the counts (33 editions, 27 reigns); series C and sample coding unchanged (Taejo–Cheoljong).<br>1.1.1 (2026-11-02) — tie wording fixed in the reign summaries: the ten reigns with no historian's comment were each shown as a solitary "rank 18"; they now say how many reigns share the value. No number, table or data file changed.<br>VERSION_EN</p>
 """
     ko = ko.replace("METHOD_EXT_KO", method_ext(D, "ko", esc)).replace("VERSION_KO", VERSION_LINE["ko"].replace("{BUILD_DATE}", BUILD_DATE))
@@ -1034,7 +1047,7 @@ def reading_page(D, lang):
 <p class="lead">표와 그림 대신 산문으로 읽는 1.0의 결과다. 수치는 모두 지표 면에 있고, 여기서는 무엇이 보였는지만 적는다. 고종·순종실록은 공공누리 제4유형(변경 금지·비상업)이라 건수 집계에만 넣고 본문 발췌는 싣지 않았다(공개 코딩 표에서도 그 기사의 제목·인용문은 비웠다).</p>
 TAKE_READ_KO
 <h2>얼마나 적었나</h2>
-<p>태조부터 순종까지 27대의 본실록은 기사 {int(M.n_articles.sum()):,}건, 한자 {M.n_han.sum()/1e6:.1f}백만 자다(고종·순종은 건수만 셌다). 재위 1년당 글자 수로 보면 {top.king_ko}실록이 {top.han_per_year:,.0f}자로 가장 촘촘하고 {low.king_ko}실록이 {low.han_per_year:,.0f}자로 가장 성글다. 성종·중종·선조·숙종이 10만 자를 넘고 정조 이후 급히 줄어든다. 국편이 「후기로 갈수록 기록이 빈약하다」고 적은 것이 이 수치다.</p>
+<p>태조부터 순종까지 27대의 본실록은 기사 {int(M.n_articles.sum()):,}건, 한자 {M.n_han.sum()/1e4:,.0f}만 자다(고종·순종은 건수만 셌다). 재위 1년당 글자 수로 보면 {top.king_ko}실록이 {top.han_per_year:,.0f}자로 가장 촘촘하고 {low.king_ko}실록이 {low.han_per_year:,.0f}자로 가장 성글다. 세종·성종·중종·선조·정조 등 11개 왕대가 10만 자를 넘고(재위 1~3년인 인종·예종·문종·단종도 여기에 든다) 숙종은 7만 자대이며, 정조 이후 급히 줄어든다. 국편이 「후기로 갈수록 기록이 빈약하다」고 적은 것이 이 수치다.</p>
 <p>사론(史臣曰)은 성종실록에서 처음 2%를 넘고 중종·명종·선조에서 가장 많다가 정조실록부터 하나도 없다. 조선 전기의 사론을 손으로 센 차장섭의 표와 국편 태그 수는 왕대마다 수십 건 안에서 맞는다.</p>
 <h2>판본이 갈린 곳</h2>
 <p>선조수정실록은 원본의 기사 수로 7%, 글자 수로 10%다. 국편 해제의 「1/5」은 권수 인상이다. 수정본 기사가 있는 날의 60%는 원본에도 기사가 있다. 현종개수실록은 원본보다 기사가 13%, 글자가 34% 많다 — 개수는 삭감이 아니라 다시 쓰기였다. 광해군일기는 중초본에서 정초본으로 가며 기사가 {g.article_drop:.0%}, 글자가 {g.han_drop:.0%} 줄었고, 중초본 글자의 {g.marked_deleted_share:.0%}가 산삭 표시 안에 있다.</p>
@@ -1051,20 +1064,20 @@ TAKE_READ_KO
 <p class="lead">The 1.0 results in prose rather than tables. Every number is on a metric page; this page reports only what the figures show. The Gojong and Sunjong records (KOGL Type 4, no derivatives) enter the counts only; no excerpts are published, and their rows in the coding tables carry judgments without title or quote.</p>
 TAKE_READ_EN
 <h2>How much was written</h2>
-<p>The principal editions for the 27 reigns from Taejo to Sunjong hold {int(M.n_articles.sum()):,} articles and {M.n_han.sum()/1e6:.1f} million Chinese characters (Gojong and Sunjong: counts only). Per reign-year the {top.king_en} records are the densest at {top.han_per_year:,.0f} characters and the {low.king_en} records the thinnest at {low.han_per_year:,.0f}. Seongjong, Jungjong, Seonjo and Sukjong exceed 100,000; after Jeongjo the density collapses. This puts a number on NIKH's remark that the record thins toward the end.</p>
+<p>The principal editions for the 27 reigns from Taejo to Sunjong hold {int(M.n_articles.sum()):,} articles and {M.n_han.sum()/1e6:.1f} million Chinese characters (Gojong and Sunjong: counts only). Per reign-year the {top.king_en} records are the densest at {top.han_per_year:,.0f} characters and the {low.king_en} records the thinnest at {low.han_per_year:,.0f}. Eleven reigns exceed 100,000, among them Sejong, Seongjong, Jungjong, Seonjo and Jeongjo (and the one- to three-year reigns of Injong, Yejong, Munjong and Danjong); Sukjong is near 72,000, and after Jeongjo the density collapses. This puts a number on NIKH's remark that the record thins toward the end.</p>
 <p>Historians' comments first exceed 2% of articles under Seongjong, peak under Jungjong, Myeongjong and Seonjo, and vanish from Jeongjo onward. Cha Jang-seop's hand count for early Joseon and the NIKH tags agree to within a few dozen per reign.</p>
 <h2>Where the editions diverge</h2>
-<p>The Revised Seonjo records are 7% of the original by articles and 10% by characters; NIKH's 'one fifth' is an impression by fascicle count. Of the revised edition's days, 60% also have an article in the original. The Supplemented Hyeonjong records have 13% more articles and 34% more characters than the original — a rewrite, not a cut. The Daily Records of Gwanghaegun lost {g.article_drop:.0%} of its articles and {g.han_drop:.0%} of its characters between drafts, and {g.marked_deleted_share:.0%} of the second draft's characters sit inside deletion marks.</p>
+<p>The Revised Seonjo records are 7% of the original by articles and 10% by characters; NIKH's 'one fifth' is an estimate based on fascicle count. Of the revised edition's days, 60% also have an article in the original. The Supplemented Hyeonjong records have 13% more articles and 34% more characters than the original — a rewrite, not a cut. The Daily Records of Gwanghaegun lost {g.article_drop:.0%} of their articles and {g.han_drop:.0%} of their characters between drafts, and {g.marked_deleted_share:.0%} of the second draft's characters sit inside deletion marks.</p>
 <h2>Was the sky right?</h2>
-<p>When all 332 articles containing '日食' were read and classified, one in three turned out to be a memorial or edict using an eclipse as an argument, and one in seven was not an eclipse at all ('日食一升' is a daily ration of rice). Of the 84 read as a report that an eclipse occurred that day, {obs.rate:.0%} fall within ±1 day of a computed eclipse visible from Seoul and {obsE.rate:.0%} match an eclipse somewhere on Earth. Most of the rest are '地下日食' — eclipses after sunset that were recorded from calculation. Seen the other way, {D.solar_rec.has_article_w1.mean():.0%} of the {len(D.solar_rec)} eclipses visible from Seoul have an article.</p>
-<p>The {int(v.n_days):,} days on which Venus was reported visible in daylight give an even sharper result. A period search returns {v.best_period_days:.1f} days, 0.04% from the synodic period of 583.92; {v.within_90d:.0%} of the records fall within 90 days of inferior conjunction and the conjunction itself is empty. At least this kind of record carries the signal of real observation.</p>
+<p>When all 332 articles containing '日食' were read and classified, one in three turned out to be a memorial or edict using an eclipse as an argument, and one in seven was not an eclipse at all ('日食一升' is a daily ration of rice). Of the 84 read as reports that an eclipse occurred that day, {obs.rate:.0%} fall within ±1 day of a computed eclipse visible from Seoul and {obsE.rate:.0%} match an eclipse somewhere on Earth. Most of the rest are '地下日食' — eclipses after sunset that were recorded from calculation. Seen the other way, {D.solar_rec.has_article_w1.mean():.0%} of the {len(D.solar_rec)} eclipses visible from Seoul have an article.</p>
+<p>The {int(v.n_days):,} days on which Venus was reported visible in daylight give an even sharper result. A period search returns {v.best_period_days:.1f} days, 0.04% from the synodic period of 583.92; {v.within_90d:.0%} of the records fall within 90 days of inferior conjunction and the conjunction itself is nearly empty. At least this kind of record carries the signal of real observation.</p>
 <h2>Who held office</h2>
 <p>When first appointees to high office are grouped by 50-year period, the share of the top ten clans rises from {C.top10_resampled.iloc[0]:.2f} to {C.top10_resampled.iloc[8]:.2f}; concentration among examination passers over the same period is smaller. The two groups differ in composition, so the gap is not read as a promotion effect.</p>
 <h2>A death-penalty article is not an execution</h2>
 <p>Articles with capital-punishment terms are most frequent under Sejong, but the sample shows most of them are sentencing reports applying the code; execution is confirmed in 2 of 20. In the sample the confirmation rate is higher in the late 16th to early 18th century, but with 20 articles per period the distribution is not settled. Of the 2,853 capital cases Yu Seung-hui counted in the Ilseongnok for Jeongjo–Cheoljong, only 111 can be found in the Sillok. The Sillok is not a source of penal statistics.</p>
 """
     ko = ko.replace("TAKE_READ_KO", take_block("실록의 관측 기록은 계량에 쓸 수 있을 만큼 정확하고, 빈도형 기록은 기록 관행을 탄다. 이 둘을 갈라 읽는 것이 이 사이트의 한 문장 요약이다.", "ko"))
-    en = en.replace("TAKE_READ_EN", take_block("The Sillok's observational articles are accurate enough for quantitative use; its frequency counts follow recording practice. Telling the two apart is this site in one sentence.", "en"))
+    en = en.replace("TAKE_READ_EN", take_block("The Sillok's observational articles are accurate enough for quantitative use; its frequency counts follow recording practice. That distinction sums up this site.", "en"))
     return page(lang, t["nav_reading"], f'<div class="prose">{ko if lang == "ko" else en}</div>', depth=1, active="reading")
 
 
@@ -1174,6 +1187,18 @@ def main():
         (out / lang / "data.html").write_text(data_page(D, lang, files), encoding="utf-8"); n += 1
         (out / lang / "method.html").write_text(method_page(D, lang), encoding="utf-8"); n += 1
         (out / lang / "reading.html").write_text(reading_page(D, lang), encoding="utf-8"); n += 1
+    # 1.2.5: the language link points to the same page in the other language (it used to go to the other home page)
+    for lang, other in (("ko", "en"), ("en", "ko")):
+        for f in (out / lang).rglob("*.html"):
+            rel = f.relative_to(out / lang).as_posix()
+            h = f.read_text(encoding="utf-8")
+            h2, k = re.subn(r'(class="lang" href="(?:\.\./)*)' + other + r'/index\.html"', lambda mm: mm.group(1) + other + "/" + rel + '"', h)
+            if k != 1:
+                raise SystemExit(f"language link not found once in {f}")
+            if lang == "ko":   # 1.2.5: Korean pages write year ranges with a wave dash (1392~1910); English keeps the en dash
+                parts = re.split(r"(<script\b.*?</script>|<style\b.*?</style>)", h2, flags=re.S)
+                h2 = "".join(p if p.startswith(("<script", "<style")) else re.sub(r"(?<!\d)(\d{4})–(\d{2,4})(?!\d)", r"\1~\2", p) for p in parts)
+            f.write_text(h2, encoding="utf-8")
     print("pages", n, "data files", len(files))
 
 

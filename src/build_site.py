@@ -197,7 +197,67 @@ def _fmt(v, spec) -> str:
         return str(v)
 
 
-def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", active: str = "") -> str:
+
+
+CSS += ' main.wide{max-width:1300px} .crumbs{font-size:.84rem;color:var(--fg3);margin:-.4rem 0 .9rem} .crumbs .sep{margin:0 .25rem} .crumbs [aria-current]{color:var(--fg2)} .leaf{display:grid;grid-template-columns:220px minmax(0,1fr);gap:2rem;align-items:start} .sibs{position:sticky;top:4.2rem;max-height:calc(100vh - 5rem);overflow:auto;font-size:.84rem;border-right:1px solid var(--line);padding-right:.8rem} .sibs ol,.sibs-m ol{list-style:none;margin:.2rem 0 .8rem;padding:0} .sibs li a,.sibs-m li a{display:block;padding:.18rem .4rem;border-radius:6px;color:var(--fg2)} .sibs li a:hover,.sibs-m li a:hover{background:var(--bg2);text-decoration:none} .sibs a[aria-current],.sibs-m a[aria-current]{background:var(--bg2);color:var(--fg);font-weight:600} .sibs summary,.sibs-m summary{cursor:pointer;font-weight:600;color:var(--fg);margin:.3rem 0} .sibs .sg{font-weight:600;margin:.2rem 0} .sibs-m{display:none;border:1px solid var(--line);border-radius:10px;padding:.4rem .8rem;margin:0 0 1rem;font-size:.9rem} .pn{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1rem;font-size:.92rem} .pn a[rel=next]{margin-left:auto;text-align:right} .pn small{display:block;color:var(--fg3)} @media(max-width:860px){.leaf{display:block}.sibs{display:none}.sibs-m{display:block}} @media print{.crumbs,.sibs,.sibs-m,.pn{display:none}.leaf{display:block}}'
+JS += ';document.addEventListener("keydown",function(e){if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;var t=e.target;if(t&&t.closest&&t.closest("input,textarea,select,[contenteditable]"))return;var a=null;if(e.key==="ArrowLeft")a=document.querySelector("a[rel=prev]");else if(e.key==="ArrowRight")a=document.querySelector("a[rel=next]");if(a){location.href=a.href}});var sb=document.querySelector(".sibs"),cu=sb&&sb.querySelector("a[aria-current]");if(cu){sb.scrollTop=cu.offsetTop-sb.clientHeight/2}'
+
+LEAF_T = {"ko": dict(crumbs="위치", sibs="같은 계열", others="이 계열의 다른 면", pn="이전·다음", prev="이전", next="다음", next_group="다음 계열"),
+          "en": dict(crumbs="Breadcrumb", sibs="In this series", others="Other pages in this series", pn="Previous and next", prev="Previous", next="Next", next_group="Next series")}
+
+
+def leaf_html(lang, leaf, body):
+    """Breadcrumb, same-series list (sidebar on wide screens, collapsed box on narrow ones) and previous/next links.
+    leaf = dict(crumbs=[(label, href)...], groups=[(group label, [(label, href), ...]), ...], cur=href of this page)."""
+    L = LEAF_T[lang]
+    flat = [(lab, href, gi, glab) for gi, (glab, items) in enumerate(leaf["groups"]) for lab, href in items]
+    idx = next(i for i, x in enumerate(flat) if x[1] == leaf["cur"])
+    cur_g = flat[idx][2]
+    crumbs = " <span class='sep' aria-hidden='true'>›</span> ".join(f'<a href="{h}">{esc(l)}</a>' for l, h in leaf["crumbs"])
+    crumbs += f" <span class='sep' aria-hidden='true'>›</span> <span aria-current='page'>{esc(flat[idx][0])}</span>"
+
+    def lists():
+        out = []
+        many = len(leaf["groups"]) > 1
+        for gi, (glab, items) in enumerate(leaf["groups"]):
+            lis = "".join(f'<li><a href="{h}"' + (' aria-current="page"' if h == leaf["cur"] else "") + f'>{esc(l)}</a></li>' for l, h in items)
+            if many:
+                out.append(f'<details{" open" if gi == cur_g else ""}><summary>{esc(glab)} <small>({len(items)})</small></summary><ol>{lis}</ol></details>')
+            else:
+                out.append(f'<p class="sg">{esc(glab)} <small>({len(items)})</small></p><ol>{lis}</ol>')
+        return "".join(out)
+
+    side = f'<aside class="sibs"><nav aria-label="{L["sibs"]}">{lists()}</nav></aside>'
+    mobile = f'<details class="sibs-m"><summary>{L["others"]} ({sum(len(i) for _, i in leaf["groups"])})</summary><nav aria-label="{L["sibs"]}">{lists()}</nav></details>'
+    pn = []
+    if idx > 0:
+        p = flat[idx - 1]
+        pn.append(f'<a rel="prev" href="{p[1]}">← {esc(p[0])}</a>')
+    if idx + 1 < len(flat):
+        n = flat[idx + 1]
+        note = f'<small>{L["next_group"]}: {esc(n[3])}</small> ' if n[2] != cur_g else ""
+        pn.append(f'<a rel="next" href="{n[1]}">{note}{esc(n[0])} →</a>')
+    pnav = f'<nav class="pn" aria-label="{L["pn"]}">{"".join(pn)}</nav>'
+    return (f'<nav class="crumbs" aria-label="{L["crumbs"]}">{crumbs}</nav><div class="leaf">{side}<div class="leafbody">{mobile}'
+            f'{body}{pnav}</div></div>')
+
+
+
+def metric_leaf(lang, mid):
+    t = T[lang]
+    groups = [(sl[lang], [(m[lang]["name"], f'{m["id"]}.html') for m in METRICS if m["series"] == s]) for s, sl in SERIES.items()]
+    return dict(crumbs=[(t["nav_home"], "../index.html"), (t["nav_metrics"], "index.html")], cur=f"{mid}.html", groups=[g for g in groups if g[1]])
+
+
+def king_leaf(D, lang, edition):
+    t = T[lang]; kc, _ = KING_COL[lang]
+    items = [(f"{int(r.king_no)}. {r[kc]}", f"{r.edition}.html") for _, r in D.main_ed().iterrows()]
+    return dict(crumbs=[(t["nav_home"], "../index.html"), (t["nav_kings"], "index.html")], cur=f"{edition}.html", groups=[(t["king_list"], items)])
+
+
+def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", active: str = "", leaf=None) -> str:
+    if leaf:   # 1.2.6: breadcrumb, same-series list and previous/next on metric and reign pages
+        body = leaf_html(lang, leaf, body)
     t = T[lang]
     root = "../" * depth
     other = "en" if lang == "ko" else "ko"
@@ -219,7 +279,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
 <header><a class="brand" href="{root}{lang}/index.html">{t['site']}</a>
 <nav>{navh}</nav>
 <div class="right"><button id="theme" class="theme" type="button" aria-label="{"테마" if lang == "ko" else "Theme"}">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
-<main>{body}</main>
+<main{' class="wide"' if leaf else ''}>{body}</main>
 <footer>{t['site']} · {t['version']} {VERSION} · {t['built']} {BUILD_DATE} · <a href="{REPO}">GitHub</a> · {t['hub']} <a href="https://bowonkwon.github.io/{hub_path}">bowonkwon.github.io</a><br>{attribution}</footer>
 <script>{JS}</script></body></html>"""
 
@@ -837,7 +897,7 @@ def metric_page(m, D, lang):
     body.append(reliability_card(m, D, lang))
     body.append(metric_figure(m, D, lang))
     body.append(f'<p class="files"><a href="../../data/{m["table"]}.csv">{t["download"]}: {m["table"]}.csv</a></p>')
-    return page(lang, L["name"], "".join(body), depth=2, desc=L["definition"], active="metrics")
+    return page(lang, L["name"], "".join(body), depth=2, desc=L["definition"], active="metrics", leaf=metric_leaf(lang, m["id"]))
 
 
 def metrics_index(D, lang):
@@ -881,7 +941,7 @@ def king_page(r, D, lang):
                 "".join(f'<tr><td><a href="../metrics/{x.mid}.html">{esc(x.metric)}</a></td><td class="num">{fmt(x.value, x.spec)}</td><td class="num">{fmt(x.med, x.spec)}</td></tr>' for _, x in kw.iterrows()) + "</tbody></table></div>")
     nikh_id = f"k{r.edition[1:]}"
     body.append(f'<p class="links"><a href="{NIKH}/search/inspectionMonthList.do?id={nikh_id}">{t["nikh_link"]}</a></p>')
-    return page(lang, r[kc], "".join(body), depth=2, active="kings")
+    return page(lang, r[kc], "".join(body), depth=2, active="kings", leaf=king_leaf(D, lang, r.edition))
 
 
 def kings_index(D, lang):

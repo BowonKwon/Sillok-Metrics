@@ -1,6 +1,6 @@
 # Sillok Metrics · 실록 메트릭스
 
-**조선왕조실록을 기사 단위로 센 수치와, 그 수치를 얼마나 믿어도 되는지.**
+**조선왕조실록을 기사 단위로 센 수치와, 수치마다 붙인 신뢰도.**
 **The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number.**
 
 Site: https://bowonkwon.github.io/Sillok-Metrics/ (한국어 · English) · Hub: https://bowonkwon.github.io/

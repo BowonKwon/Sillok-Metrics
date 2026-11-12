@@ -34,8 +34,8 @@ TAKEAWAYS = {
         ko="국편 해제의 「1/3 축소」를 세 단위로 쪼갠 값이다. 기사 15%, 글자 18%, 산삭 표시 16%는 서로 다른 것을 재므로, 인용할 때 어느 단위인지 적어야 한다.",
         en="Splits NIKH's 'reduced by a third' into three distinct measures (15% of articles, 18% of characters, 16% of characters marked); say which one you are citing."),
     "revised_saron_share": dict(
-        ko="국편 태그 기준으로는 수정본에 사론이 거의 없다(선조수정실록 1건). 오항녕이 센 52칙과 다르므로, 수정본의 논평을 셀 때는 태그가 아니라 본문의 「史臣曰」을 직접 세야 한다.",
-        en="According to NIKH's tags the revisions carry almost no commentary (a single comment in the Revised Seonjo records), compared with the 52 counted by Oh Hang-nyeong. Count '史臣曰' in the text, not the tags, when working on revised editions."),
+        ko="국편 태그 기준으로는 수정본에 사론이 거의 없다(선조수정실록 1건). 선조수정실록 원문에는 「史臣曰」 표지도 없어(「史臣」 12회) 표지를 세서는 수정본의 논평을 잴 수 없다 — 기사 본문을 읽어 논평을 가려내야 한다.",
+        en="According to NIKH's tags the revisions carry almost no commentary (a single comment in the Revised Seonjo records). The Revised Seonjo text has no '史臣曰' marker either ('史臣' occurs 12 times), so counting markers cannot measure its commentary; comments have to be identified by reading the articles."),
     "solar_eclipse_match": dict(
         ko="「실록의 일식 기록은 믿을 만한가」에 유형별로 답한다. 관측 보고로 읽히는 기사의 65%는 서울에서 실제로 보인 일식과 맞고, 95%는 지구 어딘가의 일식과 맞는다. 나머지는 대부분 해 진 뒤의 일식을 계산대로 적은 것이다. 「日食」 기사 전체를 관측 기록으로 세면 일치율은 24%로 떨어진다 — 유형을 가리지 않은 집계는 쓰지 말 것.",
         en="Answers the question 'Can the Sillok's eclipse records be trusted?' type by type: 65% of observation reports match an eclipse visible from Seoul and 95% an eclipse somewhere on Earth; most of the rest are eclipses after sunset that were recorded from calculation. Counting every '日食' article as an observation drops the rate to 24%, so never use the total that ignores type."),

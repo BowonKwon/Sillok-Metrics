@@ -19,7 +19,7 @@ Fields
 SITE = {
     "ko": {"title": "실록 메트릭스", "subtitle": "조선왕조실록을 기사 단위로 센 수치와, 수치마다 붙인 신뢰도"},
     "en": {"title": "Sillok Metrics", "subtitle": "The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number"},
-    "version": "1.2.6",
+    "version": "1.2.7",
 }
 
 SERIES = {
@@ -63,7 +63,7 @@ SOURCES = {
     },
 }
 
-# prior results shown next to our numbers (only values read from the original publication)
+# prior results shown next to our numbers (only values read from the original publication; oh_2004 is the exception, its original is not yet read, see the entry)
 PRIOR = {
     "bak_oh_2015": {"ko": "Bak & Oh (2015), 국편 누리집을 긁어 센 왕별 기사 수(p. 11, Table 1). 표의 태조~철종 합계 347,926건, 27왕 합계 380,723건. 본문이 적은 코퍼스 총수 380,271건(「1392–1863」)은 표 합과 452건 차이가 나는 논문 자체의 불일치다(1.2.3 까지는 이 값을 「고종·순종 포함」으로 잘못 적었다).",
                     "en": "Bak & Oh (2015), articles per reign counted from the NIKH website (p. 11, Table 1): the table sums to 347,926 for Taejo–Cheoljong and 380,723 for all 27 reigns. The corpus total stated in the text, 380,271 ('1392–1863'), differs from the table sum by 452, an inconsistency within the paper (up to 1.2.3 this site wrongly labeled that figure 'with Gojong and Sunjong').",
@@ -74,8 +74,8 @@ PRIOR = {
     "nikh_haejae": {"ko": "국사편찬위원회 왕대별 해제: 선조수정실록은 「원본의 1/5」, 경종수정실록은 「원 실록의 1/3 분량」, 광해군일기 정초본은 중초본보다 「1/3 정도 축소」.",
                     "en": "NIKH edition notes: the Revised Seonjo records are 'one fifth of the original', the Revised Gyeongjong records 'one third', and the final draft of the Daily Records of Gwanghaegun 'reduced by about a third' from the second draft.",
                     "cite": "국사편찬위원회 조선왕조실록 누리집, 왕대별 해제(wnb·wtb·woa·wob).", "cite_en": "NIKH, Veritable Records of the Joseon Dynasty website, edition notes by reign (wnb, wtb, woa, wob)."},
-    "oh_2004": {"ko": "오항녕(2004): 선조수정실록이 사론으로 원본 평가를 고친 인물 40명, 사론 52칙.",
-                "en": "Oh Hang-nyeong (2004): the Revised Seonjo records re-evaluate 40 persons through 52 historians' comments.",
+    "oh_2004": {"ko": "오항녕(2004)은 『선조수정실록』의 사론 개정을 다룬다. 사론을 고친 인물 40명은 저자의 칼럼에 나오는 계수이고(게재지 미확인), 1.2.6 까지 여기 함께 적었던 「사론 52칙」은 출처와 면을 원문에서 확인하지 못했다.",
+                "en": "Oh Hang-nyeong (2004) deals with the revision of historians' comments in the Revised Seonjo records. The figure of 40 persons whose comments were revised appears in a column by the author (place of publication not confirmed); the source and page of the '52 comments' given here up to 1.2.6 are not confirmed in the original.",
                 "cite": "오항녕, 「朝鮮後期 實錄編纂 慣例의 변화」, 『國史館論叢』 105, 2004.", "cite_en": "Oh Hang-nyeong, 'Changes in the conventions of Veritable Records compilation in late Joseon' (in Korean), Guksagwan Nonchong 105, 2004."},
     "ahn_lee_2004": {"ko": "안영숙·이용삼(2004) 표 1: 조선시대 일식 기록 261건(실록 231 + 증보문헌비고·승정원일기 30) 중 오기 11, 조선에서 볼 수 없던 일식 60(지하식 16). 계산으로는 보였으나 기록 없는 일식 38.",
                      "en": "Ahn & Lee (2004), Table 1: of 261 Joseon eclipse records (231 in the Sillok, 30 in other sources) 11 are mis-dated and 60 were not visible from Korea (16 below the horizon); 38 visible eclipses went unrecorded.",
@@ -180,12 +180,12 @@ METRICS = [
          ko=dict(name="수정본의 사론 비중", definition="원본과 수정본의 사론 기사 비율을 나란히 둔 값.",
                  formula="사론 기사 / 전체 기사, 판본별",
                  reading="수정본이 논평을 통해 평가를 바꾸는 책이라면 사론 비율이 원본보다 높아야 한다.",
-                 caveat="국편 태그 기준. 선조수정실록의 사론은 국편 태그로 1건뿐이라 오항녕의 52칙과 크게 다르다 — 태그 누락 가능성을 표에 적었다."),
+                 caveat="국편 태그 기준. 선조수정실록의 사론은 국편 태그로 1건뿐이고, 원문에 「史臣曰」 표지는 한 번도 없다(「史臣」은 12회). 수정본의 논평은 표지 없이 기사 본문에 들어 있을 수 있어 태그 수가 논평의 양을 다 보여 주지 못할 수 있다 — 태그 누락 가능성을 표에 적었다."),
          en=dict(name="Historians' comments in revised editions", definition="Share of articles with a historian's comment, original and revised side by side.",
                  formula="Articles with comments / all articles, per edition",
                  reading="If a revision changes judgments through commentary, its share should exceed the original's.",
-                 caveat="NIKH tagging. The Revised Seonjo records carry only one tagged comment, compared with the 52 counted by Oh Hang-nyeong, so tagging gaps are likely and are noted in the table."),
-         external=dict(ko="오항녕(2004)의 선조수정실록 사론 52칙·인물 40명.", en="Oh Hang-nyeong (2004): 52 comments on 40 persons in the Revised Seonjo records.")),
+                 caveat="NIKH tagging. The Revised Seonjo records carry only one tagged comment, and the text never uses the marker '史臣曰' ('史臣' occurs 12 times). Comments in a revision may sit in the article text without a marker, so the tag count may not show all of them; possible tagging gaps are noted in the table."),
+         external=dict(ko="오항녕(2004)은 선조수정실록의 사론 개정을 다룬다. 사론을 고친 인물 40명은 저자의 칼럼에 나오는 계수로, 논문 원문에서는 아직 확인하지 못했다(선행 결과 면).", en="Oh Hang-nyeong (2004) deals with the revision of historians' comments in the Revised Seonjo records. The figure of 40 persons whose comments were revised appears in a column by the author and has not yet been confirmed in the paper itself (see Prior results).")),
     # ---------------- C
     dict(id="solar_eclipse_match", series="C", table="c_solar", unit="share", fmt=".1%", reliability="external-match",
          ko=dict(name="일식 기사의 계산 일식 일치율", definition="「日食」이 나오는 기사를 유형(관측 보고·예보·구식례·불식·논의)으로 나눈 뒤, 기사 날짜 ±1일 안에 서울에서 보이는 계산 일식이 있는 기사의 비율.",

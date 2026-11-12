@@ -23,7 +23,7 @@ EXT_IDS = {"g1_solar_match", "g2_lunar_match", "g3_planets", "g4_comet_ident", "
 from registry import METRICS, PRIOR, SERIES, SITE, SOURCES
 
 VERSION = SITE["version"]
-BUILD_DATE = "2026-11-03"
+BUILD_DATE = "2026-11-13"
 REPO = "https://github.com/BowonKwon/Sillok-Metrics"
 NIKH = "https://sillok.history.go.kr"
 

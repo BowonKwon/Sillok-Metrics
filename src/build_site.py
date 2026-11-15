@@ -23,7 +23,7 @@ EXT_IDS = {"g1_solar_match", "g2_lunar_match", "g3_planets", "g4_comet_ident", "
 from registry import METRICS, PRIOR, SERIES, SITE, SOURCES
 
 VERSION = SITE["version"]
-BUILD_DATE = "2026-11-13"
+BUILD_DATE = "2026-11-15"
 REPO = "https://github.com/BowonKwon/Sillok-Metrics"
 NIKH = "https://sillok.history.go.kr"
 
@@ -301,40 +301,84 @@ def nice_ticks(lo: float, hi: float, n: int = 5) -> list[float]:
     return ticks
 
 
-def svg_lines(series, spec, width=900, height=320, ylabel="", xstep=None, bands=None) -> str:
+def tick_spec(spec, ticks):
+    """Number format for axis ticks: one more decimal when the ticks fall between the values the format can show
+    (a 2.5 step printed with no decimals reads 0, 3, 5, 8)."""
+    if spec.endswith(".0%") and any(abs(v * 100 - round(v * 100)) > 1e-9 for v in ticks):
+        return spec[:-3] + ".1%"
+    if spec.endswith(".0f") and any(abs(v - round(v)) > 1e-9 for v in ticks):
+        return spec[:-3] + ".1f"
+    return spec
+
+
+def svg_lines(series, spec, width=900, height=320, ylabel="", xstep=None, bands=None, gaps=True) -> str:
     xs = [p[0] for _, pts, _ in series for p in pts]
     ys = [p[1] for _, pts, _ in series for p in pts if not math.isnan(p[1])]
     if not xs or not ys:
         return ""
     x0, x1, y0, y1 = min(xs), max(xs), 0.0, max(ys) * 1.05 or 1
-    L, R, Tp, B = 62, (110 if len(series) > 1 else 20), 16, 36
+    _w = lambda t: sum(11 if ord(ch) > 0x2E80 else 6.3 for ch in str(t))  # rough width of a label at the chart font size
+    L, R, Tp, B = 62, (max(110, max(_w(n) for n, _, _ in series) + 14) if len(series) > 1 else 20), 22, 36
     pw, ph = width - L - R, height - Tp - B
     X = lambda v: L + (v - x0) / (x1 - x0 or 1) * pw
     Y = lambda v: Tp + ph - (v - y0) / (y1 - y0) * ph
     out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="line chart">']
     if bands:
         for (a, b, label) in bands:
-            out.append(f'<rect x="{X(a):.1f}" y="{Tp}" width="{max(X(b)-X(a),1):.1f}" height="{ph}" fill="var(--accent2)" fill-opacity=".10"><title>{esc(label)}</title></rect>')
-    for v in nice_ticks(y0, y1):
-        out.append(f'<line class="grid" x1="{L}" y1="{Y(v):.1f}" x2="{width-R}" y2="{Y(v):.1f}"/><text x="{L-6}" y="{Y(v)+4:.1f}" text-anchor="end">{fmt(v, spec)}</text>')
+            out.append(f'<rect x="{X(a):.1f}" y="{Tp}" width="{max(X(b)-X(a),4):.1f}" height="{ph}" fill="var(--accent2)" fill-opacity=".28"><title>{esc(label)}</title></rect>')  # a one- or two-year band must stay visible
+    ticks = nice_ticks(y0, y1)
+    tspec = tick_spec(spec, ticks)  # 2.5% steps must not be printed as 3%, 5%, 8%
+    for v in ticks:
+        out.append(f'<line class="grid" x1="{L}" y1="{Y(v):.1f}" x2="{width-R}" y2="{Y(v):.1f}"/><text x="{L-6}" y="{Y(v)+4:.1f}" text-anchor="end">{fmt(v, tspec)}</text>')
     step = xstep or max(1, int((x1 - x0) / 8 / 10) * 10)
     xv = int(math.ceil(x0 / step) * step)
     while xv <= x1:
         out.append(f'<text x="{X(xv):.1f}" y="{height-12}" text-anchor="middle">{xv}</text>')
         xv += step
     if ylabel:
-        out.append(f'<text x="{L}" y="10">{esc(cap(ylabel, "en"))}</text>')
+        out.append(f'<text x="{L}" y="13">{esc(cap(ylabel, "en"))}</text>')
+    ends = []
     for name, pts, ci in series:
-        pts = [p for p in pts if not math.isnan(p[1])]
+        # The line stops where the data stop: at a missing value, and where the x values skip more than one regular step
+        # (decades left out for a thin denominator). Joining across such a gap draws values that were never counted.
+        allx = sorted(p[0] for p in pts)
+        steps = [b - a for a, b in zip(allx, allx[1:]) if b > a]
+        base = min(steps) if steps else 0
+        segs, cur, prev = [], [], None
+        for x, y in pts:
+            if math.isnan(y):
+                if cur:
+                    segs.append(cur)
+                cur, prev = [], None
+                continue
+            if gaps and cur and base and x - prev > base * 1.5:
+                segs.append(cur)
+                cur = []
+            cur.append((x, y))
+            prev = x
+        if cur:
+            segs.append(cur)
+        pts = [p for seg in segs for p in seg]
         if not pts:
             continue
-        d = " ".join(f"{'M' if i == 0 else 'L'}{X(x):.1f},{Y(y):.1f}" for i, (x, y) in enumerate(pts))
+        d = " ".join(f"{'M' if i == 0 else 'L'}{X(x):.1f},{Y(y):.1f}" for seg in segs for i, (x, y) in enumerate(seg))
         out.append(f'<path d="{d}" fill="none" stroke="var(--s{ci+1})" stroke-width="1.8" stroke-linejoin="round"/>')
+        for seg in segs:
+            if len(seg) == 1:  # a lone point between two gaps has no line to show it
+                out.append(f'<circle cx="{X(seg[0][0]):.1f}" cy="{Y(seg[0][1]):.1f}" r="2.4" fill="var(--s{ci+1})"/>')
         for x, y in pts:
             out.append(f'<circle cx="{X(x):.1f}" cy="{Y(y):.1f}" r="4" fill="transparent"><title>{esc(name)} · {x}: {fmt(y, spec)}</title></circle>')
         if len(series) > 1:
             lx, ly = pts[-1]
-            out.append(f'<text x="{X(lx)+4:.1f}" y="{Y(ly)+4:.1f}">{esc(name)}</text>')
+            ends.append([X(lx) + 4, Y(ly) + 4, name])
+    # Series names at the line ends: keep them at least 17 units apart (a label is about 16.5 units tall) so that lines ending close together stay legible.
+    ends.sort(key=lambda e: e[1])
+    for a, b in zip(ends, ends[1:]):
+        if b[1] - a[1] < 17:
+            b[1] = a[1] + 17
+    over = (ends[-1][1] - (height - B - 2)) if ends else 0
+    for e in ends:
+        out.append(f'<text x="{e[0]:.1f}" y="{e[1] - max(over, 0):.1f}">{esc(e[2])}</text>')
     out.append("</svg>")
     return "".join(out)
 
@@ -347,14 +391,19 @@ def svg_bars(items, spec, width=900, row_h=22, label_w=240, xlabel="", errors=No
     lo, hi = 0.0, max(max(vals), hi_err, 0.0)
     pad = hi * 0.05 or 1
     hi = hi + pad
+    _lw = lambda t: sum(11 if ord(ch) > 0x2E80 else 6.3 for ch in str(t))  # rough width of a label at the chart font size
+    label_w = min(max(label_w, max(_lw(n) for n, _, _ in items) + 16), width * 0.62)  # a long row name (English edition titles) must fit its column
     pw = width - label_w - 30
-    h = row_h * len(items) + 40
+    hb = row_h * len(items) + 40
+    h = hb + (16 if xlabel else 0)  # the axis title sits below the tick labels, not on them
     x = lambda v: label_w + (v - lo) / (hi - lo) * pw
     out = [f'<svg viewBox="0 0 {width} {h}" role="img" aria-label="bar chart">']
-    for v in nice_ticks(lo, hi):
-        out.append(f'<line class="grid" x1="{x(v):.1f}" y1="6" x2="{x(v):.1f}" y2="{h-30}"/><text x="{x(v):.1f}" y="{h-14}" text-anchor="middle">{fmt(v, spec)}</text>')
+    _ticks = nice_ticks(lo, hi)
+    _tspec = tick_spec(spec, _ticks)
+    for v in _ticks:
+        out.append(f'<line class="grid" x1="{x(v):.1f}" y1="6" x2="{x(v):.1f}" y2="{hb-30}"/><text x="{x(v):.1f}" y="{hb-14}" text-anchor="middle">{fmt(v, _tspec)}</text>')
     if xlabel:
-        out.append(f'<text x="{label_w+pw/2:.0f}" y="{h-2}" text-anchor="middle">{esc(cap(xlabel, "en"))}</text>')
+        out.append(f'<text x="{label_w+pw/2:.0f}" y="{hb+4}" text-anchor="middle">{esc(cap(xlabel, "en"))}</text>')
     for i, (name, v, ci) in enumerate(items):
         y = 8 + i * row_h
         out.append(f'<text x="{label_w-8}" y="{y+row_h*0.68:.1f}" text-anchor="end">{esc(cap(name, "en"))}</text>')
@@ -570,7 +619,7 @@ def metric_figure(m, D: Data, lang) -> str:
         if mid in ("n_articles", "n_han"):
             y = D.yearly
             colm = "n_articles" if mid == "n_articles" else "n_han"
-            out.append(fig(svg_lines([(t["year"], [(int(r.year_ce), float(r[colm])) for _, r in y.iterrows()], 0)], ",.0f", ylabel=t["year"]),
+            out.append(fig(svg_lines([((t["articles"] if mid == "n_articles" else t["chars"]), [(int(r.year_ce), float(r[colm])) for _, r in y.iterrows()], 0)], ",.0f", ylabel=(t["articles"] if mid == "n_articles" else t["chars"])),
                            ("연도별(본실록). 임진왜란 전후(1592~)의 골과 정조 이후의 감소가 보인다." if lang == "ko" else "By year, principal editions. Note the trough around the Imjin War (1592–) and the decline after Jeongjo.")))
         cols = [(ec, t["edition"], None), ("n_articles", t["articles"], ",.0f"), ("n_dated", t["dated"], ",.0f"), ("n_han", t["chars"], ",.0f"), ("reign_months", t["reign"] + " (" + t["months"] + ")", ",.0f"),
                 ("articles_per_year", t["articles"] + "/" + t["year"], ",.0f"), ("han_per_year", t["chars"] + "/" + t["year"], ",.0f"), ("median_len", ("기사 길이 중앙값" if lang == "ko" else "median length"), ",.0f"),
@@ -636,7 +685,7 @@ def metric_figure(m, D: Data, lang) -> str:
         ph = D.venus_days.phase_days
         bins = list(range(-292, 293, 12)); hist = [int(((ph >= a) & (ph < a + 12)).sum()) for a in bins[:-1]]
         items = [(f"{a:+d}…{a+12:+d}".replace("-", "−"), float(h), 1 if abs(a + 6) <= 90 else 2) for a, h in zip(bins[:-1], hist)]
-        out.append(fig(svg_bars(items, ",.0f", row_h=14, label_w=110, xlabel=("기록 일수" if lang == "ko" else "record days")), ("내합(0) 기준 위상별 기록 일수. 내합 ±90일(진한 색)에 66%가 몰리고 내합 당일 부근은 비어 있다." if lang == "ko" else "Record days by phase relative to inferior conjunction (0). 66% lie within ±90 days (darker); the conjunction itself is nearly empty.")))
+        out.append(fig(svg_bars(items, ",.0f", row_h=18, label_w=110, xlabel=("기록 일수" if lang == "ko" else "record days")), ("내합(0) 기준 위상별 기록 일수. 내합 ±90일(진한 색)에 66%가 몰리고 내합 당일 부근은 비어 있다." if lang == "ko" else "Record days by phase relative to inferior conjunction (0). 66% lie within ±90 days (darker); the conjunction itself is nearly empty.")))
         vr = D.venus.iloc[0]
         VROWS = [("n_days", "기록 일수", "Record days", ",.0f"), ("within_90d", "내합 ±90일 안 비율", "Share within ±90 days of inferior conjunction", ".1%"),
                  ("within_6d", "내합 ±6일 안 비율", "Share within ±6 days of inferior conjunction", ".2%"), ("best_period_days", "주기 탐색 최적 주기(일)", "Best period from the period search (days)", ".1f"),
@@ -646,8 +695,15 @@ def metric_figure(m, D: Data, lang) -> str:
     elif mid in ("comet_years", "earthquake_articles"):
         Y = D.comet if mid == "comet_years" else D.quake
         bands = [(y - 0.5, y + 0.5, "Halley") for y in (1456, 1531, 1607, 1682, 1759, 1835)] if mid == "comet_years" else None
-        out.append(fig(svg_lines([(t["articles"], [(int(r.year_ce), float(r.n_articles)) for _, r in Y.iterrows()], 0)], ",.0f", bands=bands),
-                       ("연도별 키워드 기사 수(본실록). 띠는 핼리 혜성 회귀 연도." if lang == "ko" else "Keyword articles per year (principal editions). Bands: Halley apparition years.") if mid == "comet_years" else ("연도별 「地震」 기사 수(본실록)." if lang == "ko" else "'地震' articles per year (principal editions).")))
+        have = {int(r.year_ce): float(r.n_articles) for _, r in Y.iterrows()}
+        # The sky series count the principal editions of Taejo to Cheoljong only (metrics_c.py), so a year is drawn as 0 only
+        # when one of those editions has articles in it; the Gojong and Sunjong years lie outside the count and stay empty (1.2.8).
+        scope = set(D.ed[(D.ed.is_main) & (D.ed.king_no <= 25)].edition)
+        rec = {int(r.year_ce) for _, r in D.yearly_ed.iterrows() if r.edition in scope and float(r.n_articles) > 0}
+        pts = [(yr, have.get(yr, 0.0 if yr in rec else math.nan)) for yr in range(min(rec), max(rec) + 1)]
+        out.append(fig(svg_lines([(t["articles"], pts, 0)], ",.0f", bands=bands),
+                       (("연도별 키워드 기사 수(본실록). 띠는 핼리 혜성 회귀 연도." if lang == "ko" else "Keyword articles per year (principal editions). Bands: Halley apparition years.") if mid == "comet_years" else ("연도별 「地震」 기사 수(본실록)." if lang == "ko" else "'地震' articles per year (principal editions)."))
+                       + (f" 집계 범위는 태조~철종실록({min(rec)}~{max(rec)}년)이고, 그 안에서 해당 기사가 없는 해는 0으로 그렸다." if lang == "ko" else f" The count covers the Veritable Records of Taejo to Cheoljong ({min(rec)}–{max(rec)}); within that span a year with no such article is drawn as 0.")))
         out.append(table_html(Y, [("year_ce", t["year"], None), ("n_articles", t["articles"], ",.0f"), ("n_days", ("기록 일수" if lang == "ko" else "days"), ",.0f")], "t_y", lang))
         if mid == "earthquake_articles":
             Q = D.quake_prov.copy(); Q["decade"] = Q.year_ce // 10 * 10
@@ -695,8 +751,9 @@ def metric_figure(m, D: Data, lang) -> str:
             out.append(fig(svg_lines([(t["share"], [(int(r.year_ce), float(r.keyword_share)) for _, r in Yr.iterrows()], 0)], ".0%", bands=[(1670, 1671, "1670–71"), (1695, 1696, "1695–96")]), ("연도별 비율. 띠는 경신(1670~71)·을병(1695~96) 대기근." if lang == "ko" else "Share by year. Bands: the great famines of 1670–71 and 1695–96.")))
     elif mid == "death_penalty_mention":
         E = D.death
-        out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "Mentions per 1,000"), [(int(r.period[:4]) + 25, float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
-                                  (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(int(r.period[:4]) + 25, float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50),
+        pmid = lambda p: (int(p[:4]) + int(p[-4:])) / 2   # middle year of a period such as "1392–1399"
+        out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "Mentions per 1,000"), [(pmid(r.period), float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
+                                  (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(pmid(r.period), float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50, gaps=False),
                        ("50년 구간(중앙 연도). 보정치는 언급 기사 비율 × 표본에서 잰 집행 확인율." if lang == "ko" else "50-year periods (mid-year). The corrected line multiplies the mention rate by the execution-confirmed rate from the sample.")))
         out.append(table_html(E, [("period", t["period"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "execution confirmed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "confirmation rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
         Rg = D.death_reign
@@ -716,22 +773,29 @@ def king_spans(D):
     return out
 
 
-def density_strip(D, lang, width=1000, height=150) -> str:
+def density_strip(D, lang, width=1000, height=170) -> str:
     """Yearly character counts 1392–1863 as a bar strip, shaded by reign (alternating), reign labels below."""
     y = D.yearly.set_index("year_ce").n_han
     years = list(range(1392, 1911))
     vals = [float(y.get(yr, 0)) for yr in years]
     vmax = max(vals) or 1
-    L, R, T, B = 8, 8, 10, 34
+    L, R, T, B = 8, 8, 10, 54
     pw, ph = width - L - R, height - T - B
     bw = pw / len(years)
     X = lambda yr: L + (yr - 1392) * bw
     spans = king_spans(D)
     out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{"연도별 글자 수, 1392–1863" if lang == "ko" else "Characters per year, 1392–1863"}">']
+    last_right = [-1e9, -1e9]   # two rows of reign names: a name that would run into the one before it drops to the second row (1.2.8)
     for i, (kn, ko, en, a, b) in enumerate(spans):
         out.append(f'<rect x="{X(a):.1f}" y="{T}" width="{max(X(b + 1) - X(a), 1):.1f}" height="{ph}" fill="var(--s{1 if i % 2 == 0 else 3})" fill-opacity=".10"/>')
         if b - a >= 14:
-            out.append(f'<text x="{(X(a) + X(b + 1)) / 2:.1f}" y="{height - 20}" text-anchor="middle">{esc(ko if lang == "ko" else en)}</text>')
+            nm = ko if lang == "ko" else en
+            half = sum(12.5 if ord(ch) > 0x2E80 else 6.8 for ch in nm) / 2
+            mid = (X(a) + X(b + 1)) / 2
+            row = next((r for r in (0, 1) if mid - half >= last_right[r] + 4), None)
+            if row is not None:   # left out only when both rows are taken
+                out.append(f'<text x="{mid:.1f}" y="{height - 40 + row * 18}" text-anchor="middle">{esc(nm)}</text>')
+                last_right[row] = mid + half
     for yr, v in zip(years, vals):
         h = v / vmax * ph
         out.append(f'<rect x="{X(yr):.2f}" y="{T + ph - h:.1f}" width="{max(bw - 0.4, 0.6):.2f}" height="{h:.1f}" fill="var(--s1)"><title>{yr}: {v:,.0f}</title></rect>')
@@ -751,7 +815,9 @@ def reign_ribbon(D, king_no, lang, width=1000, height=46) -> str:
         on = kn == king_no
         out.append(f'<rect x="{X(a):.1f}" y="6" width="{max(X(b + 1) - X(a) - 1, 1):.1f}" height="16" rx="2" fill="var(--s{2 if on else 1})" fill-opacity="{1 if on else .22}"><title>{esc(ko if lang == "ko" else en)} {a}–{b}</title></rect>')
         if on:
-            out.append(f'<text x="{(X(a) + X(b + 1)) / 2:.1f}" y="38" text-anchor="middle" fill="var(--fg)">{esc(ko if lang == "ko" else en)} · {a}–{b}</text>')
+            lab = f"{ko if lang == 'ko' else en} · {a}–{b}"
+            half = sum(12.5 if ord(ch) > 0x2E80 else 6.8 for ch in lab) / 2 + 4
+            out.append(f'<text x="{min(max((X(a) + X(b + 1)) / 2, L + half), width - R - half):.1f}" y="38" text-anchor="middle" fill="var(--fg)">{esc(lab)}</text>')
     hl = [(X(a) + X(b + 1)) / 2 for kn, ko, en, a, b in spans if kn == king_no]
     for yr in (1400, 1500, 1600, 1700, 1800, 1900):
         if hl and abs(X(yr) - hl[0]) < 70:   # keep the axis label from colliding with the highlighted reign's label

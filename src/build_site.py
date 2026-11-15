@@ -86,6 +86,7 @@ header .brand{font-family:var(--display);font-weight:600;font-size:1.05rem;color
 header nav{display:flex;gap:1rem;flex-wrap:wrap}header nav a{color:var(--fg2);font-size:.92rem;padding:.2rem 0;border-bottom:2px solid transparent}
 header nav a:hover{text-decoration:none;color:var(--fg)}header nav a.on{color:var(--fg);border-bottom-color:var(--accent2)}
 header .right{margin-left:auto;display:flex;gap:.6rem;align-items:center}
+header .hub{font-size:.88rem;color:var(--fg2);white-space:nowrap}header .hub:hover{color:var(--fg)}
 header .lang{font-size:.88rem;color:var(--fg2);border:1px solid var(--line);border-radius:999px;padding:.15rem .7rem}header .lang:hover{text-decoration:none;color:var(--fg);border-color:var(--fg3)}
 .theme{border:1px solid var(--line);background:transparent;color:var(--fg2);border-radius:999px;width:30px;height:30px;cursor:pointer;font-size:.9rem;line-height:1;padding:0}.theme:hover{color:var(--fg);border-color:var(--fg3)}
 main{max-width:1060px;margin:0 auto;padding:1.6rem 1.1rem 4rem;min-width:0}
@@ -112,6 +113,7 @@ a.stat:hover{text-decoration:none;border-color:var(--fg3)}
 .rel{border-left:4px solid var(--accent2)}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.4rem;margin:0}dt{color:var(--fg3);font-size:.86rem;letter-spacing:.01em;padding-top:.15rem}dd{margin:0;min-width:0}
 dd.formula{font-family:ui-monospace,"SF Mono",Consolas,"Noto Sans KR",monospace;font-size:.9rem;background:var(--bg2);border-radius:6px;padding:.45rem .65rem;line-height:1.6}
+@media(max-width:640px){.sx{overflow-x:auto;-webkit-overflow-scrolling:touch}.sx>svg{min-width:calc(var(--vw)*1px);max-width:none}}
 @media(max-width:640px){dl{grid-template-columns:1fr}dt{margin-top:.5rem}}
 table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.6rem 0}
 th,td{border-bottom:1px solid var(--line2);padding:.42rem .6rem;text-align:left;vertical-align:top}
@@ -255,9 +257,23 @@ def king_leaf(D, lang, edition):
     return dict(crumbs=[(t["nav_home"], "../index.html"), (t["nav_kings"], "index.html")], cur=f"{edition}.html", groups=[(t["king_list"], items)])
 
 
+_WIDE_SVG = re.compile(r"""<svg\b[^>]*\bviewBox=(["'])0 0 (\d+)(?:\.\d+)? [^"']*\1[^>]*>.*?</svg>""", re.S)
+
+
+def wrap_wide_svgs(body: str) -> str:
+    """Put every chart at least 500 units wide in a <div class="sx"> that carries its width (1.2.9). On a narrow screen the
+    stylesheet lets that box scroll sideways and draws the chart at its own size, so chart text keeps the size it was laid
+    out for instead of shrinking to 4px. On wider screens the box changes nothing."""
+    def one(m):
+        w = int(m.group(2))
+        return f'<div class="sx" style="--vw:{w}">{m.group(0)}</div>' if w >= 500 else m.group(0)
+    return _WIDE_SVG.sub(one, body)
+
+
 def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", active: str = "", leaf=None) -> str:
     if leaf:   # 1.2.6: breadcrumb, same-series list and previous/next on metric and reign pages
         body = leaf_html(lang, leaf, body)
+    body = wrap_wide_svgs(body)
     t = T[lang]
     root = "../" * depth
     other = "en" if lang == "ko" else "ko"
@@ -278,7 +294,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
 <style>{CSS}</style></head><body>
 <header><a class="brand" href="{root}{lang}/index.html">{t['site']}</a>
 <nav>{navh}</nav>
-<div class="right"><button id="theme" class="theme" type="button" aria-label="{"테마" if lang == "ko" else "Theme"}">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
+<div class="right"><a class="hub" href="https://bowonkwon.github.io/{'' if lang == 'ko' else 'en/'}">{'공개 자료 허브' if lang == 'ko' else 'All public materials'}</a><button id="theme" class="theme" type="button" aria-label="{"테마" if lang == "ko" else "Theme"}">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
 <main{' class="wide"' if leaf else ''}>{body}</main>
 <footer>{t['site']} · {t['version']} {VERSION} · {t['built']} {BUILD_DATE} · <a href="{REPO}">GitHub</a> · {t['hub']} <a href="https://bowonkwon.github.io/{hub_path}">bowonkwon.github.io</a><br>{attribution}</footer>
 <script>{JS}</script></body></html>"""
@@ -603,7 +619,39 @@ def reliability_card(m, D: Data, lang) -> str:
 
 
 # ----------------------------------------------------------------- metric figures
+def short_reign_note(ed, col, ec, lang) -> str:
+    """For the per-year metrics (1.2.9): the edition with the largest value and how short its reign was, when it was under two years."""
+    if col not in ("han_per_year",):
+        return ""
+    top = ed.loc[ed[col].idxmax()]
+    if not float(top.reign_months) < 24:
+        return ""
+    eun = "은" if ("가" <= str(top[ec])[-1] <= "힣" and (ord(str(top[ec])[-1]) - 0xAC00) % 28) else "는"
+    return (f" 값이 가장 큰 {top[ec]}{eun} 재위가 {int(top.reign_months)}개월이다. 재위가 짧으면 1년당 값이 몇 달 치 기록에 좌우되므로, 기록이 가장 촘촘했다는 뜻으로 읽기 어렵다." if lang == "ko"
+            else f" The largest value is that of the {top[ec]}, a reign of {int(top.reign_months)} months. With so short a reign the per-year value rests on a few months of record and is a poor sign of how dense the record was.")
+
+
+_svg_bars, _svg_lines = svg_bars, svg_lines
+EDITION_NOTE = {   # 1.2.9: what the muted bars are
+    "ko": " 옅은 색은 뒤에 다시 엮었거나 따로 전하는 판본이다 — 수정실록 · 개수실록(뒤에 고쳐 다시 펴낸 것), 보궐정오(빠진 것을 깁고 틀린 것을 바로잡은 보충본), 광해군일기 중초본(초고를 고치고 덧붙인 중간 교정본으로, 정초본의 앞 단계), 순종실록부록(1910년 8월 29일 이후의 기록을 붙인 부록).",
+    "en": " Muted bars are editions compiled again later or surviving separately: revised and supplemented editions (rewritten and issued again), a supplement-and-corrections volume, the second draft of the Gwanghaegun Diary (the corrected intermediate draft, one stage before the final draft), and the appendix to the Sunjong records (entries from August 29, 1910).",
+}
+WILSON_NOTE = {
+    "ko": " 가로 선은 윌슨 95% 구간으로, 관측한 건수에서 추정한 참 일치율이 있을 법한 범위다. 비율이 같다면 건수가 적을수록 선이 길다.",
+    "en": " The horizontal lines are Wilson 95% intervals: the range in which the true match rate plausibly lies, given the observed counts. At the same rate, a smaller count gives a longer line.",
+}
+
+
 def metric_figure(m, D: Data, lang) -> str:
+    axis_name = m[lang]["name"]
+
+    def svg_bars(items, spec, **kw):   # 1.2.9: a chart on a metric page names its axis even when the branch below does not
+        kw.setdefault("xlabel", axis_name)
+        return _svg_bars(items, spec, **kw)
+
+    def svg_lines(series, spec, **kw):
+        kw.setdefault("ylabel", axis_name)
+        return _svg_lines(series, spec, **kw)
     t = T[lang]
     kc, ec = KING_COL[lang]
     mid = m["id"]
@@ -615,7 +663,7 @@ def metric_figure(m, D: Data, lang) -> str:
     if mid in ("n_articles", "n_han", "han_per_year", "median_len", "saron_share", "empty_month_share"):
         col = {"n_articles": "n_articles", "n_han": "n_han", "han_per_year": "han_per_year", "median_len": "median_len", "saron_share": "saron_share", "empty_month_share": "empty_month_share"}[mid]
         items = [(r[ec], float(r[col]), 0 if r.is_main else 2) for _, r in ed.iterrows()]
-        out.append(fig(svg_bars(items, m["fmt"], row_h=20, label_w=250), (f"판본 {len(ed)}종. 옅은 색은 수정·개수·보궐정오·중초본." if lang == "ko" else f"All {len(ed)} editions; muted color marks revised, supplemented, supplement-and-corrections and second-draft editions.")))
+        out.append(fig(svg_bars(items, m["fmt"], row_h=20, label_w=250), (f"판본 {len(ed)}종, 막대 하나가 판본 하나다." if lang == "ko" else f"All {len(ed)} editions, one bar each.") + EDITION_NOTE[lang] + short_reign_note(ed, col, ec, lang)))
         if mid in ("n_articles", "n_han"):
             y = D.yearly
             colm = "n_articles" if mid == "n_articles" else "n_han"
@@ -653,7 +701,7 @@ def metric_figure(m, D: Data, lang) -> str:
             (("산삭 표시가 있는 기사" if lang == "ko" else "articles with deletion marks"), f"{int(g.articles_with_deletion_marks):,}")]) + "</div>")
         Y = D.gwy
         out.append(fig(svg_lines([(("산삭 표시 비율" if lang == "ko" else "Marked deleted"), [(int(r.year_ce), float(r.marked_deleted_share)) for _, r in Y.iterrows()], 1),
-                                  (("글자 수 감소율" if lang == "ko" else "Character drop"), [(int(r.year_ce), float(r.han_drop)) for _, r in Y.iterrows()], 0)], ".0%", xstep=2),
+                                  (("글자 수 감소율" if lang == "ko" else "Character drop"), [(int(r.year_ce), float(r.han_drop)) for _, r in Y.iterrows()], 0)], ".0%", xstep=2, ylabel=("비율 · 산삭 표시와 글자 수 감소" if lang == "ko" else "share · marked deleted and character drop")),
                        ("연도별. 산삭 표시 비율(중초본 안의 削 표지)과 정초본까지의 글자 수 감소율." if lang == "ko" else "By year: share of characters inside deletion marks in the second draft, and the character drop to the final draft.")))
         out.append(table_html(Y, [("year_ce", t["year"], None), ("n_articles", t["articles"] + (" (중초)" if lang == "ko" else " (second draft)"), ",.0f"), ("final_articles", t["articles"] + (" (정초)" if lang == "ko" else " (final draft)"), ",.0f"), ("n_han", t["chars"] + (" (중초)" if lang == "ko" else " (second draft)"), ",.0f"), ("final_han", t["chars"] + (" (정초)" if lang == "ko" else " (final draft)"), ",.0f"), ("marked_deleted_share", ("산삭 표시" if lang == "ko" else "marked deleted"), ".1%"), ("han_drop", ("글자 감소" if lang == "ko" else "character drop"), ".1%")], "t_gw", lang, filt=False))
     elif mid == "solar_eclipse_match":
@@ -664,7 +712,7 @@ def metric_figure(m, D: Data, lang) -> str:
         w1 = w1.set_index("type").loc[[o for o in order if o in set(w1.type)]].reset_index()
         items = [(f"{r.type_l} (n={int(r.n)})", float(r.rate), 1 if r.type == "observed" else 2) for _, r in w1.iterrows()]
         errs = {f"{r.type_l} (n={int(r.n)})": (float(r.ci_lo), float(r.ci_hi)) for _, r in w1.iterrows()}
-        out.append(fig(svg_bars(items, ".0%", label_w=300, errors=errs), ("유형별 일치율(서울 가시 일식, ±1일)과 윌슨 95% 구간. 관측 보고가 대표 수치다." if lang == "ko" else "Match rate by type (eclipse visible from Seoul, ±1 day) with Wilson 95% intervals. Observation reports are the headline.")))
+        out.append(fig(svg_bars(items, ".0%", label_w=300, errors=errs), ("유형별 일치율(서울 가시 일식, ±1일)과 윌슨 95% 구간. 관측 보고가 대표 수치다." + WILSON_NOTE["ko"] if lang == "ko" else "Match rate by type (eclipse visible from Seoul, ±1 day) with Wilson 95% intervals. Observation reports are the headline." + WILSON_NOTE["en"])))
         out.append(table_html(s, [("type_l", ("유형" if lang == "ko" else "type"), None), ("window_l", ("대조 창" if lang == "ko" else "window"), None), ("n", t["n"], ",.0f"), ("matched", ("일치" if lang == "ko" else "matched"), ",.0f"), ("rate", t["share"], ".1%"), ("ci_lo", "95% lo", ".1%"), ("ci_hi", "95% hi", ".1%")], "t_solar", lang, filt=False))
         rec = D.solar_rec
         out.append("<p>" + (f"거꾸로 보면: 1392~1863년에 서울에서 보였을 계산 일식 {len(rec)}회 가운데 ±1일 안에 「日食」 기사가 있는 것은 {int(rec.has_article_w1.sum())}회({rec.has_article_w1.mean():.0%})다. 식분별 포착률은 이 판에서 따로 내지 않았다."
@@ -680,12 +728,15 @@ def metric_figure(m, D: Data, lang) -> str:
         out.append(table_html(A, [("article_id", "ID", None), ("solar_date", ("양력" if lang == "ko" else "solar date"), None), ("match_seoul_w1", ("서울 ±1일" if lang == "ko" else "Seoul ±1 d"), None), ("nikh_url", t["nikh_link"], None)], "t_lunar_art", lang))
     elif mid == "venus_phase":
         pg = D.venus_pg
-        out.append(fig(svg_lines([("Z", [(float(r.period), float(r.Z)) for _, r in pg.iterrows()], 0)], ",.0f", xstep=100, bands=[(580, 588, "583.92")]),
-                       ("300~900일 주기 스캔의 레일리 Z. 띠는 금성 회합주기 583.92일." if lang == "ko" else "Rayleigh Z across trial periods 300–900 days; the band marks the 583.92-day synodic period.")))
+        out.append(fig(svg_lines([("Z", [(float(r.period), float(r.Z)) for _, r in pg.iterrows()], 0)], ",.0f", xstep=100, bands=[(580, 588, "583.92")],
+                                 ylabel=("레일리 Z · 클수록 기록일이 그 주기에 맞춰 몰린다" if lang == "ko" else "Rayleigh Z · higher = record days cluster more at that period")),
+                       ("가로는 시험해 본 주기(300~900일)다. 세로의 레일리 Z 는 기록일을 그 주기로 접었을 때 한쪽에 얼마나 몰리는지를 나타내는 수로, 봉우리가 높을수록 기록이 그 주기로 되풀이된다는 뜻이다. 띠는 금성의 회합주기 583.92일 — 지구에서 볼 때 금성이 해에 대해 같은 자리로 돌아오는 데 걸리는 날수다."
+                        if lang == "ko" else "Left to right: the trial period (300–900 days). Rayleigh Z says how strongly the record days bunch together when folded at that period; a higher peak means the records recur at that period. The band marks Venus's synodic period of 583.92 days, the time Venus takes to return to the same position relative to the Sun as seen from Earth.")))
         ph = D.venus_days.phase_days
         bins = list(range(-292, 293, 12)); hist = [int(((ph >= a) & (ph < a + 12)).sum()) for a in bins[:-1]]
         items = [(f"{a:+d}…{a+12:+d}".replace("-", "−"), float(h), 1 if abs(a + 6) <= 90 else 2) for a, h in zip(bins[:-1], hist)]
-        out.append(fig(svg_bars(items, ",.0f", row_h=18, label_w=110, xlabel=("기록 일수" if lang == "ko" else "record days")), ("내합(0) 기준 위상별 기록 일수. 내합 ±90일(진한 색)에 66%가 몰리고 내합 당일 부근은 비어 있다." if lang == "ko" else "Record days by phase relative to inferior conjunction (0). 66% lie within ±90 days (darker); the conjunction itself is nearly empty.")))
+        out.append(fig(svg_bars(items, ",.0f", row_h=18, label_w=110, xlabel=("기록 일수" if lang == "ko" else "record days")), ("내합(0) 기준 위상별 기록 일수. 세로는 내합에서 며칠 떨어졌는지(12일 묶음)다. 내합은 금성이 해와 지구 사이에 와서 해와 같은 방향에 놓이는 때로, 이때는 햇빛에 묻혀 맨눈으로 보기 어렵다. 내합 ±90일(진한 색)에 66%가 몰리고 내합 당일 부근은 거의 비어 있다." if lang == "ko"
+                        else "Record days by phase relative to inferior conjunction (0). Top to bottom: days from inferior conjunction, in 12-day bins. At inferior conjunction Venus passes between the Sun and the Earth and lies in the Sun's direction, where it is hard to see with the naked eye. 66% lie within ±90 days (darker); the conjunction itself is nearly empty.")))
         vr = D.venus.iloc[0]
         VROWS = [("n_days", "기록 일수", "Record days", ",.0f"), ("within_90d", "내합 ±90일 안 비율", "Share within ±90 days of inferior conjunction", ".1%"),
                  ("within_6d", "내합 ±6일 안 비율", "Share within ±6 days of inferior conjunction", ".2%"), ("best_period_days", "주기 탐색 최적 주기(일)", "Best period from the period search (days)", ".1f"),
@@ -713,15 +764,15 @@ def metric_figure(m, D: Data, lang) -> str:
     elif mid == "summer_cold":
         W = D.weather[D.weather.reliable]
         out.append(fig(svg_lines([(("서리·눈" if lang == "ko" else "Frost and snow"), [(int(r.decade), float(r.frost_snow_per_1000)) for _, r in W.iterrows()], 0),
-                                  (("우박" if lang == "ko" else "Hail"), [(int(r.decade), float(r.hail_per_1000)) for _, r in W.iterrows()], 1)], ".0f", xstep=50, bands=[(1640, 1719, "1640–1719")]),
+                                  (("우박" if lang == "ko" else "Hail"), [(int(r.decade), float(r.hail_per_1000)) for _, r in W.iterrows()], 1)], ".0f", xstep=50, bands=[(1640, 1719, "1640–1719")], ylabel=("천기 분류 기사 1,000건당 기록일" if lang == "ko" else "record days per 1,000 weather-class articles")),
                        ("10년 단위, 천기 분류 기사 1,000건당 기록일. 천기 기사 100건 미만인 연대(1780년대 이후 대부분)는 뺐다. 띠는 1640~1719년." if lang == "ko" else "By decade, record days per 1,000 weather-class articles; decades with fewer than 100 such articles (most after the 1780s) are omitted. Band: 1640–1719.")))
         out.append(table_html(D.weather, [("decade", t["decade"], None), ("weather_class_articles", ("천기 기사" if lang == "ko" else "weather-class articles"), ",.0f"), ("frost_days", ("서리 일" if lang == "ko" else "frost days"), ",.0f"), ("snow_days", ("눈 일" if lang == "ko" else "snow days"), ",.0f"), ("hail_days", ("우박 일" if lang == "ko" else "hail days"), ",.0f"), ("frost_snow_per_1000", ("서리·눈/1,000" if lang == "ko" else "frost+snow/1,000"), ".1f"), ("hail_per_1000", ("우박/1,000" if lang == "ko" else "hail/1,000"), ".1f"), ("reliable", ("그림 포함" if lang == "ko" else "plotted"), None)], "t_w", lang, filt=False))
     elif mid == "clan_concentration":
         C = D.clan; M = D.clan_mk
         out.append(fig(svg_lines([(("고위직 첫 임명자" if lang == "ko" else "High-office appointees"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in C.iterrows()], 0),
                                   (("하한(결측=별개 성관)" if lang == "ko" else "Lower bound"), [(float(r.mid_year), float(r.top10_lower_bound)) for _, r in C.iterrows()], 2),
-                                  (("문과 급제자" if lang == "ko" else "Examination passers"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in M.iterrows()], 1)], ".2f", xstep=50),
-                       (f"상위 10개 성관 점유율, 구간마다 {int(C.resample_n.iloc[0])}명 재표집 1,000회 평균. 표에 95% 구간." if lang == "ko" else f"Top-10 clan share, mean of 1,000 resamples of {int(C.resample_n.iloc[0])} per period; 95% intervals in the table.")))
+                                  (("문과 급제자" if lang == "ko" else "Examination passers"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in M.iterrows()], 1)], ".2f", xstep=50, ylabel=("상위 10개 성관 점유율" if lang == "ko" else "top-10 clan share")),
+                       (f"세로는 상위 10개 성관(본관 + 성)이 차지하는 몫이다. 구간마다 사람 수가 달라 같은 수({int(C.resample_n.iloc[0])}명)를 다시 뽑아 1,000번 계산한 평균을 그렸다(두 집단의 선). 「하한」 선은 성관을 알 수 없는 사람을 저마다 다른 성관으로 쳤을 때의 값이다. 95% 구간은 표에 있다." if lang == "ko" else f"Top-10 clan share. The two group lines are means of 1,000 resamples of {int(C.resample_n.iloc[0])} per period; the 'lower bound' line counts each person of unknown clan as a clan of their own. 95% intervals in the table.")))
         out.append(table_html(C, [("period", t["period"], None), ("first_appointees", ("첫 임명자" if lang == "ko" else "first appointees"), ",.0f"), ("missing_share_after", ("보충 후 결측" if lang == "ko" else "unmatched after fill"), ".1%"), ("n", "n", ",.0f"), ("n_clans", ("성관 수" if lang == "ko" else "clans"), ",.0f"), ("top10_resampled", ("상위 10 (재표집)" if lang == "ko" else "top-10 (resampled)"), ".3f"), ("top10_ci_lo", "95% lo", ".3f"), ("top10_ci_hi", "95% hi", ".3f"), ("top10_lower_bound", ("하한" if lang == "ko" else "lower bound"), ".3f"), ("hhi", "HHI", ".4f"), ("effective_clans", ("유효 성관 수" if lang == "ko" else "effective clans"), ".1f"), ("top5", ("상위 5" if lang == "ko" else "top 5"), None)], "t_clan", lang, filt=False))
         f = D.clan_fill
         out.append("<p class='src'>" + (f"첫 임명자 {f['first_appointees']:,}명: 인물 데이터에서 성관 확인 {f['fill']['person_table']:,}, 문과방목으로 보충 {f['fill']['roster_fill']:,}, 남은 결측 {f['fill']['still_missing']:,}. 보충 규칙을 성관을 아는 사람에게 적용한 정확도 {f['validation']['accuracy']:.1%}. 구간 순서와 재표집 점유율의 스피어만 ρ = {f['spearman_resampled'][0]:.2f}, 하한 ρ = {f['spearman_lower'][0]:.2f}."
@@ -753,7 +804,7 @@ def metric_figure(m, D: Data, lang) -> str:
         E = D.death
         pmid = lambda p: (int(p[:4]) + int(p[-4:])) / 2   # middle year of a period such as "1392–1399"
         out.append(fig(svg_lines([(("언급 기사/1,000" if lang == "ko" else "Mentions per 1,000"), [(pmid(r.period), float(r.mentions_per_1000)) for _, r in E.iterrows()], 2),
-                                  (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(pmid(r.period), float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50, gaps=False),
+                                  (("집행 확인율 보정" if lang == "ko" else "× execution-confirmed rate"), [(pmid(r.period), float(r.mentions_x_exec_rate_per_1000)) for _, r in E.iterrows()], 0)], ".1f", xstep=50, gaps=False, ylabel=("날짜 있는 기사 1,000건당 건수" if lang == "ko" else "per 1,000 dated articles")),
                        ("50년 구간(중앙 연도). 보정치는 언급 기사 비율 × 표본에서 잰 집행 확인율." if lang == "ko" else "50-year periods (mid-year). The corrected line multiplies the mention rate by the execution-confirmed rate from the sample.")))
         out.append(table_html(E, [("period", t["period"], None), ("n_dated_articles", t["dated"], ",.0f"), ("n_mentions", ("언급 기사" if lang == "ko" else "mentions"), ",.0f"), ("mentions_per_1000", "/1,000", ".1f"), ("events", ("표본 사건" if lang == "ko" else "sample events"), ",.0f"), ("executed_confirmed", ("집행 확인" if lang == "ko" else "execution confirmed"), ",.0f"), ("exec_rate", ("확인율" if lang == "ko" else "confirmation rate"), ".2f"), ("exec_ci_lo", "95% lo", ".2f"), ("exec_ci_hi", "95% hi", ".2f"), ("mentions_x_exec_rate_per_1000", ("보정/1,000" if lang == "ko" else "corrected/1,000"), ".2f")], "t_death", lang, filt=False))
         Rg = D.death_reign
@@ -784,7 +835,7 @@ def density_strip(D, lang, width=1000, height=170) -> str:
     bw = pw / len(years)
     X = lambda yr: L + (yr - 1392) * bw
     spans = king_spans(D)
-    out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{"연도별 글자 수, 1392–1863" if lang == "ko" else "Characters per year, 1392–1863"}">']
+    out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{"연도별 글자 수, 1392–1910" if lang == "ko" else "Characters per year, 1392–1910"}">']
     last_right = [-1e9, -1e9]   # two rows of reign names: a name that would run into the one before it drops to the second row (1.2.8)
     for i, (kn, ko, en, a, b) in enumerate(spans):
         out.append(f'<rect x="{X(a):.1f}" y="{T}" width="{max(X(b + 1) - X(a), 1):.1f}" height="{ph}" fill="var(--s{1 if i % 2 == 0 else 3})" fill-opacity=".10"/>')
@@ -979,6 +1030,21 @@ def metrics_index(D, lang):
     return page(lang, t["metric_list"], "".join(body), depth=2, active="metrics")
 
 
+def king_line_caption(r, y, ec, lang) -> str:
+    """Caption of the articles-per-year line on a reign page (1.2.9): which edition is drawn and the year with the most articles."""
+    top = y.loc[y.n_articles.idxmax()]
+    if len(y) <= 2:   # a reign of one or two calendar years: the picture has one or two points and no course to read
+        yrs = [(int(v.year_ce), int(v.n_articles)) for _, v in y.sort_values("year_ce").iterrows()]
+        if lang == "ko":
+            return (f"{r[ec]}의 연도별 기사 수. 기사가 있는 해가 " + ("하나뿐이다" if len(yrs) == 1 else "둘뿐이다")
+                    + "(" + ", ".join(f"{a}년 {b:,}건" for a, b in yrs) + "). 점이 적어 해마다의 흐름을 읽을 그림이 아니다.")
+        return (f"Articles per year in the {r[ec]}. Only " + ("one year has" if len(yrs) == 1 else "two years have")
+                + " articles (" + ", ".join(f"{a}: {b:,}" for a, b in yrs) + "), too few points to show a course over time.")
+    if lang == "ko":
+        return (f"{r[ec]}의 연도별 기사 수. 기사가 가장 많은 해는 {int(top.year_ce)}년({int(top.n_articles):,}건)이다. 즉위한 해와 승하한 해는 앞뒤 왕대와 나뉘어 세어져 적게 나온다.")
+    return (f"Articles per year in the {r[ec]}. The year with the most articles is {int(top.year_ce)} ({int(top.n_articles):,}). Accession and death years are split between adjoining reigns and so come out low.")
+
+
 def king_page(r, D, lang):
     t = T[lang]; kc, ec = KING_COL[lang]
     eds = D.ed[D.ed.king_no == r.king_no]
@@ -991,7 +1057,7 @@ def king_page(r, D, lang):
     if len(eds) > 1:
         body.append("<h2>" + ("판본" if lang == "ko" else "Editions") + "</h2>" + table_html(eds, [(ec, t["edition"], None), ("n_articles", t["articles"], ",.0f"), ("n_han", t["chars"], ",.0f"), ("n_saron", t["saron"], ",.0f"), ("median_len", ("기사 길이 중앙값" if lang == "ko" else "median length"), ",.0f")], "t_k_ed", lang, filt=False))
     y = D.yearly_ed[D.yearly_ed.edition == r.edition]
-    body.append(fig(svg_lines([(t["articles"], [(int(x.year_ce), float(x.n_articles)) for _, x in y.iterrows()], 0)], ",.0f", xstep=5 if len(y) < 60 else 10), ("이 판본의 연도별 기사 수. 즉위·승하 해는 앞뒤 왕대와 나뉘어 센다." if lang == "ko" else "Articles per year in this edition; accession and death years are split between adjoining reigns.")))
+    body.append(fig(svg_lines([(t["articles"], [(int(x.year_ce), float(x.n_articles)) for _, x in y.iterrows()], 0)], ",.0f", xstep=5 if len(y) < 60 else 10), king_line_caption(r, y, ec, lang)))
     # keyword shares vs all-reign median
     rows = []
     for name, tbl, col, mid in [(("경연" if lang == "ko" else "royal lecture"), D.lecture, "keyword_share", "royal_lecture_share"), (("상소·차자" if lang == "ko" else "memorials"), D.memorial, "keyword_share", "memorial_share"),
@@ -1017,8 +1083,8 @@ def kings_index(D, lang):
             '<p class="src">' + ("태조~순종 27대. 고종·순종실록은 공공누리 제4유형이라 건수만 셌다(제목·본문 발췌 없음)." if lang == "ko" else "Taejo to Sunjong, 27 reigns. The Gojong and Sunjong records are KOGL Type 4, so only counts are used (no titles or excerpts).") + "</p>",
             take_block(("세로 막대는 연도별 글자 수, 바탕의 띠는 왕대다. 기록은 세종~선조에서 두껍고 정조 이후 얇아진다. 아래 카드에서 왕대마다 기사 수·글자 수와 그 왕대의 지표를 본다." if lang == "ko" else
                         "Bars are characters per year; the shaded bands are reigns. The record is dense from Sejong to Seonjo and thins after Jeongjo. Each card opens a reign page with its counts and metrics."), lang, small=True),
-            f'<div class="strip"><figure>{density_strip(D, lang)}<figcaption>' + ("연도별 한자 수(본실록), 1392–1910. 띠는 왕대." if lang == "ko" else "Characters per year (principal editions), 1392–1910; bands mark reigns.") + "</figcaption></figure></div>",
-            fig(svg_bars([(r[kc], float(r.han_per_year), 0) for _, r in M.iterrows()], ",.0f", row_h=20, label_w=160, xlabel=(t["chars"] + " " + t["per_year"])), ("재위 1년당 글자 수(본실록)." if lang == "ko" else "Characters per reign-year (principal editions).")),
+            f'<div class="strip"><figure>{density_strip(D, lang)}<figcaption>' + ("막대 하나가 한 해이고, 높이는 그해 기사의 한자 수다(본실록 — 수정 · 개수 · 보궐정오 · 중초본 · 부록을 뺀 판본). 1392–1910. 띠는 왕대." if lang == "ko" else "One bar per year; its height is the number of characters in that year's articles (principal editions, leaving out the revised, supplemented, supplement-and-corrections and second-draft editions and the appendix). 1392–1910; bands mark reigns.") + "</figcaption></figure></div>",
+            fig(svg_bars([(r[kc], float(r.han_per_year), 0) for _, r in M.iterrows()], ",.0f", row_h=20, label_w=160, xlabel=(t["chars"] + " " + t["per_year"])), ("재위 1년당 글자 수(본실록)." if lang == "ko" else "Characters per reign-year (principal editions).") + short_reign_note(M, "han_per_year", kc, lang)),
             "<div class='cards'>"]
     for _, r in M.iterrows():
         body.append(f'<a class="card s-A" href="{r.edition}.html"><b>{int(r.king_no)}. {esc(r[kc])}</b><small>{esc(r[ec])} · {int(r.n_articles):,} {t["articles"]} · {int(r.n_han):,} {t["chars"]}</small></a>')
@@ -1051,7 +1117,7 @@ def home(D, lang):
              if lang == "ko" else
              "Scope: the 27 reigns from Taejo to Sunjong (1392–1910). The Gojong and Sunjong records are released under KOGL Type 4 (no derivatives, non-commercial), so they enter only counts that neither alter nor quote the text (articles, characters, NIKH classification, keyword hits); titles, text excerpts and the astronomical checks exclude them, and in the published coding tables their rows keep the judgment but have their title, quote and summary blanked. The 25 reigns Taejo–Cheoljong are Type 1 (attribution).")
     body = [f'<div class="hero"><div class="glyph" aria-hidden="true">實錄</div><h1>{t["site"]}</h1><p class="lead">{esc(t["tagline"])}</p><p class="src" style="max-width:70ch">{esc(scope)}</p>'
-            f'<div class="strip">{density_strip(D, lang)}<p class="src">' + ("연도별 한자 수 1392–1910(본실록). 띠는 왕대." if lang == "ko" else "Characters per year 1392–1910 (principal editions); bands mark reigns.") + '</p></div></div>',
+            f'<div class="strip">{density_strip(D, lang)}<p class="src">' + ("막대 하나가 한 해이고, 높이는 그해 기사의 한자 수다(본실록 — 수정 · 개수 · 보궐정오 · 중초본 · 부록을 뺀 판본). 1392–1910. 띠는 왕대." if lang == "ko" else "One bar per year; its height is the number of characters in that year's articles (principal editions, leaving out the revised, supplemented, supplement-and-corrections and second-draft editions and the appendix). 1392–1910; bands mark reigns.") + '</p></div></div>',
             '<div class="take"><div class="l">' + ("핵심" if lang == "ko" else "Key points") + '</div><p>' + "<br>".join(f"{i+1}. {esc(x)}" for i, x in enumerate(five)) + "</p></div>",
             '<div class="stats">' + "".join(f'<a class="stat" href="{h}"><div class="n">{n}</div><small>{l}</small></a>' for n, l, h in stats) + "</div>",
             '<div class="note">' + ("숫자마다 <b>신뢰도 카드</b>가 붙어 있다. 원본에서 그대로 센 값인지, 천문 계산과 맞춰 본 비율인지, 코딩한 표본에서 잰 정밀도인지를 지표 면마다 적었다. 원문 전문은 싣지 않고 기사마다 국사편찬위원회 원문으로 연결한다."

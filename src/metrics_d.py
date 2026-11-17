@@ -10,7 +10,7 @@ D1 clan concentration: first appointments to high office from the NIKH office ta
    typos), form == 현직, first year 1392–1910; roster match = same Hanja name, pass year ≤ first
    appointment ≤ pass year + 60, birth year if both known, unique clan among candidates.
 D2 royal lecture, D3 memorials, D4 justice classes: shares per reign from keyword hits / subjects.
-Outputs: d_clan.csv, d_clan_munkwa.csv, d_clan_fill.json, d_lecture.csv, d_memorial.csv, d_justice.csv, d_justice_decade.csv
+Outputs: d_clan.csv, d_clan_munkwa.csv, d_clan_input.csv, d_clan_munkwa_input.csv (resampling inputs, 1.2.10), d_clan_fill.json, d_lecture.csv, d_memorial.csv, d_justice.csv, d_justice_decade.csv
 """
 import collections
 import csv
@@ -131,6 +131,9 @@ def main():
                          top5=" · ".join(f"{k}{v}" for k, v in collections.Counter(g).most_common(5))))
     clan = pd.DataFrame(rows)
     clan.to_csv(D / "d_clan.csv", index=False, encoding="utf-8")
+    # 1.2.10: the lists the resampling draws from, in the order rng.sample sees them, so the 1,000 draws can be re-run
+    # from this file alone (period, position in the list, clan = 본관 + surname). Not a public file; it goes to verifiers.
+    pd.DataFrame([dict(group="first_appointees", period=f"{b[0]}–{b[1]-1}", seq=i, clan=c) for b in BINS for i, c in enumerate(clans[b])]).to_csv(D / "d_clan_input.csv", index=False, encoding="utf-8")
     # roster itself
     bm_bins = collections.defaultdict(list)
     for b in BM:
@@ -146,6 +149,7 @@ def main():
                           top10_resampled=float(np.mean(boot)), top10_ci_lo=float(np.percentile(boot, 2.5)), top10_ci_hi=float(np.percentile(boot, 97.5)), resample_n=nmin,
                           top5=" · ".join(f"{k}{v}" for k, v in collections.Counter(g).most_common(5))))
     pd.DataFrame(rows2).to_csv(D / "d_clan_munkwa.csv", index=False, encoding="utf-8")
+    pd.DataFrame([dict(group="munkwa_passers", period=f"{b[0]}–{b[1]-1}", seq=i, clan=c) for b in BINS for i, c in enumerate(bm_bins[b])]).to_csv(D / "d_clan_munkwa_input.csv", index=False, encoding="utf-8")
     from scipy.stats import spearmanr
     mid = [r["mid_year"] for r in rows]
     rs = spearmanr(mid, [r["top10_resampled"] for r in rows]); rl = spearmanr(mid, [r["top10_lower_bound"] for r in rows]); rb = spearmanr(mid, [r["top10_resampled"] for r in rows2])

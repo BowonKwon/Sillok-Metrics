@@ -56,4 +56,10 @@ Code: MIT. Site text and this project's own contributions: CC BY 4.0. Derived ta
 
 ## 인용 / Citation
 
-Kwon, Bowon (2026). *Sillok Metrics* 1.2.9. https://bowonkwon.github.io/Sillok-Metrics/
+Kwon, Bowon (2026). *Sillok Metrics* 1.2.10. https://bowonkwon.github.io/Sillok-Metrics/
+
+## 일러두기 · Note
+
+이 저장소의 자료는 엮은이가 개인적으로 공부하며 엮은 것입니다. 엮은이가 속한 기관의 견해나 업무와는 관계가 없습니다.
+
+These are personal study materials and do not represent the views or work of any institution the editor belongs to.

@@ -21,9 +21,10 @@ import pandas as pd
 from site_ext import load_ext, headline_ext, reliability_ext, figure_ext, method_ext, SERIES_INTRO, DATA_FILES_EXT, GZIP_FILES_EXT, CODING_FILES_EXT, SOURCE_MAP_EXT, VERSION_LINE  # noqa: E402
 EXT_IDS = {"g1_solar_match", "g2_lunar_match", "g3_planets", "g4_comet_ident", "g5_sunspot", "g6_overlap", "f1_weather_tokens", "f2_routine", "f3_asos", "f4_missing"}
 from registry import METRICS, PRIOR, SERIES, SITE, SOURCES
+from rel_gloss import add_gloss, GLOSS_CSS  # 1.2.10: plain-language notes for the words of the reliability cards
 
 VERSION = SITE["version"]
-BUILD_DATE = "2026-11-15"
+BUILD_DATE = "2026-11-17"
 REPO = "https://github.com/BowonKwon/Sillok-Metrics"
 NIKH = "https://sillok.history.go.kr"
 
@@ -274,6 +275,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
     if leaf:   # 1.2.6: breadcrumb, same-series list and previous/next on metric and reign pages
         body = leaf_html(lang, leaf, body)
     body = wrap_wide_svgs(body)
+    body = add_gloss(body, lang, "end" if active in ("method", "reading") else "card")   # 1.2.10
     t = T[lang]
     root = "../" * depth
     other = "en" if lang == "ko" else "ko"
@@ -291,7 +293,7 @@ def page(lang: str, title: str, body: str, depth: int = 1, desc: str = "", activ
 <script>(function(){{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark"){{localStorage.setItem("skm-theme",q)}}else if(q==="auto"){{localStorage.removeItem("skm-theme")}}var v=localStorage.getItem("skm-theme");if(v)document.documentElement.setAttribute("data-theme",v)}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
-<style>{CSS}</style></head><body>
+<style>{CSS}{GLOSS_CSS}</style></head><body>
 <header><a class="brand" href="{root}{lang}/index.html">{t['site']}</a>
 <nav>{navh}</nav>
 <div class="right"><a class="hub" href="https://bowonkwon.github.io/{'' if lang == 'ko' else 'en/'}">{'공개 자료 허브' if lang == 'ko' else 'All public materials'}</a><button id="theme" class="theme" type="button" aria-label="{"테마" if lang == "ko" else "Theme"}">◑</button><a class="lang" href="{root}{other}/index.html">{t['lang_other']}</a></div></header>
@@ -772,7 +774,7 @@ def metric_figure(m, D: Data, lang) -> str:
         out.append(fig(svg_lines([(("고위직 첫 임명자" if lang == "ko" else "High-office appointees"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in C.iterrows()], 0),
                                   (("하한(결측=별개 성관)" if lang == "ko" else "Lower bound"), [(float(r.mid_year), float(r.top10_lower_bound)) for _, r in C.iterrows()], 2),
                                   (("문과 급제자" if lang == "ko" else "Examination passers"), [(float(r.mid_year), float(r.top10_resampled)) for _, r in M.iterrows()], 1)], ".2f", xstep=50, ylabel=("상위 10개 성관 점유율" if lang == "ko" else "top-10 clan share")),
-                       (f"세로는 상위 10개 성관(본관 + 성)이 차지하는 몫이다. 구간마다 사람 수가 달라 같은 수({int(C.resample_n.iloc[0])}명)를 다시 뽑아 1,000번 계산한 평균을 그렸다(두 집단의 선). 「하한」 선은 성관을 알 수 없는 사람을 저마다 다른 성관으로 쳤을 때의 값이다. 95% 구간은 표에 있다." if lang == "ko" else f"Top-10 clan share. The two group lines are means of 1,000 resamples of {int(C.resample_n.iloc[0])} per period; the 'lower bound' line counts each person of unknown clan as a clan of their own. 95% intervals in the table.")))
+                       (f"세로는 상위 10개 성관(본관 + 성)이 차지하는 몫이다. 구간마다 사람 수가 달라 같은 수({int(C.resample_n.iloc[0])}명)를 다시 뽑아 1,000번 계산한 평균을 그렸다(두 집단의 선). 「하한」 선은 성관을 알 수 없는 사람을 저마다 다른 성관으로 쳤을 때의 값이다. 표의 「95% lo · hi」는 신뢰구간이 아니라, 지금 목록에서 {int(C.resample_n.iloc[0])}명씩 1,000번 다시 뽑았을 때 상위 10 몫이 놓인 가운데 95% 범위다(구간마다 사람 수가 다른 탓에 생기는 흔들림). 사람이 {int(C.resample_n.iloc[0])}명뿐인 구간은 매번 모두가 뽑혀 범위의 폭이 0 이다.<!--gloss-skip:interval,wilson-->" if lang == "ko" else f"Top-10 clan share. The two group lines are means of 1,000 resamples of {int(C.resample_n.iloc[0])} per period; the 'lower bound' line counts each person of unknown clan as a clan of their own. The table's '95% lo · hi' are not confidence intervals: they are the middle 95% of the top-10 share over 1,000 redraws of {int(C.resample_n.iloc[0])} people from the present list (the spread that comes from periods of different size). A period with only {int(C.resample_n.iloc[0])} people is drawn whole every time, so its range has no width.<!--gloss-skip:interval,wilson-->")))
         out.append(table_html(C, [("period", t["period"], None), ("first_appointees", ("첫 임명자" if lang == "ko" else "first appointees"), ",.0f"), ("missing_share_after", ("보충 후 결측" if lang == "ko" else "unmatched after fill"), ".1%"), ("n", "n", ",.0f"), ("n_clans", ("성관 수" if lang == "ko" else "clans"), ",.0f"), ("top10_resampled", ("상위 10 (재표집)" if lang == "ko" else "top-10 (resampled)"), ".3f"), ("top10_ci_lo", "95% lo", ".3f"), ("top10_ci_hi", "95% hi", ".3f"), ("top10_lower_bound", ("하한" if lang == "ko" else "lower bound"), ".3f"), ("hhi", "HHI", ".4f"), ("effective_clans", ("유효 성관 수" if lang == "ko" else "effective clans"), ".1f"), ("top5", ("상위 5" if lang == "ko" else "top 5"), None)], "t_clan", lang, filt=False))
         f = D.clan_fill
         out.append("<p class='src'>" + (f"첫 임명자 {f['first_appointees']:,}명: 인물 데이터에서 성관 확인 {f['fill']['person_table']:,}, 문과방목으로 보충 {f['fill']['roster_fill']:,}, 남은 결측 {f['fill']['still_missing']:,}. 보충 규칙을 성관을 아는 사람에게 적용한 정확도 {f['validation']['accuracy']:.1%}. 구간 순서와 재표집 점유율의 스피어만 ρ = {f['spearman_resampled'][0]:.2f}, 하한 ρ = {f['spearman_lower'][0]:.2f}."
@@ -1000,12 +1002,27 @@ def king_takeaway(D, r, lang):
 
 
 # ----------------------------------------------------------------- pages
+def venus_plain(D, lang) -> str:
+    """1.2.10: the idea of the Venus test in everyday words, placed right under the takeaway so that the terms
+    (inferior conjunction, synodic period, Rayleigh Z) are explained before the spec box and the charts use them.
+    Numbers from c_venus.csv."""
+    v0 = D.venus.iloc[0]
+    return ("<p class='src'>" + (f"쉽게 말하면 — 지구에서 보면 금성은 583.92일(약 1년 7개월)마다 해와 지구 사이, 해와 거의 같은 방향을 지난다. 이때를 내합이라 하고, 이 무렵의 금성은 햇빛에 묻혀 보이지 않는다. 내합 앞뒤로 해에서 떨어진 자리에 있을 때는 밝게 빛나, 하늘이 맑으면 낮에도 눈에 띌 수 있다. "
+                                        f"그러니 「낮에 금성이 보였다」는 기록이 실제로 본 것을 적은 것이라면, 기록한 날은 583.92일마다 되풀이되고 내합 앞뒤에 몰리되 내합 바로 그 무렵에는 드물어야 한다. 아래 두 그림이 이것을 본다. "
+                                        f"첫 그림의 레일리 Z 는 기록일을 한 주기 길이의 둥근 시계판 위에 찍었을 때 점이 한쪽으로 얼마나 쏠리는지를 나타내는 수다. 주기 하나를 정해 두고 보면, 날짜가 아무렇게나 흩어져 있을 때 평균 1 이고 스무 번에 열아홉 번꼴로 3 을 넘지 않는다. 이 기록 {int(v0.n_days):,}일은 {v0.best_period_days:.1f}일 주기에서 {v0.rayleigh_Z_best:,.0f}이다."
+                                        if lang == "ko" else
+                                        f"In everyday terms: seen from the Earth, Venus passes between the Sun and the Earth, in nearly the same direction as the Sun, every 583.92 days (about a year and seven months). That moment is the inferior conjunction, and around it Venus is lost in the Sun's glare. On either side of it, when Venus stands away from the Sun, it shines brightly and in a clear sky can be noticed even in daylight. "
+                                        f"So if the records that 'Venus was seen in daytime' set down real sightings, their dates should repeat every 583.92 days and cluster on both sides of the conjunction, while the conjunction itself should be rare. The two charts below check this. "
+                                        f"The Rayleigh Z of the first chart measures how far the dates lean to one side when they are marked on a round clock face one period long. For a fixed period, dates scattered at random give 1 on average and stay below 3 about nineteen times in twenty; these {int(v0.n_days):,} record days give {v0.rayleigh_Z_best:,.0f} at a period of {v0.best_period_days:.1f} days.") + "</p>")
+
+
 def metric_page(m, D, lang):
     t = T[lang]; L = m[lang]
     hv, hl = headline(m, D, lang)
     body = [f'<div class="eyebrow"><span class="tag layer">{esc(SERIES[m["series"]][lang])}</span><span class="tag">{esc(m["unit"])}</span></div>',
             f'<div class="mhero"><div><h1>{esc(L["name"])}</h1><p class="lead">{esc(L["definition"])}</p></div><div class="big">{esc(hv)}<small>{esc(hl)}</small></div></div>',
             take_block(m["takeaway"][lang], lang),
+            (venus_plain(D, lang) if m["id"] == "venus_phase" else ""),
             '<div class="spec"><dl>', f'<dt>{t["formula"]}</dt><dd class="formula">{esc(L["formula"])}</dd>',
             f'<dt>{t["reading"]}</dt><dd>{esc(L["reading"])}</dd>', f'<dt>{t["caveat"]}</dt><dd>{esc(L["caveat"])}</dd>']
     if "external" in m:
@@ -1245,7 +1262,7 @@ TAKE_READ_KO
 <p>선조수정실록은 원본의 기사 수로 7%, 글자 수로 10%다. 국편 해제의 「1/5」은 권수 인상이다. 수정본 기사가 있는 날의 60%는 원본에도 기사가 있다. 현종개수실록은 원본보다 기사가 13%, 글자가 34% 많다 — 개수는 삭감이 아니라 다시 쓰기였다. 광해군일기는 중초본에서 정초본으로 가며 기사가 {g.article_drop:.0%}, 글자가 {g.han_drop:.0%} 줄었고, 중초본 글자의 {g.marked_deleted_share:.0%}가 산삭 표시 안에 있다.</p>
 <h2>하늘은 맞았나</h2>
 <p>「日食」이 나오는 기사 332건을 읽어 유형을 나누니 셋 중 하나는 일식을 논의의 소재로 끌어온 상소·전교였고, 일곱 중 하나는 일식이 아니었다(「日食一升」은 하루 한 되를 먹는다는 뜻이다). 그날 일식이 있었다는 보고로 읽히는 84건 가운데 서울에서 실제로 보이는 계산 일식과 ±1일 안에 맞는 것은 {obs.rate:.0%}, 지구 어딘가에서 일어난 일식과 맞는 것은 {obsE.rate:.0%}다. 맞지 않는 쪽의 대부분은 「地下日食」처럼 해가 진 뒤의 일식을 계산대로 적은 것이다. 거꾸로 서울에서 보였을 일식 {len(D.solar_rec)}회 중 기사가 있는 것은 {D.solar_rec.has_article_w1.mean():.0%}다.</p>
-<p>금성이 낮에 보였다는 太白晝見 기록 {int(v.n_days):,}일은 더 뚜렷하다. 기록일의 주기를 찾으면 {v.best_period_days:.1f}일이 나오고, 이것은 금성의 회합주기 583.92일과 0.04% 차이다. 기록의 {v.within_90d:.0%}가 내합 앞뒤 90일에 몰리고 내합 당일 부근은 비어 있다. 적어도 이 유형의 기록에는 실제 관측의 신호가 남아 있다.</p>
+<p>금성이 낮에 보였다는 太白晝見 기록 {int(v.n_days):,}일은 더 뚜렷하다. 기록일의 주기를 찾으면 {v.best_period_days:.1f}일이 나오고, 이것은 금성의 회합주기 583.92일과 0.04% 차이다. 기록의 {v.within_90d:.0%}가 내합 앞뒤 90일에 몰리고 내합 당일 부근은 거의 비어 있다. 적어도 이 유형의 기록에는 실제 관측의 신호가 남아 있다.</p>
 <h2>누가 벼슬을 했나</h2>
 <p>정승·판서·참판·대사헌·대사간·도승지·관찰사·대제학에 처음 오른 사람의 성관을 50년마다 모으면 상위 10개 성관의 점유율이 {C.top10_resampled.iloc[0]:.2f}에서 {C.top10_resampled.iloc[8]:.2f}로 오른다. 같은 기간 문과 급제자 집단의 집중은 그보다 작다. 두 집단은 구성이 달라 이 차이를 승진 단계의 효과로 단정하지는 않는다.</p>
 <h2>사형 기사는 사형이 아니다</h2>

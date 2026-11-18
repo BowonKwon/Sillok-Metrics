@@ -19,7 +19,7 @@ Fields
 SITE = {
     "ko": {"title": "실록 메트릭스", "subtitle": "조선왕조실록을 기사 단위로 센 수치와, 수치마다 붙인 신뢰도"},
     "en": {"title": "Sillok Metrics", "subtitle": "The Veritable Records of the Joseon Dynasty counted article by article, with a reliability card on every number"},
-    "version": "1.2.10",
+    "version": "1.2.11",
 }
 
 SERIES = {

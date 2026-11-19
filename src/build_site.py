@@ -25,7 +25,7 @@ from rel_gloss import add_gloss, GLOSS_CSS  # 1.2.10: plain-language notes for t
 
 VERSION = SITE["version"]
 import site_nav  # 1.2.11: section ids, section lists, a button back to the list
-BUILD_DATE = "2026-11-18"
+BUILD_DATE = "2026-11-19"
 REPO = "https://github.com/BowonKwon/Sillok-Metrics"
 NIKH = "https://sillok.history.go.kr"
 
